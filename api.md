@@ -34,6 +34,18 @@ Methods:
 
 - <code title="get /api/v1/orderbook">client.orderbook.<a href="./src/parsec_api/resources/orderbook.py">retrieve</a>(\*\*<a href="src/parsec_api/types/orderbook_retrieve_params.py">params</a>) -> <a href="./src/parsec_api/types/orderbook_retrieve_response.py">OrderbookRetrieveResponse</a></code>
 
+# PriceHistory
+
+Types:
+
+```python
+from parsec_api.types import PriceHistoryRetrieveResponse
+```
+
+Methods:
+
+- <code title="get /api/v1/price-history">client.price_history.<a href="./src/parsec_api/resources/price_history.py">retrieve</a>(\*\*<a href="src/parsec_api/types/price_history_retrieve_params.py">params</a>) -> <a href="./src/parsec_api/types/price_history_retrieve_response.py">PriceHistoryRetrieveResponse</a></code>
+
 # Websocket
 
 Types:

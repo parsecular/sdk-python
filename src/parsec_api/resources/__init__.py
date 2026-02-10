@@ -64,6 +64,14 @@ from .websocket import (
     WebsocketResourceWithStreamingResponse,
     AsyncWebsocketResourceWithStreamingResponse,
 )
+from .price_history import (
+    PriceHistoryResource,
+    AsyncPriceHistoryResource,
+    PriceHistoryResourceWithRawResponse,
+    AsyncPriceHistoryResourceWithRawResponse,
+    PriceHistoryResourceWithStreamingResponse,
+    AsyncPriceHistoryResourceWithStreamingResponse,
+)
 
 __all__ = [
     "ExchangesResource",
@@ -84,6 +92,12 @@ __all__ = [
     "AsyncOrderbookResourceWithRawResponse",
     "OrderbookResourceWithStreamingResponse",
     "AsyncOrderbookResourceWithStreamingResponse",
+    "PriceHistoryResource",
+    "AsyncPriceHistoryResource",
+    "PriceHistoryResourceWithRawResponse",
+    "AsyncPriceHistoryResourceWithRawResponse",
+    "PriceHistoryResourceWithStreamingResponse",
+    "AsyncPriceHistoryResourceWithStreamingResponse",
     "WebsocketResource",
     "AsyncWebsocketResource",
     "WebsocketResourceWithRawResponse",
