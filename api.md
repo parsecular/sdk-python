@@ -1,68 +1,106 @@
-# Shared Types
+# Exchanges
+
+Types:
 
 ```python
-from parsec_api.types import Order
+from parsec_api.types import ExchangeListResponse
 ```
 
-# Pets
+Methods:
+
+- <code title="get /api/v1/exchanges">client.exchanges.<a href="./src/parsec_api/resources/exchanges.py">list</a>() -> <a href="./src/parsec_api/types/exchange_list_response.py">ExchangeListResponse</a></code>
+
+# Markets
+
+Types:
+
+```python
+from parsec_api.types import MarketListResponse
+```
+
+Methods:
+
+- <code title="get /api/v1/markets">client.markets.<a href="./src/parsec_api/resources/markets.py">list</a>(\*\*<a href="src/parsec_api/types/market_list_params.py">params</a>) -> <a href="./src/parsec_api/types/market_list_response.py">MarketListResponse</a></code>
+
+# Orderbook
+
+Types:
+
+```python
+from parsec_api.types import OrderbookRetrieveResponse
+```
+
+Methods:
+
+- <code title="get /api/v1/orderbook">client.orderbook.<a href="./src/parsec_api/resources/orderbook.py">retrieve</a>(\*\*<a href="src/parsec_api/types/orderbook_retrieve_params.py">params</a>) -> <a href="./src/parsec_api/types/orderbook_retrieve_response.py">OrderbookRetrieveResponse</a></code>
+
+# Websocket
+
+Types:
+
+```python
+from parsec_api.types import WebsocketUsageResponse
+```
+
+Methods:
+
+- <code title="get /api/v1/ws/usage">client.websocket.<a href="./src/parsec_api/resources/websocket.py">usage</a>(\*\*<a href="src/parsec_api/types/websocket_usage_params.py">params</a>) -> <a href="./src/parsec_api/types/websocket_usage_response.py">WebsocketUsageResponse</a></code>
+
+# Orders
+
+Types:
+
+```python
+from parsec_api.types import Order, OrderListResponse
+```
+
+Methods:
+
+- <code title="post /api/v1/orders">client.orders.<a href="./src/parsec_api/resources/orders.py">create</a>(\*\*<a href="src/parsec_api/types/order_create_params.py">params</a>) -> <a href="./src/parsec_api/types/order.py">Order</a></code>
+- <code title="get /api/v1/orders/{order_id}">client.orders.<a href="./src/parsec_api/resources/orders.py">retrieve</a>(order_id, \*\*<a href="src/parsec_api/types/order_retrieve_params.py">params</a>) -> <a href="./src/parsec_api/types/order.py">Order</a></code>
+- <code title="get /api/v1/orders">client.orders.<a href="./src/parsec_api/resources/orders.py">list</a>(\*\*<a href="src/parsec_api/types/order_list_params.py">params</a>) -> <a href="./src/parsec_api/types/order_list_response.py">OrderListResponse</a></code>
+- <code title="delete /api/v1/orders/{order_id}">client.orders.<a href="./src/parsec_api/resources/orders.py">cancel</a>(order_id, \*\*<a href="src/parsec_api/types/order_cancel_params.py">params</a>) -> <a href="./src/parsec_api/types/order.py">Order</a></code>
+
+# Positions
+
+Types:
+
+```python
+from parsec_api.types import PositionListResponse
+```
+
+Methods:
+
+- <code title="get /api/v1/positions">client.positions.<a href="./src/parsec_api/resources/positions.py">list</a>(\*\*<a href="src/parsec_api/types/position_list_params.py">params</a>) -> <a href="./src/parsec_api/types/position_list_response.py">PositionListResponse</a></code>
+
+# Account
 
 Types:
 
 ```python
 from parsec_api.types import (
-    Category,
-    Pet,
-    PetFindByStatusResponse,
-    PetFindByTagsResponse,
-    PetUploadImageResponse,
+    AccountBalanceResponse,
+    AccountPingResponse,
+    AccountUserActivityResponse,
 )
 ```
 
 Methods:
 
-- <code title="post /pet">client.pets.<a href="./src/parsec_api/resources/pets.py">create</a>(\*\*<a href="src/parsec_api/types/pet_create_params.py">params</a>) -> <a href="./src/parsec_api/types/pet.py">Pet</a></code>
-- <code title="get /pet/{petId}">client.pets.<a href="./src/parsec_api/resources/pets.py">retrieve</a>(pet_id) -> <a href="./src/parsec_api/types/pet.py">Pet</a></code>
-- <code title="put /pet">client.pets.<a href="./src/parsec_api/resources/pets.py">update</a>(\*\*<a href="src/parsec_api/types/pet_update_params.py">params</a>) -> <a href="./src/parsec_api/types/pet.py">Pet</a></code>
-- <code title="delete /pet/{petId}">client.pets.<a href="./src/parsec_api/resources/pets.py">delete</a>(pet_id) -> None</code>
-- <code title="get /pet/findByStatus">client.pets.<a href="./src/parsec_api/resources/pets.py">find_by_status</a>(\*\*<a href="src/parsec_api/types/pet_find_by_status_params.py">params</a>) -> <a href="./src/parsec_api/types/pet_find_by_status_response.py">PetFindByStatusResponse</a></code>
-- <code title="get /pet/findByTags">client.pets.<a href="./src/parsec_api/resources/pets.py">find_by_tags</a>(\*\*<a href="src/parsec_api/types/pet_find_by_tags_params.py">params</a>) -> <a href="./src/parsec_api/types/pet_find_by_tags_response.py">PetFindByTagsResponse</a></code>
-- <code title="post /pet/{petId}">client.pets.<a href="./src/parsec_api/resources/pets.py">update_by_id</a>(pet_id, \*\*<a href="src/parsec_api/types/pet_update_by_id_params.py">params</a>) -> None</code>
-- <code title="post /pet/{petId}/uploadImage">client.pets.<a href="./src/parsec_api/resources/pets.py">upload_image</a>(pet_id, image, \*\*<a href="src/parsec_api/types/pet_upload_image_params.py">params</a>) -> <a href="./src/parsec_api/types/pet_upload_image_response.py">PetUploadImageResponse</a></code>
+- <code title="get /api/v1/balance">client.account.<a href="./src/parsec_api/resources/account.py">balance</a>(\*\*<a href="src/parsec_api/types/account_balance_params.py">params</a>) -> <a href="./src/parsec_api/types/account_balance_response.py">AccountBalanceResponse</a></code>
+- <code title="get /api/v1/ping">client.account.<a href="./src/parsec_api/resources/account.py">ping</a>(\*\*<a href="src/parsec_api/types/account_ping_params.py">params</a>) -> <a href="./src/parsec_api/types/account_ping_response.py">AccountPingResponse</a></code>
+- <code title="put /api/v1/credentials">client.account.<a href="./src/parsec_api/resources/account.py">update_credentials</a>(\*\*<a href="src/parsec_api/types/account_update_credentials_params.py">params</a>) -> None</code>
+- <code title="get /api/v1/user-activity">client.account.<a href="./src/parsec_api/resources/account.py">user_activity</a>(\*\*<a href="src/parsec_api/types/account_user_activity_params.py">params</a>) -> <a href="./src/parsec_api/types/account_user_activity_response.py">AccountUserActivityResponse</a></code>
 
-# Store
+# Approvals
 
 Types:
 
 ```python
-from parsec_api.types import StoreListInventoryResponse
+from parsec_api.types import ApprovalListResponse, ApprovalSetResponse
 ```
 
 Methods:
 
-- <code title="get /store/inventory">client.store.<a href="./src/parsec_api/resources/store/store.py">list_inventory</a>() -> <a href="./src/parsec_api/types/store_list_inventory_response.py">StoreListInventoryResponse</a></code>
-
-## Orders
-
-Methods:
-
-- <code title="post /store/order">client.store.orders.<a href="./src/parsec_api/resources/store/orders.py">create</a>(\*\*<a href="src/parsec_api/types/store/order_create_params.py">params</a>) -> <a href="./src/parsec_api/types/shared/order.py">Order</a></code>
-- <code title="get /store/order/{orderId}">client.store.orders.<a href="./src/parsec_api/resources/store/orders.py">retrieve</a>(order_id) -> <a href="./src/parsec_api/types/shared/order.py">Order</a></code>
-- <code title="delete /store/order/{orderId}">client.store.orders.<a href="./src/parsec_api/resources/store/orders.py">delete</a>(order_id) -> None</code>
-
-# Users
-
-Types:
-
-```python
-from parsec_api.types import User, UserLoginResponse
-```
-
-Methods:
-
-- <code title="post /user">client.users.<a href="./src/parsec_api/resources/users.py">create</a>(\*\*<a href="src/parsec_api/types/user_create_params.py">params</a>) -> <a href="./src/parsec_api/types/user.py">User</a></code>
-- <code title="get /user/{username}">client.users.<a href="./src/parsec_api/resources/users.py">retrieve</a>(username) -> <a href="./src/parsec_api/types/user.py">User</a></code>
-- <code title="put /user/{username}">client.users.<a href="./src/parsec_api/resources/users.py">update</a>(existing_username, \*\*<a href="src/parsec_api/types/user_update_params.py">params</a>) -> None</code>
-- <code title="delete /user/{username}">client.users.<a href="./src/parsec_api/resources/users.py">delete</a>(username) -> None</code>
-- <code title="post /user/createWithList">client.users.<a href="./src/parsec_api/resources/users.py">create_with_list</a>(\*\*<a href="src/parsec_api/types/user_create_with_list_params.py">params</a>) -> <a href="./src/parsec_api/types/user.py">User</a></code>
-- <code title="get /user/login">client.users.<a href="./src/parsec_api/resources/users.py">login</a>(\*\*<a href="src/parsec_api/types/user_login_params.py">params</a>) -> str</code>
-- <code title="get /user/logout">client.users.<a href="./src/parsec_api/resources/users.py">logout</a>() -> None</code>
+- <code title="get /api/v1/approvals">client.approvals.<a href="./src/parsec_api/resources/approvals.py">list</a>(\*\*<a href="src/parsec_api/types/approval_list_params.py">params</a>) -> <a href="./src/parsec_api/types/approval_list_response.py">ApprovalListResponse</a></code>
+- <code title="post /api/v1/approvals">client.approvals.<a href="./src/parsec_api/resources/approvals.py">set</a>(\*\*<a href="src/parsec_api/types/approval_set_params.py">params</a>) -> <a href="./src/parsec_api/types/approval_set_response.py">ApprovalSetResponse</a></code>

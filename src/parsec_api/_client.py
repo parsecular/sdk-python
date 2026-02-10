@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import os
-from typing import TYPE_CHECKING, Any, Mapping
-from typing_extensions import Self, override
+from typing import TYPE_CHECKING, Any, Dict, Mapping, cast
+from typing_extensions import Self, Literal, override
 
 import httpx
 
@@ -31,12 +31,18 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import pets, store, users
-    from .resources.pets import PetsResource, AsyncPetsResource
-    from .resources.users import UsersResource, AsyncUsersResource
-    from .resources.store.store import StoreResource, AsyncStoreResource
+    from .resources import orders, account, markets, approvals, exchanges, orderbook, positions, websocket
+    from .resources.orders import OrdersResource, AsyncOrdersResource
+    from .resources.account import AccountResource, AsyncAccountResource
+    from .resources.markets import MarketsResource, AsyncMarketsResource
+    from .resources.approvals import ApprovalsResource, AsyncApprovalsResource
+    from .resources.exchanges import ExchangesResource, AsyncExchangesResource
+    from .resources.orderbook import OrderbookResource, AsyncOrderbookResource
+    from .resources.positions import PositionsResource, AsyncPositionsResource
+    from .resources.websocket import WebsocketResource, AsyncWebsocketResource
 
 __all__ = [
+    "ENVIRONMENTS",
     "Timeout",
     "Transport",
     "ProxiesTypes",
@@ -47,16 +53,24 @@ __all__ = [
     "AsyncClient",
 ]
 
+ENVIRONMENTS: Dict[str, str] = {
+    "production": "https://api.parsecapi.com",
+    "local": "http://localhost:3000",
+}
+
 
 class ParsecAPI(SyncAPIClient):
     # client options
     api_key: str
 
+    _environment: Literal["production", "local"] | NotGiven
+
     def __init__(
         self,
         *,
         api_key: str | None = None,
-        base_url: str | httpx.URL | None = None,
+        environment: Literal["production", "local"] | NotGiven = not_given,
+        base_url: str | httpx.URL | None | NotGiven = not_given,
         timeout: float | Timeout | None | NotGiven = not_given,
         max_retries: int = DEFAULT_MAX_RETRIES,
         default_headers: Mapping[str, str] | None = None,
@@ -77,20 +91,41 @@ class ParsecAPI(SyncAPIClient):
     ) -> None:
         """Construct a new synchronous ParsecAPI client instance.
 
-        This automatically infers the `api_key` argument from the `PETSTORE_API_KEY` environment variable if it is not provided.
+        This automatically infers the `api_key` argument from the `PARSEC_API_KEY` environment variable if it is not provided.
         """
         if api_key is None:
-            api_key = os.environ.get("PETSTORE_API_KEY")
+            api_key = os.environ.get("PARSEC_API_KEY")
         if api_key is None:
             raise ParsecAPIError(
-                "The api_key client option must be set either by passing api_key to the client or by setting the PETSTORE_API_KEY environment variable"
+                "The api_key client option must be set either by passing api_key to the client or by setting the PARSEC_API_KEY environment variable"
             )
         self.api_key = api_key
 
-        if base_url is None:
-            base_url = os.environ.get("PARSEC_API_BASE_URL")
-        if base_url is None:
-            base_url = f"https://petstore3.swagger.io/api/v3"
+        self._environment = environment
+
+        base_url_env = os.environ.get("PARSEC_API_BASE_URL")
+        if is_given(base_url) and base_url is not None:
+            # cast required because mypy doesn't understand the type narrowing
+            base_url = cast("str | httpx.URL", base_url)  # pyright: ignore[reportUnnecessaryCast]
+        elif is_given(environment):
+            if base_url_env and base_url is not None:
+                raise ValueError(
+                    "Ambiguous URL; The `PARSEC_API_BASE_URL` env var and the `environment` argument are given. If you want to use the environment, you must pass base_url=None",
+                )
+
+            try:
+                base_url = ENVIRONMENTS[environment]
+            except KeyError as exc:
+                raise ValueError(f"Unknown environment: {environment}") from exc
+        elif base_url_env is not None:
+            base_url = base_url_env
+        else:
+            self._environment = environment = "production"
+
+            try:
+                base_url = ENVIRONMENTS[environment]
+            except KeyError as exc:
+                raise ValueError(f"Unknown environment: {environment}") from exc
 
         super().__init__(
             version=__version__,
@@ -104,22 +139,52 @@ class ParsecAPI(SyncAPIClient):
         )
 
     @cached_property
-    def pets(self) -> PetsResource:
-        from .resources.pets import PetsResource
+    def exchanges(self) -> ExchangesResource:
+        from .resources.exchanges import ExchangesResource
 
-        return PetsResource(self)
-
-    @cached_property
-    def store(self) -> StoreResource:
-        from .resources.store import StoreResource
-
-        return StoreResource(self)
+        return ExchangesResource(self)
 
     @cached_property
-    def users(self) -> UsersResource:
-        from .resources.users import UsersResource
+    def markets(self) -> MarketsResource:
+        from .resources.markets import MarketsResource
 
-        return UsersResource(self)
+        return MarketsResource(self)
+
+    @cached_property
+    def orderbook(self) -> OrderbookResource:
+        from .resources.orderbook import OrderbookResource
+
+        return OrderbookResource(self)
+
+    @cached_property
+    def websocket(self) -> WebsocketResource:
+        from .resources.websocket import WebsocketResource
+
+        return WebsocketResource(self)
+
+    @cached_property
+    def orders(self) -> OrdersResource:
+        from .resources.orders import OrdersResource
+
+        return OrdersResource(self)
+
+    @cached_property
+    def positions(self) -> PositionsResource:
+        from .resources.positions import PositionsResource
+
+        return PositionsResource(self)
+
+    @cached_property
+    def account(self) -> AccountResource:
+        from .resources.account import AccountResource
+
+        return AccountResource(self)
+
+    @cached_property
+    def approvals(self) -> ApprovalsResource:
+        from .resources.approvals import ApprovalsResource
+
+        return ApprovalsResource(self)
 
     @cached_property
     def with_raw_response(self) -> ParsecAPIWithRawResponse:
@@ -138,7 +203,7 @@ class ParsecAPI(SyncAPIClient):
     @override
     def auth_headers(self) -> dict[str, str]:
         api_key = self.api_key
-        return {"api_key": api_key}
+        return {"X-API-Key": api_key}
 
     @property
     @override
@@ -153,6 +218,7 @@ class ParsecAPI(SyncAPIClient):
         self,
         *,
         api_key: str | None = None,
+        environment: Literal["production", "local"] | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.Client | None = None,
@@ -188,6 +254,7 @@ class ParsecAPI(SyncAPIClient):
         return self.__class__(
             api_key=api_key or self.api_key,
             base_url=base_url or self.base_url,
+            environment=environment or self._environment,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
             max_retries=max_retries if is_given(max_retries) else self.max_retries,
@@ -238,11 +305,14 @@ class AsyncParsecAPI(AsyncAPIClient):
     # client options
     api_key: str
 
+    _environment: Literal["production", "local"] | NotGiven
+
     def __init__(
         self,
         *,
         api_key: str | None = None,
-        base_url: str | httpx.URL | None = None,
+        environment: Literal["production", "local"] | NotGiven = not_given,
+        base_url: str | httpx.URL | None | NotGiven = not_given,
         timeout: float | Timeout | None | NotGiven = not_given,
         max_retries: int = DEFAULT_MAX_RETRIES,
         default_headers: Mapping[str, str] | None = None,
@@ -263,20 +333,41 @@ class AsyncParsecAPI(AsyncAPIClient):
     ) -> None:
         """Construct a new async AsyncParsecAPI client instance.
 
-        This automatically infers the `api_key` argument from the `PETSTORE_API_KEY` environment variable if it is not provided.
+        This automatically infers the `api_key` argument from the `PARSEC_API_KEY` environment variable if it is not provided.
         """
         if api_key is None:
-            api_key = os.environ.get("PETSTORE_API_KEY")
+            api_key = os.environ.get("PARSEC_API_KEY")
         if api_key is None:
             raise ParsecAPIError(
-                "The api_key client option must be set either by passing api_key to the client or by setting the PETSTORE_API_KEY environment variable"
+                "The api_key client option must be set either by passing api_key to the client or by setting the PARSEC_API_KEY environment variable"
             )
         self.api_key = api_key
 
-        if base_url is None:
-            base_url = os.environ.get("PARSEC_API_BASE_URL")
-        if base_url is None:
-            base_url = f"https://petstore3.swagger.io/api/v3"
+        self._environment = environment
+
+        base_url_env = os.environ.get("PARSEC_API_BASE_URL")
+        if is_given(base_url) and base_url is not None:
+            # cast required because mypy doesn't understand the type narrowing
+            base_url = cast("str | httpx.URL", base_url)  # pyright: ignore[reportUnnecessaryCast]
+        elif is_given(environment):
+            if base_url_env and base_url is not None:
+                raise ValueError(
+                    "Ambiguous URL; The `PARSEC_API_BASE_URL` env var and the `environment` argument are given. If you want to use the environment, you must pass base_url=None",
+                )
+
+            try:
+                base_url = ENVIRONMENTS[environment]
+            except KeyError as exc:
+                raise ValueError(f"Unknown environment: {environment}") from exc
+        elif base_url_env is not None:
+            base_url = base_url_env
+        else:
+            self._environment = environment = "production"
+
+            try:
+                base_url = ENVIRONMENTS[environment]
+            except KeyError as exc:
+                raise ValueError(f"Unknown environment: {environment}") from exc
 
         super().__init__(
             version=__version__,
@@ -290,22 +381,52 @@ class AsyncParsecAPI(AsyncAPIClient):
         )
 
     @cached_property
-    def pets(self) -> AsyncPetsResource:
-        from .resources.pets import AsyncPetsResource
+    def exchanges(self) -> AsyncExchangesResource:
+        from .resources.exchanges import AsyncExchangesResource
 
-        return AsyncPetsResource(self)
-
-    @cached_property
-    def store(self) -> AsyncStoreResource:
-        from .resources.store import AsyncStoreResource
-
-        return AsyncStoreResource(self)
+        return AsyncExchangesResource(self)
 
     @cached_property
-    def users(self) -> AsyncUsersResource:
-        from .resources.users import AsyncUsersResource
+    def markets(self) -> AsyncMarketsResource:
+        from .resources.markets import AsyncMarketsResource
 
-        return AsyncUsersResource(self)
+        return AsyncMarketsResource(self)
+
+    @cached_property
+    def orderbook(self) -> AsyncOrderbookResource:
+        from .resources.orderbook import AsyncOrderbookResource
+
+        return AsyncOrderbookResource(self)
+
+    @cached_property
+    def websocket(self) -> AsyncWebsocketResource:
+        from .resources.websocket import AsyncWebsocketResource
+
+        return AsyncWebsocketResource(self)
+
+    @cached_property
+    def orders(self) -> AsyncOrdersResource:
+        from .resources.orders import AsyncOrdersResource
+
+        return AsyncOrdersResource(self)
+
+    @cached_property
+    def positions(self) -> AsyncPositionsResource:
+        from .resources.positions import AsyncPositionsResource
+
+        return AsyncPositionsResource(self)
+
+    @cached_property
+    def account(self) -> AsyncAccountResource:
+        from .resources.account import AsyncAccountResource
+
+        return AsyncAccountResource(self)
+
+    @cached_property
+    def approvals(self) -> AsyncApprovalsResource:
+        from .resources.approvals import AsyncApprovalsResource
+
+        return AsyncApprovalsResource(self)
 
     @cached_property
     def with_raw_response(self) -> AsyncParsecAPIWithRawResponse:
@@ -324,7 +445,7 @@ class AsyncParsecAPI(AsyncAPIClient):
     @override
     def auth_headers(self) -> dict[str, str]:
         api_key = self.api_key
-        return {"api_key": api_key}
+        return {"X-API-Key": api_key}
 
     @property
     @override
@@ -339,6 +460,7 @@ class AsyncParsecAPI(AsyncAPIClient):
         self,
         *,
         api_key: str | None = None,
+        environment: Literal["production", "local"] | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.AsyncClient | None = None,
@@ -374,6 +496,7 @@ class AsyncParsecAPI(AsyncAPIClient):
         return self.__class__(
             api_key=api_key or self.api_key,
             base_url=base_url or self.base_url,
+            environment=environment or self._environment,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
             max_retries=max_retries if is_given(max_retries) else self.max_retries,
@@ -427,22 +550,52 @@ class ParsecAPIWithRawResponse:
         self._client = client
 
     @cached_property
-    def pets(self) -> pets.PetsResourceWithRawResponse:
-        from .resources.pets import PetsResourceWithRawResponse
+    def exchanges(self) -> exchanges.ExchangesResourceWithRawResponse:
+        from .resources.exchanges import ExchangesResourceWithRawResponse
 
-        return PetsResourceWithRawResponse(self._client.pets)
-
-    @cached_property
-    def store(self) -> store.StoreResourceWithRawResponse:
-        from .resources.store import StoreResourceWithRawResponse
-
-        return StoreResourceWithRawResponse(self._client.store)
+        return ExchangesResourceWithRawResponse(self._client.exchanges)
 
     @cached_property
-    def users(self) -> users.UsersResourceWithRawResponse:
-        from .resources.users import UsersResourceWithRawResponse
+    def markets(self) -> markets.MarketsResourceWithRawResponse:
+        from .resources.markets import MarketsResourceWithRawResponse
 
-        return UsersResourceWithRawResponse(self._client.users)
+        return MarketsResourceWithRawResponse(self._client.markets)
+
+    @cached_property
+    def orderbook(self) -> orderbook.OrderbookResourceWithRawResponse:
+        from .resources.orderbook import OrderbookResourceWithRawResponse
+
+        return OrderbookResourceWithRawResponse(self._client.orderbook)
+
+    @cached_property
+    def websocket(self) -> websocket.WebsocketResourceWithRawResponse:
+        from .resources.websocket import WebsocketResourceWithRawResponse
+
+        return WebsocketResourceWithRawResponse(self._client.websocket)
+
+    @cached_property
+    def orders(self) -> orders.OrdersResourceWithRawResponse:
+        from .resources.orders import OrdersResourceWithRawResponse
+
+        return OrdersResourceWithRawResponse(self._client.orders)
+
+    @cached_property
+    def positions(self) -> positions.PositionsResourceWithRawResponse:
+        from .resources.positions import PositionsResourceWithRawResponse
+
+        return PositionsResourceWithRawResponse(self._client.positions)
+
+    @cached_property
+    def account(self) -> account.AccountResourceWithRawResponse:
+        from .resources.account import AccountResourceWithRawResponse
+
+        return AccountResourceWithRawResponse(self._client.account)
+
+    @cached_property
+    def approvals(self) -> approvals.ApprovalsResourceWithRawResponse:
+        from .resources.approvals import ApprovalsResourceWithRawResponse
+
+        return ApprovalsResourceWithRawResponse(self._client.approvals)
 
 
 class AsyncParsecAPIWithRawResponse:
@@ -452,22 +605,52 @@ class AsyncParsecAPIWithRawResponse:
         self._client = client
 
     @cached_property
-    def pets(self) -> pets.AsyncPetsResourceWithRawResponse:
-        from .resources.pets import AsyncPetsResourceWithRawResponse
+    def exchanges(self) -> exchanges.AsyncExchangesResourceWithRawResponse:
+        from .resources.exchanges import AsyncExchangesResourceWithRawResponse
 
-        return AsyncPetsResourceWithRawResponse(self._client.pets)
-
-    @cached_property
-    def store(self) -> store.AsyncStoreResourceWithRawResponse:
-        from .resources.store import AsyncStoreResourceWithRawResponse
-
-        return AsyncStoreResourceWithRawResponse(self._client.store)
+        return AsyncExchangesResourceWithRawResponse(self._client.exchanges)
 
     @cached_property
-    def users(self) -> users.AsyncUsersResourceWithRawResponse:
-        from .resources.users import AsyncUsersResourceWithRawResponse
+    def markets(self) -> markets.AsyncMarketsResourceWithRawResponse:
+        from .resources.markets import AsyncMarketsResourceWithRawResponse
 
-        return AsyncUsersResourceWithRawResponse(self._client.users)
+        return AsyncMarketsResourceWithRawResponse(self._client.markets)
+
+    @cached_property
+    def orderbook(self) -> orderbook.AsyncOrderbookResourceWithRawResponse:
+        from .resources.orderbook import AsyncOrderbookResourceWithRawResponse
+
+        return AsyncOrderbookResourceWithRawResponse(self._client.orderbook)
+
+    @cached_property
+    def websocket(self) -> websocket.AsyncWebsocketResourceWithRawResponse:
+        from .resources.websocket import AsyncWebsocketResourceWithRawResponse
+
+        return AsyncWebsocketResourceWithRawResponse(self._client.websocket)
+
+    @cached_property
+    def orders(self) -> orders.AsyncOrdersResourceWithRawResponse:
+        from .resources.orders import AsyncOrdersResourceWithRawResponse
+
+        return AsyncOrdersResourceWithRawResponse(self._client.orders)
+
+    @cached_property
+    def positions(self) -> positions.AsyncPositionsResourceWithRawResponse:
+        from .resources.positions import AsyncPositionsResourceWithRawResponse
+
+        return AsyncPositionsResourceWithRawResponse(self._client.positions)
+
+    @cached_property
+    def account(self) -> account.AsyncAccountResourceWithRawResponse:
+        from .resources.account import AsyncAccountResourceWithRawResponse
+
+        return AsyncAccountResourceWithRawResponse(self._client.account)
+
+    @cached_property
+    def approvals(self) -> approvals.AsyncApprovalsResourceWithRawResponse:
+        from .resources.approvals import AsyncApprovalsResourceWithRawResponse
+
+        return AsyncApprovalsResourceWithRawResponse(self._client.approvals)
 
 
 class ParsecAPIWithStreamedResponse:
@@ -477,22 +660,52 @@ class ParsecAPIWithStreamedResponse:
         self._client = client
 
     @cached_property
-    def pets(self) -> pets.PetsResourceWithStreamingResponse:
-        from .resources.pets import PetsResourceWithStreamingResponse
+    def exchanges(self) -> exchanges.ExchangesResourceWithStreamingResponse:
+        from .resources.exchanges import ExchangesResourceWithStreamingResponse
 
-        return PetsResourceWithStreamingResponse(self._client.pets)
-
-    @cached_property
-    def store(self) -> store.StoreResourceWithStreamingResponse:
-        from .resources.store import StoreResourceWithStreamingResponse
-
-        return StoreResourceWithStreamingResponse(self._client.store)
+        return ExchangesResourceWithStreamingResponse(self._client.exchanges)
 
     @cached_property
-    def users(self) -> users.UsersResourceWithStreamingResponse:
-        from .resources.users import UsersResourceWithStreamingResponse
+    def markets(self) -> markets.MarketsResourceWithStreamingResponse:
+        from .resources.markets import MarketsResourceWithStreamingResponse
 
-        return UsersResourceWithStreamingResponse(self._client.users)
+        return MarketsResourceWithStreamingResponse(self._client.markets)
+
+    @cached_property
+    def orderbook(self) -> orderbook.OrderbookResourceWithStreamingResponse:
+        from .resources.orderbook import OrderbookResourceWithStreamingResponse
+
+        return OrderbookResourceWithStreamingResponse(self._client.orderbook)
+
+    @cached_property
+    def websocket(self) -> websocket.WebsocketResourceWithStreamingResponse:
+        from .resources.websocket import WebsocketResourceWithStreamingResponse
+
+        return WebsocketResourceWithStreamingResponse(self._client.websocket)
+
+    @cached_property
+    def orders(self) -> orders.OrdersResourceWithStreamingResponse:
+        from .resources.orders import OrdersResourceWithStreamingResponse
+
+        return OrdersResourceWithStreamingResponse(self._client.orders)
+
+    @cached_property
+    def positions(self) -> positions.PositionsResourceWithStreamingResponse:
+        from .resources.positions import PositionsResourceWithStreamingResponse
+
+        return PositionsResourceWithStreamingResponse(self._client.positions)
+
+    @cached_property
+    def account(self) -> account.AccountResourceWithStreamingResponse:
+        from .resources.account import AccountResourceWithStreamingResponse
+
+        return AccountResourceWithStreamingResponse(self._client.account)
+
+    @cached_property
+    def approvals(self) -> approvals.ApprovalsResourceWithStreamingResponse:
+        from .resources.approvals import ApprovalsResourceWithStreamingResponse
+
+        return ApprovalsResourceWithStreamingResponse(self._client.approvals)
 
 
 class AsyncParsecAPIWithStreamedResponse:
@@ -502,22 +715,52 @@ class AsyncParsecAPIWithStreamedResponse:
         self._client = client
 
     @cached_property
-    def pets(self) -> pets.AsyncPetsResourceWithStreamingResponse:
-        from .resources.pets import AsyncPetsResourceWithStreamingResponse
+    def exchanges(self) -> exchanges.AsyncExchangesResourceWithStreamingResponse:
+        from .resources.exchanges import AsyncExchangesResourceWithStreamingResponse
 
-        return AsyncPetsResourceWithStreamingResponse(self._client.pets)
-
-    @cached_property
-    def store(self) -> store.AsyncStoreResourceWithStreamingResponse:
-        from .resources.store import AsyncStoreResourceWithStreamingResponse
-
-        return AsyncStoreResourceWithStreamingResponse(self._client.store)
+        return AsyncExchangesResourceWithStreamingResponse(self._client.exchanges)
 
     @cached_property
-    def users(self) -> users.AsyncUsersResourceWithStreamingResponse:
-        from .resources.users import AsyncUsersResourceWithStreamingResponse
+    def markets(self) -> markets.AsyncMarketsResourceWithStreamingResponse:
+        from .resources.markets import AsyncMarketsResourceWithStreamingResponse
 
-        return AsyncUsersResourceWithStreamingResponse(self._client.users)
+        return AsyncMarketsResourceWithStreamingResponse(self._client.markets)
+
+    @cached_property
+    def orderbook(self) -> orderbook.AsyncOrderbookResourceWithStreamingResponse:
+        from .resources.orderbook import AsyncOrderbookResourceWithStreamingResponse
+
+        return AsyncOrderbookResourceWithStreamingResponse(self._client.orderbook)
+
+    @cached_property
+    def websocket(self) -> websocket.AsyncWebsocketResourceWithStreamingResponse:
+        from .resources.websocket import AsyncWebsocketResourceWithStreamingResponse
+
+        return AsyncWebsocketResourceWithStreamingResponse(self._client.websocket)
+
+    @cached_property
+    def orders(self) -> orders.AsyncOrdersResourceWithStreamingResponse:
+        from .resources.orders import AsyncOrdersResourceWithStreamingResponse
+
+        return AsyncOrdersResourceWithStreamingResponse(self._client.orders)
+
+    @cached_property
+    def positions(self) -> positions.AsyncPositionsResourceWithStreamingResponse:
+        from .resources.positions import AsyncPositionsResourceWithStreamingResponse
+
+        return AsyncPositionsResourceWithStreamingResponse(self._client.positions)
+
+    @cached_property
+    def account(self) -> account.AsyncAccountResourceWithStreamingResponse:
+        from .resources.account import AsyncAccountResourceWithStreamingResponse
+
+        return AsyncAccountResourceWithStreamingResponse(self._client.account)
+
+    @cached_property
+    def approvals(self) -> approvals.AsyncApprovalsResourceWithStreamingResponse:
+        from .resources.approvals import AsyncApprovalsResourceWithStreamingResponse
+
+        return AsyncApprovalsResourceWithStreamingResponse(self._client.approvals)
 
 
 Client = ParsecAPI
