@@ -1,17 +1,22 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List, Optional
+from typing import List, Optional, Tuple
 from datetime import datetime
 
 from .._models import BaseModel
 
-__all__ = ["OrderbookRetrieveResponse"]
+__all__ = ["OrderbookRetrieveResponse", "OrderbookLevel"]
+
+# Stainless currently models `[price, size]` levels as `List[List[float]]`.
+# The wire format is still a JSON array, but the fixed length is important for
+# consumers and we can enforce it at runtime via pydantic.
+OrderbookLevel = Tuple[float, float]
 
 
 class OrderbookRetrieveResponse(BaseModel):
-    asks: List[List[float]]
+    asks: List[OrderbookLevel]
 
-    bids: List[List[float]]
+    bids: List[OrderbookLevel]
 
     exchange: str
 

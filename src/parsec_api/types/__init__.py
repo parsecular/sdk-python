@@ -24,6 +24,7 @@ from .websocket_usage_params import WebsocketUsageParams as WebsocketUsageParams
 from .account_balance_response import AccountBalanceResponse as AccountBalanceResponse
 from .websocket_usage_response import WebsocketUsageResponse as WebsocketUsageResponse
 from .orderbook_retrieve_params import OrderbookRetrieveParams as OrderbookRetrieveParams
+from .orderbook_retrieve_response import OrderbookLevel as OrderbookLevel
 from .orderbook_retrieve_response import OrderbookRetrieveResponse as OrderbookRetrieveResponse
 from .account_user_activity_params import AccountUserActivityParams as AccountUserActivityParams
 from .account_user_activity_response import AccountUserActivityResponse as AccountUserActivityResponse
