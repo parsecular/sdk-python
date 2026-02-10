@@ -1,11 +1,11 @@
 [project]
 name = "parsec_api"
 version = "0.0.1"
-description = "The official Python library for the parsec-api API"
+description = "The official Python library for the Parsec API API"
 dynamic = ["readme"]
 license = "Apache-2.0"
 authors = [
-{ name = "Parsec API", email = "" },
+{ name = "Parsec API", email = "support@parsecapi.com" },
 ]
 
 dependencies = [

@@ -402,10 +402,10 @@ class TestParsecAPI:
     def test_validate_headers(self) -> None:
         client = ParsecAPI(base_url=base_url, api_key=api_key, _strict_response_validation=True)
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-        assert request.headers.get("api_key") == api_key
+        assert request.headers.get("X-API-Key") == api_key
 
         with pytest.raises(ParsecAPIError):
-            with update_env(**{"PETSTORE_API_KEY": Omit()}):
+            with update_env(**{"PARSEC_API_KEY": Omit()}):
                 client2 = ParsecAPI(base_url=base_url, api_key=None, _strict_response_validation=True)
             _ = client2
 
@@ -691,6 +691,18 @@ class TestParsecAPI:
             client = ParsecAPI(api_key=api_key, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
+        # explicit environment arg requires explicitness
+        with update_env(PARSEC_API_BASE_URL="http://localhost:5000/from/env"):
+            with pytest.raises(ValueError, match=r"you must pass base_url=None"):
+                ParsecAPI(api_key=api_key, _strict_response_validation=True, environment="production")
+
+            client = ParsecAPI(
+                base_url=None, api_key=api_key, _strict_response_validation=True, environment="production"
+            )
+            assert str(client.base_url).startswith("https://api.parsecapi.com")
+
+            client.close()
+
     @pytest.mark.parametrize(
         "client",
         [
@@ -851,20 +863,20 @@ class TestParsecAPI:
     @mock.patch("parsec_api._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter, client: ParsecAPI) -> None:
-        respx_mock.get("/store/inventory").mock(side_effect=httpx.TimeoutException("Test timeout error"))
+        respx_mock.get("/api/v1/exchanges").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            client.store.with_streaming_response.list_inventory().__enter__()
+            client.exchanges.with_streaming_response.list().__enter__()
 
         assert _get_open_connections(client) == 0
 
     @mock.patch("parsec_api._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter, client: ParsecAPI) -> None:
-        respx_mock.get("/store/inventory").mock(return_value=httpx.Response(500))
+        respx_mock.get("/api/v1/exchanges").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            client.store.with_streaming_response.list_inventory().__enter__()
+            client.exchanges.with_streaming_response.list().__enter__()
         assert _get_open_connections(client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
@@ -891,9 +903,9 @@ class TestParsecAPI:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.get("/store/inventory").mock(side_effect=retry_handler)
+        respx_mock.get("/api/v1/exchanges").mock(side_effect=retry_handler)
 
-        response = client.store.with_raw_response.list_inventory()
+        response = client.exchanges.with_raw_response.list()
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -915,9 +927,9 @@ class TestParsecAPI:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.get("/store/inventory").mock(side_effect=retry_handler)
+        respx_mock.get("/api/v1/exchanges").mock(side_effect=retry_handler)
 
-        response = client.store.with_raw_response.list_inventory(extra_headers={"x-stainless-retry-count": Omit()})
+        response = client.exchanges.with_raw_response.list(extra_headers={"x-stainless-retry-count": Omit()})
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
@@ -938,9 +950,9 @@ class TestParsecAPI:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.get("/store/inventory").mock(side_effect=retry_handler)
+        respx_mock.get("/api/v1/exchanges").mock(side_effect=retry_handler)
 
-        response = client.store.with_raw_response.list_inventory(extra_headers={"x-stainless-retry-count": "42"})
+        response = client.exchanges.with_raw_response.list(extra_headers={"x-stainless-retry-count": "42"})
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
 
@@ -1285,10 +1297,10 @@ class TestAsyncParsecAPI:
     def test_validate_headers(self) -> None:
         client = AsyncParsecAPI(base_url=base_url, api_key=api_key, _strict_response_validation=True)
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
-        assert request.headers.get("api_key") == api_key
+        assert request.headers.get("X-API-Key") == api_key
 
         with pytest.raises(ParsecAPIError):
-            with update_env(**{"PETSTORE_API_KEY": Omit()}):
+            with update_env(**{"PARSEC_API_KEY": Omit()}):
                 client2 = AsyncParsecAPI(base_url=base_url, api_key=None, _strict_response_validation=True)
             _ = client2
 
@@ -1580,6 +1592,18 @@ class TestAsyncParsecAPI:
             client = AsyncParsecAPI(api_key=api_key, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
+        # explicit environment arg requires explicitness
+        with update_env(PARSEC_API_BASE_URL="http://localhost:5000/from/env"):
+            with pytest.raises(ValueError, match=r"you must pass base_url=None"):
+                AsyncParsecAPI(api_key=api_key, _strict_response_validation=True, environment="production")
+
+            client = AsyncParsecAPI(
+                base_url=None, api_key=api_key, _strict_response_validation=True, environment="production"
+            )
+            assert str(client.base_url).startswith("https://api.parsecapi.com")
+
+            await client.close()
+
     @pytest.mark.parametrize(
         "client",
         [
@@ -1751,10 +1775,10 @@ class TestAsyncParsecAPI:
     async def test_retrying_timeout_errors_doesnt_leak(
         self, respx_mock: MockRouter, async_client: AsyncParsecAPI
     ) -> None:
-        respx_mock.get("/store/inventory").mock(side_effect=httpx.TimeoutException("Test timeout error"))
+        respx_mock.get("/api/v1/exchanges").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            await async_client.store.with_streaming_response.list_inventory().__aenter__()
+            await async_client.exchanges.with_streaming_response.list().__aenter__()
 
         assert _get_open_connections(async_client) == 0
 
@@ -1763,10 +1787,10 @@ class TestAsyncParsecAPI:
     async def test_retrying_status_errors_doesnt_leak(
         self, respx_mock: MockRouter, async_client: AsyncParsecAPI
     ) -> None:
-        respx_mock.get("/store/inventory").mock(return_value=httpx.Response(500))
+        respx_mock.get("/api/v1/exchanges").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            await async_client.store.with_streaming_response.list_inventory().__aenter__()
+            await async_client.exchanges.with_streaming_response.list().__aenter__()
         assert _get_open_connections(async_client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
@@ -1793,9 +1817,9 @@ class TestAsyncParsecAPI:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.get("/store/inventory").mock(side_effect=retry_handler)
+        respx_mock.get("/api/v1/exchanges").mock(side_effect=retry_handler)
 
-        response = await client.store.with_raw_response.list_inventory()
+        response = await client.exchanges.with_raw_response.list()
 
         assert response.retries_taken == failures_before_success
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
@@ -1817,11 +1841,9 @@ class TestAsyncParsecAPI:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.get("/store/inventory").mock(side_effect=retry_handler)
+        respx_mock.get("/api/v1/exchanges").mock(side_effect=retry_handler)
 
-        response = await client.store.with_raw_response.list_inventory(
-            extra_headers={"x-stainless-retry-count": Omit()}
-        )
+        response = await client.exchanges.with_raw_response.list(extra_headers={"x-stainless-retry-count": Omit()})
 
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
@@ -1842,9 +1864,9 @@ class TestAsyncParsecAPI:
                 return httpx.Response(500)
             return httpx.Response(200)
 
-        respx_mock.get("/store/inventory").mock(side_effect=retry_handler)
+        respx_mock.get("/api/v1/exchanges").mock(side_effect=retry_handler)
 
-        response = await client.store.with_raw_response.list_inventory(extra_headers={"x-stainless-retry-count": "42"})
+        response = await client.exchanges.with_raw_response.list(extra_headers={"x-stainless-retry-count": "42"})
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
 

@@ -11,7 +11,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 ## Documentation
 
-The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [docs.parsecapi.com](https://docs.parsecapi.com). The full API of this library can be found in [api.md](api.md).
 
 ## Installation
 
@@ -32,20 +32,21 @@ import os
 from parsec_api import ParsecAPI
 
 client = ParsecAPI(
-    api_key=os.environ.get("PETSTORE_API_KEY"),  # This is the default and can be omitted
+    api_key=os.environ.get("PARSEC_API_KEY"),  # This is the default and can be omitted
+    # defaults to "production".
+    environment="local",
 )
 
-order = client.store.orders.create(
-    pet_id=1,
-    quantity=1,
-    status="placed",
+markets = client.markets.list(
+    exchanges=["kalshi"],
+    limit=1,
 )
-print(order.id)
+print(markets.markets)
 ```
 
 While you can provide an `api_key` keyword argument,
 we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
-to add `PETSTORE_API_KEY="My API Key"` to your `.env` file
+to add `PARSEC_API_KEY="My API Key"` to your `.env` file
 so that your API Key is not stored in source control.
 
 ## Async usage
@@ -58,17 +59,18 @@ import asyncio
 from parsec_api import AsyncParsecAPI
 
 client = AsyncParsecAPI(
-    api_key=os.environ.get("PETSTORE_API_KEY"),  # This is the default and can be omitted
+    api_key=os.environ.get("PARSEC_API_KEY"),  # This is the default and can be omitted
+    # defaults to "production".
+    environment="local",
 )
 
 
 async def main() -> None:
-    order = await client.store.orders.create(
-        pet_id=1,
-        quantity=1,
-        status="placed",
+    markets = await client.markets.list(
+        exchanges=["kalshi"],
+        limit=1,
     )
-    print(order.id)
+    print(markets.markets)
 
 
 asyncio.run(main())
@@ -98,15 +100,14 @@ from parsec_api import AsyncParsecAPI
 
 async def main() -> None:
     async with AsyncParsecAPI(
-        api_key=os.environ.get("PETSTORE_API_KEY"),  # This is the default and can be omitted
+        api_key=os.environ.get("PARSEC_API_KEY"),  # This is the default and can be omitted
         http_client=DefaultAioHttpClient(),
     ) as client:
-        order = await client.store.orders.create(
-            pet_id=1,
-            quantity=1,
-            status="placed",
+        markets = await client.markets.list(
+            exchanges=["kalshi"],
+            limit=1,
         )
-        print(order.id)
+        print(markets.markets)
 
 
 asyncio.run(main())
@@ -120,23 +121,6 @@ Nested request parameters are [TypedDicts](https://docs.python.org/3/library/typ
 - Converting to a dictionary, `model.to_dict()`
 
 Typed requests and responses provide autocomplete and documentation within your editor. If you would like to see type errors in VS Code to help catch bugs earlier, set `python.analysis.typeCheckingMode` to `basic`.
-
-## Nested params
-
-Nested parameters are dictionaries, typed using `TypedDict`, for example:
-
-```python
-from parsec_api import ParsecAPI
-
-client = ParsecAPI()
-
-pet = client.pets.create(
-    name="doggie",
-    photo_urls=["string"],
-    category={},
-)
-print(pet.category)
-```
 
 ## Handling errors
 
@@ -154,7 +138,7 @@ from parsec_api import ParsecAPI
 client = ParsecAPI()
 
 try:
-    client.store.list_inventory()
+    client.exchanges.list()
 except parsec_api.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
@@ -197,7 +181,7 @@ client = ParsecAPI(
 )
 
 # Or, configure per-request:
-client.with_options(max_retries=5).store.list_inventory()
+client.with_options(max_retries=5).exchanges.list()
 ```
 
 ### Timeouts
@@ -220,7 +204,7 @@ client = ParsecAPI(
 )
 
 # Override per-request:
-client.with_options(timeout=5.0).store.list_inventory()
+client.with_options(timeout=5.0).exchanges.list()
 ```
 
 On timeout, an `APITimeoutError` is thrown.
@@ -261,11 +245,11 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 from parsec_api import ParsecAPI
 
 client = ParsecAPI()
-response = client.store.with_raw_response.list_inventory()
+response = client.exchanges.with_raw_response.list()
 print(response.headers.get('X-My-Header'))
 
-store = response.parse()  # get the object that `store.list_inventory()` would have returned
-print(store)
+exchange = response.parse()  # get the object that `exchanges.list()` would have returned
+print(exchange)
 ```
 
 These methods return an [`APIResponse`](https://github.com/stainless-sdks/parsec-api-python/tree/main/src/parsec_api/_response.py) object.
@@ -279,7 +263,7 @@ The above interface eagerly reads the full response body when you make the reque
 To stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.
 
 ```python
-with client.store.with_streaming_response.list_inventory() as response:
+with client.exchanges.with_streaming_response.list() as response:
     print(response.headers.get("X-My-Header"))
 
     for line in response.iter_lines():
