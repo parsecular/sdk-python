@@ -109,8 +109,8 @@ class _LocalBook:
     exchange: str
     token_id: str
     market_id: str
-    bids: List[StreamingOrderbookLevel] = field(default_factory=list)
-    asks: List[StreamingOrderbookLevel] = field(default_factory=list)
+    bids: List[StreamingOrderbookLevel] = field(default_factory=lambda: [])
+    asks: List[StreamingOrderbookLevel] = field(default_factory=lambda: [])
     tick_size: Optional[float] = None
     last_seq: int = 0
 
@@ -136,8 +136,9 @@ def _compute_mid_spread(
 def _parse_wire_levels(raw: Any) -> List[StreamingOrderbookLevel]:
     if not isinstance(raw, list):
         return []
+    items: List[Any] = raw
     levels: List[StreamingOrderbookLevel] = []
-    for item in raw:
+    for item in items:
         if isinstance(item, (list, tuple)) and len(item) >= 2:
             try:
                 levels.append(StreamingOrderbookLevel(price=float(item[0]), size=float(item[1])))

@@ -41,7 +41,7 @@ class MockServer:
             0,
         )
         # Get the actual port
-        sockets = self._server.sockets
+        sockets = list(self._server.sockets)
         if sockets:
             self.port = sockets[0].getsockname()[1]
 
@@ -154,7 +154,7 @@ class TestConnectionAuth:
         ws = ParsecWebSocket("pk_test", server.url)
 
         @ws.on("connected")
-        async def on_connected() -> None:
+        async def _on_connected() -> None:
             connected_events.append(True)
 
         async def _auth() -> None:
@@ -179,7 +179,7 @@ class TestConnectionAuth:
         ws = ParsecWebSocket("pk_bad", server.url)
 
         @ws.on("error")
-        async def on_error(err: WsError) -> None:
+        async def _on_error(err: WsError) -> None:
             errors.append(err)
 
         async def _auth() -> None:
@@ -206,7 +206,7 @@ class TestOrderbookSnapshot:
         books: List[OrderbookSnapshot] = []
 
         @ws.on("orderbook")
-        async def on_book(b: OrderbookSnapshot) -> None:
+        async def _on_book(b: OrderbookSnapshot) -> None:
             books.append(b)
 
         ws.subscribe(parsec_id="polymarket:0x123", outcome="Yes")
@@ -250,7 +250,7 @@ class TestDeltaApplication:
         books: List[OrderbookSnapshot] = []
 
         @ws.on("orderbook")
-        async def on_book(b: OrderbookSnapshot) -> None:
+        async def _on_book(b: OrderbookSnapshot) -> None:
             books.append(b)
 
         ws.subscribe(parsec_id="polymarket:0x123", outcome="Yes")
@@ -285,7 +285,7 @@ class TestDeltaApplication:
         books: List[OrderbookSnapshot] = []
 
         @ws.on("orderbook")
-        async def on_book(b: OrderbookSnapshot) -> None:
+        async def _on_book(b: OrderbookSnapshot) -> None:
             books.append(b)
 
         ws.subscribe(parsec_id="polymarket:0x123", outcome="Yes")
@@ -317,7 +317,7 @@ class TestDeltaApplication:
         books: List[OrderbookSnapshot] = []
 
         @ws.on("orderbook")
-        async def on_book(b: OrderbookSnapshot) -> None:
+        async def _on_book(b: OrderbookSnapshot) -> None:
             books.append(b)
 
         ws.subscribe(parsec_id="polymarket:0x123", outcome="Yes")
@@ -352,7 +352,7 @@ class TestDeltaEdgeCases:
         books: List[OrderbookSnapshot] = []
 
         @ws.on("orderbook")
-        async def on_book(b: OrderbookSnapshot) -> None:
+        async def _on_book(b: OrderbookSnapshot) -> None:
             books.append(b)
 
         ws.subscribe(parsec_id="polymarket:0x123", outcome="Yes")
@@ -382,7 +382,7 @@ class TestSequenceGap:
         books: List[OrderbookSnapshot] = []
 
         @ws.on("orderbook")
-        async def on_book(b: OrderbookSnapshot) -> None:
+        async def _on_book(b: OrderbookSnapshot) -> None:
             books.append(b)
 
         ws.subscribe(parsec_id="polymarket:0x123", outcome="Yes")
@@ -424,7 +424,7 @@ class TestResyncRequired:
         books: List[OrderbookSnapshot] = []
 
         @ws.on("orderbook")
-        async def on_book(b: OrderbookSnapshot) -> None:
+        async def _on_book(b: OrderbookSnapshot) -> None:
             books.append(b)
 
         ws.subscribe(parsec_id="polymarket:0x123", outcome="Yes")
@@ -468,7 +468,7 @@ class TestReconnect:
         reconnect_events: List[tuple[int, int]] = []
 
         @ws.on("reconnecting")
-        async def on_reconnecting(attempt: int, delay_ms: int) -> None:
+        async def _on_reconnecting(attempt: int, delay_ms: int) -> None:
             reconnect_events.append((attempt, delay_ms))
 
         ws.subscribe(parsec_id="polymarket:0x123", outcome="Yes")
@@ -504,7 +504,7 @@ class TestAuthErrorNoReconnect:
         ws = ParsecWebSocket("pk_bad", server.url)
 
         @ws.on("reconnecting")
-        async def on_reconnecting(attempt: int, delay_ms: int) -> None:
+        async def _on_reconnecting(attempt: int, delay_ms: int) -> None:
             reconnect_events.append((attempt, delay_ms))
 
         async def _auth() -> None:
@@ -531,7 +531,7 @@ class TestCloseCancelsReconnect:
         reconnect_events: List[Any] = []
 
         @ws.on("reconnecting")
-        async def on_reconnecting(attempt: int, delay_ms: int) -> None:
+        async def _on_reconnecting(attempt: int, delay_ms: int) -> None:
             reconnect_events.append((attempt, delay_ms))
 
         server.close_all_clients()
@@ -574,7 +574,7 @@ class TestActivityEvents:
         activities: List[Activity] = []
 
         @ws.on("activity")
-        async def on_activity(a: Activity) -> None:
+        async def _on_activity(a: Activity) -> None:
             activities.append(a)
 
         server.send_to_all({
@@ -613,7 +613,7 @@ class TestSlowReaderHeartbeat:
         slow_events: List[tuple[str, str]] = []
 
         @ws.on("slow_reader")
-        async def on_slow(parsec_id: str, outcome: str) -> None:
+        async def _on_slow(parsec_id: str, outcome: str) -> None:
             slow_events.append((parsec_id, outcome))
 
         server.send_to_all({
@@ -634,7 +634,7 @@ class TestSlowReaderHeartbeat:
         heartbeats: List[int] = []
 
         @ws.on("heartbeat")
-        async def on_heartbeat(ts_ms: int) -> None:
+        async def _on_heartbeat(ts_ms: int) -> None:
             heartbeats.append(ts_ms)
 
         server.send_to_all({"type": "heartbeat", "ts_ms": 1707044096000})

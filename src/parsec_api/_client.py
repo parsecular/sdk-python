@@ -51,6 +51,7 @@ if TYPE_CHECKING:
     from .resources.positions import PositionsResource, AsyncPositionsResource
     from .resources.websocket import WebsocketResource, AsyncWebsocketResource
     from .resources.price_history import PriceHistoryResource, AsyncPriceHistoryResource
+    from .streaming import ParsecWebSocket
 
 __all__ = [
     "ENVIRONMENTS",
