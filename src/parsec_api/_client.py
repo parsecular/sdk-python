@@ -203,6 +203,30 @@ class ParsecAPI(SyncAPIClient):
 
         return ApprovalsResource(self)
 
+    def ws(self, *, url: str | None = None) -> "ParsecWebSocket":
+        """Create a WebSocket client for real-time orderbook and trade streaming.
+
+        Inherits ``api_key`` and derives the WebSocket URL from ``base_url``.
+
+        Args:
+            url: Override the WebSocket URL (derived from base_url by default).
+
+        Returns:
+            A new :class:`ParsecWebSocket` instance.
+        """
+        from .streaming import ParsecWebSocket
+
+        ws_url = url or self._derive_ws_url()
+        return ParsecWebSocket(self.api_key, ws_url)
+
+    def _derive_ws_url(self) -> str:
+        base = str(self.base_url).rstrip("/")
+        if base.startswith("https://"):
+            return base.replace("https://", "wss://", 1) + "/ws"
+        if base.startswith("http://"):
+            return base.replace("http://", "ws://", 1) + "/ws"
+        return "wss://" + base + "/ws"
+
     @cached_property
     def with_raw_response(self) -> ParsecAPIWithRawResponse:
         return ParsecAPIWithRawResponse(self)
@@ -450,6 +474,30 @@ class AsyncParsecAPI(AsyncAPIClient):
         from .resources.approvals import AsyncApprovalsResource
 
         return AsyncApprovalsResource(self)
+
+    def ws(self, *, url: str | None = None) -> "ParsecWebSocket":
+        """Create a WebSocket client for real-time orderbook and trade streaming.
+
+        Inherits ``api_key`` and derives the WebSocket URL from ``base_url``.
+
+        Args:
+            url: Override the WebSocket URL (derived from base_url by default).
+
+        Returns:
+            A new :class:`ParsecWebSocket` instance.
+        """
+        from .streaming import ParsecWebSocket
+
+        ws_url = url or self._derive_ws_url()
+        return ParsecWebSocket(self.api_key, ws_url)
+
+    def _derive_ws_url(self) -> str:
+        base = str(self.base_url).rstrip("/")
+        if base.startswith("https://"):
+            return base.replace("https://", "wss://", 1) + "/ws"
+        if base.startswith("http://"):
+            return base.replace("http://", "ws://", 1) + "/ws"
+        return "wss://" + base + "/ws"
 
     @cached_property
     def with_raw_response(self) -> AsyncParsecAPIWithRawResponse:
