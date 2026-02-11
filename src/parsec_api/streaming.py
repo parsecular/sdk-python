@@ -140,7 +140,8 @@ def _parse_wire_levels(raw: Any) -> List[StreamingOrderbookLevel]:
     for item in cast(List[Any], raw):
         if isinstance(item, (list, tuple)) and len(item) >= 2:
             try:
-                levels.append(StreamingOrderbookLevel(price=float(item[0]), size=float(item[1])))
+                pair: List[Any] = list(item)
+                levels.append(StreamingOrderbookLevel(price=float(pair[0]), size=float(pair[1])))
             except (TypeError, ValueError):
                 continue
     return levels
