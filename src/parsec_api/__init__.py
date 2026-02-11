@@ -20,6 +20,14 @@ from ._client import (
 from ._models import BaseModel
 from ._version import __title__, __version__
 from ._response import APIResponse as APIResponse, AsyncAPIResponse as AsyncAPIResponse
+from .streaming import (
+    WsError,
+    Activity,
+    ParsecWebSocket,
+    OrderbookSnapshot,
+    MarketSubscription,
+    StreamingOrderbookLevel,
+)
 from ._constants import DEFAULT_TIMEOUT, DEFAULT_MAX_RETRIES, DEFAULT_CONNECTION_LIMITS
 from ._exceptions import (
     APIError,
@@ -39,14 +47,6 @@ from ._exceptions import (
 )
 from ._base_client import DefaultHttpxClient, DefaultAioHttpClient, DefaultAsyncHttpxClient
 from ._utils._logs import setup_logging as _setup_logging
-from .streaming import (
-    ParsecWebSocket,
-    OrderbookSnapshot,
-    StreamingOrderbookLevel,
-    Activity,
-    WsError,
-    MarketSubscription,
-)
 
 __all__ = [
     "types",

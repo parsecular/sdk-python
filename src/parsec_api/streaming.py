@@ -11,11 +11,10 @@ persists across SDK regenerations.
 
 from __future__ import annotations
 
-import asyncio
 import json
-import math
-from dataclasses import dataclass, field
-from typing import Any, Callable, Awaitable, Dict, List, Optional, Sequence, Union
+import asyncio
+from typing import Any, Dict, List, Union, Callable, Optional, Sequence, Awaitable
+from dataclasses import field, dataclass
 
 import websockets
 import websockets.asyncio.client

@@ -5,8 +5,8 @@ Uses a local mock WS server to simulate the Parsec WS protocol.
 
 from __future__ import annotations
 
-import asyncio
 import json
+import asyncio
 from typing import Any, List
 
 import pytest
@@ -14,13 +14,12 @@ import websockets
 import websockets.asyncio.server
 
 from parsec_api.streaming import (
+    WsError,
+    Activity,
     ParsecWebSocket,
     OrderbookSnapshot,
-    Activity,
-    WsError,
     MarketSubscription,
 )
-
 
 # ── Mock server helpers ──────────────────────────────────────
 
