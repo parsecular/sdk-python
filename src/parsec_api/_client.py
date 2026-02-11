@@ -42,6 +42,7 @@ if TYPE_CHECKING:
         websocket,
         price_history,
     )
+    from .streaming import ParsecWebSocket
     from .resources.orders import OrdersResource, AsyncOrdersResource
     from .resources.account import AccountResource, AsyncAccountResource
     from .resources.markets import MarketsResource, AsyncMarketsResource
@@ -51,7 +52,6 @@ if TYPE_CHECKING:
     from .resources.positions import PositionsResource, AsyncPositionsResource
     from .resources.websocket import WebsocketResource, AsyncWebsocketResource
     from .resources.price_history import PriceHistoryResource, AsyncPriceHistoryResource
-    from .streaming import ParsecWebSocket
 
 __all__ = [
     "ENVIRONMENTS",
