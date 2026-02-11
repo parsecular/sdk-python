@@ -39,6 +39,14 @@ from ._exceptions import (
 )
 from ._base_client import DefaultHttpxClient, DefaultAioHttpClient, DefaultAsyncHttpxClient
 from ._utils._logs import setup_logging as _setup_logging
+from .streaming import (
+    ParsecWebSocket,
+    OrderbookSnapshot,
+    StreamingOrderbookLevel,
+    Activity,
+    WsError,
+    MarketSubscription,
+)
 
 __all__ = [
     "types",
@@ -83,6 +91,12 @@ __all__ = [
     "DefaultHttpxClient",
     "DefaultAsyncHttpxClient",
     "DefaultAioHttpClient",
+    "ParsecWebSocket",
+    "OrderbookSnapshot",
+    "StreamingOrderbookLevel",
+    "Activity",
+    "WsError",
+    "MarketSubscription",
 ]
 
 if not _t.TYPE_CHECKING:
