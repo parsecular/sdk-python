@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import json
 import asyncio
-from typing import Any, Dict, List, Union, Callable, Optional, Sequence, Awaitable
+from typing import Any, Dict, List, Union, Callable, Optional, Sequence, Awaitable, cast
 from dataclasses import field, dataclass
 
 import websockets
@@ -136,9 +136,8 @@ def _compute_mid_spread(
 def _parse_wire_levels(raw: Any) -> List[StreamingOrderbookLevel]:
     if not isinstance(raw, list):
         return []
-    items: List[Any] = raw
     levels: List[StreamingOrderbookLevel] = []
-    for item in items:
+    for item in cast(List[Any], raw):
         if isinstance(item, (list, tuple)) and len(item) >= 2:
             try:
                 levels.append(StreamingOrderbookLevel(price=float(item[0]), size=float(item[1])))
