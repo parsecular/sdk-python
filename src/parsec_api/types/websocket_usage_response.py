@@ -3,8 +3,9 @@
 from typing import List, Optional
 
 from .._models import BaseModel
+from .customer_usage import CustomerUsage
 
-__all__ = ["WebsocketUsageResponse", "TopMarket", "Totals", "Customer"]
+__all__ = ["WebsocketUsageResponse", "TopMarket", "Totals"]
 
 
 class TopMarket(BaseModel):
@@ -33,28 +34,6 @@ class Totals(BaseModel):
     unsubscribe_requests_total: int
 
 
-class Customer(BaseModel):
-    active_connections: int
-
-    active_subscriptions: int
-
-    auth_failures_total: int
-
-    bytes_sent_total: int
-
-    connections_closed_total: int
-
-    connections_opened_total: int
-
-    customer_id: str
-
-    messages_sent_total: int
-
-    subscribe_requests_total: int
-
-    unsubscribe_requests_total: int
-
-
 class WebsocketUsageResponse(BaseModel):
     scope: str
 
@@ -64,6 +43,6 @@ class WebsocketUsageResponse(BaseModel):
 
     updated_at_ms: int
 
-    customer: Optional[Customer] = None
+    customer: Optional[CustomerUsage] = None
 
-    customers: Optional[List[Customer]] = None
+    customers: Optional[List[CustomerUsage]] = None

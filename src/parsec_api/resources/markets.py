@@ -47,6 +47,7 @@ class MarketsResource(SyncAPIResource):
         self,
         *,
         cursor: str | Omit = omit,
+        event_id: str | Omit = omit,
         exchanges: SequenceNotStr[str] | Omit = omit,
         group_id: str | Omit = omit,
         limit: int | Omit = omit,
@@ -70,10 +71,12 @@ class MarketsResource(SyncAPIResource):
         Args:
           cursor: Pagination cursor (offset-based).
 
+          event_id: Canonical Parsec event ID filter (exact match).
+
           exchanges: Exchanges to query. In SDKs this is typically an array encoded as CSV on the
               wire. Required unless `parsec_ids` is provided.
 
-          group_id: Group/event ID filter (exact match).
+          group_id: Source-native exchange event/group ID filter (exact match).
 
           limit: Results per page (default 100).
 
@@ -107,6 +110,7 @@ class MarketsResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "cursor": cursor,
+                        "event_id": event_id,
                         "exchanges": exchanges,
                         "group_id": group_id,
                         "limit": limit,
@@ -147,6 +151,7 @@ class AsyncMarketsResource(AsyncAPIResource):
         self,
         *,
         cursor: str | Omit = omit,
+        event_id: str | Omit = omit,
         exchanges: SequenceNotStr[str] | Omit = omit,
         group_id: str | Omit = omit,
         limit: int | Omit = omit,
@@ -170,10 +175,12 @@ class AsyncMarketsResource(AsyncAPIResource):
         Args:
           cursor: Pagination cursor (offset-based).
 
+          event_id: Canonical Parsec event ID filter (exact match).
+
           exchanges: Exchanges to query. In SDKs this is typically an array encoded as CSV on the
               wire. Required unless `parsec_ids` is provided.
 
-          group_id: Group/event ID filter (exact match).
+          group_id: Source-native exchange event/group ID filter (exact match).
 
           limit: Results per page (default 100).
 
@@ -207,6 +214,7 @@ class AsyncMarketsResource(AsyncAPIResource):
                 query=await async_maybe_transform(
                     {
                         "cursor": cursor,
+                        "event_id": event_id,
                         "exchanges": exchanges,
                         "group_id": group_id,
                         "limit": limit,

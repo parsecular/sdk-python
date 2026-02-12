@@ -13,6 +13,8 @@ class AccountPingResponseItem(BaseModel):
 
     exchange: str
 
+    has_credentials: bool
+
     message: str
 
 
