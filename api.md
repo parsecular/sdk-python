@@ -63,7 +63,7 @@ Methods:
 Types:
 
 ```python
-from parsec_api.types import WebsocketUsageResponse
+from parsec_api.types import CustomerUsage, WebsocketUsageResponse
 ```
 
 Methods:
