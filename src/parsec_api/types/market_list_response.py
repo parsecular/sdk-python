@@ -42,7 +42,11 @@ class Market(BaseModel):
 
     condition_id: Optional[str] = None
 
+    event_id: Optional[str] = None
+    """Canonical Parsec event ID for cross-exchange grouping."""
+
     group_id: Optional[str] = None
+    """Source-native exchange event/group ID."""
 
     liquidity: Optional[int] = None
 

@@ -13,6 +13,9 @@ class MarketListParams(TypedDict, total=False):
     cursor: str
     """Pagination cursor (offset-based)."""
 
+    event_id: str
+    """Canonical Parsec event ID filter (exact match)."""
+
     exchanges: SequenceNotStr[str]
     """Exchanges to query.
 
@@ -21,7 +24,7 @@ class MarketListParams(TypedDict, total=False):
     """
 
     group_id: str
-    """Group/event ID filter (exact match)."""
+    """Source-native exchange event/group ID filter (exact match)."""
 
     limit: int
     """Results per page (default 100)."""

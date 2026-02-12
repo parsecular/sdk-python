@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from .order import Order as Order
+from .customer_usage import CustomerUsage as CustomerUsage
 from .order_list_params import OrderListParams as OrderListParams
 from .trade_list_params import TradeListParams as TradeListParams
 from .market_list_params import MarketListParams as MarketListParams
