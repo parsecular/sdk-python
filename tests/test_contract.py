@@ -139,9 +139,9 @@ class TestRESTPriceHistory:
 
         if len(history.candles) > 0:
             candle = history.candles[0]
-            assert hasattr(candle, "t")
-            assert isinstance(candle.t, (int, float))
-            assert candle.t > 0
+            assert hasattr(candle, "timestamp")
+            assert isinstance(candle.timestamp, str)
+            assert len(candle.timestamp) > 0
 
 
 class TestRESTWsUsage:

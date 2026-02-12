@@ -85,13 +85,8 @@ By default, the async client uses `httpx` for HTTP requests. However, for improv
 You can enable this by installing `aiohttp`:
 
 ```sh
-<<<<<<< HEAD
-# install from this staging repo
-pip install 'parsec_api[aiohttp] @ git+ssh://git@github.com:parsecular/sdk-python.git'
-=======
 # install from the production repo
 pip install 'parsec_api[aiohttp] @ git+ssh://git@github.com/parsecular/sdk-python.git'
->>>>>>> origin/next
 ```
 
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
