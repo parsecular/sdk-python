@@ -11,8 +11,8 @@ Opt-in: set PARSEC_CONTRACT_TESTS=1 and PARSEC_API_KEY=pk_live_...
 from __future__ import annotations
 
 import os
-import asyncio
 import time
+import asyncio
 from typing import Any, List
 
 import pytest
