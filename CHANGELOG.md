@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.2.0 (2026-02-12)
+
+Full Changelog: [v0.1.0...v0.2.0](https://github.com/parsecular/sdk-python/compare/v0.1.0...v0.2.0)
+
+### Features
+
+* **api:** api update ([e888e12](https://github.com/parsecular/sdk-python/commit/e888e129d9c7d67a1ae70ea8f92627fea4edce4b))
+
+
+### Bug Fixes
+
+* use correct candle.timestamp field + resolve README merge conflict ([e7e6b54](https://github.com/parsecular/sdk-python/commit/e7e6b546de618727bcaf26587f42f90e0b1cce37))
+* **ws:** add missing needs_refresh book state + fill activity tests ([16468a2](https://github.com/parsecular/sdk-python/commit/16468a2056173adc8bc799523070812063bfcfb5))
+
+
+### Chores
+
+* **internal:** fix lint error on Python 3.14 ([4e37033](https://github.com/parsecular/sdk-python/commit/4e370332461fdf2203a01a2ff290c6b02a90e333))
+
+
+### Styles
+
+* fix ruff import sorting in contract tests ([d48b74b](https://github.com/parsecular/sdk-python/commit/d48b74b05678dca25d7ada9749eca439d8838839))
+
 ## 0.1.0 (2026-02-12)
 
 Full Changelog: [v0.0.1...v0.1.0](https://github.com/parsecular/sdk-python/compare/v0.0.1...v0.1.0)
