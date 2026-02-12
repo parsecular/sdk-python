@@ -20,6 +20,9 @@ class MarketListParams(TypedDict, total=False):
     `parsec_ids` is provided.
     """
 
+    group_id: str
+    """Group/event ID filter (exact match)."""
+
     limit: int
     """Results per page (default 100)."""
 

@@ -46,6 +46,18 @@ Methods:
 
 - <code title="get /api/v1/price-history">client.price_history.<a href="./src/parsec_api/resources/price_history.py">retrieve</a>(\*\*<a href="src/parsec_api/types/price_history_retrieve_params.py">params</a>) -> <a href="./src/parsec_api/types/price_history_retrieve_response.py">PriceHistoryRetrieveResponse</a></code>
 
+# Trades
+
+Types:
+
+```python
+from parsec_api.types import TradeListResponse
+```
+
+Methods:
+
+- <code title="get /api/v1/trades">client.trades.<a href="./src/parsec_api/resources/trades.py">list</a>(\*\*<a href="src/parsec_api/types/trade_list_params.py">params</a>) -> <a href="./src/parsec_api/types/trade_list_response.py">TradeListResponse</a></code>
+
 # Websocket
 
 Types:
