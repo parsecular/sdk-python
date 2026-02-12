@@ -606,6 +606,126 @@ class TestActivityEvents:
         await ws.close()
 
 
+class TestFillActivity:
+    @pytest.mark.asyncio
+    async def test_fill_activity(self, server: MockServer) -> None:
+        ws = await connect_and_auth(server)
+        activities: List[Activity] = []
+
+        @ws.on("activity")
+        async def _on_activity(a: Activity) -> None:
+            activities.append(a)
+
+        server.send_to_all({
+            "type": "activity",
+            "parsec_id": "kalshi:KXBTC",
+            "exchange": "kalshi",
+            "outcome": "Yes",
+            "token_id": "tok_xyz",
+            "market_id": "KXBTC",
+            "kind": "fill",
+            "price": 0.72,
+            "size": 50,
+            "fill_id": "fill_456",
+            "order_id": "order_789",
+            "side": "buy",
+            "server_seq": 10,
+            "feed_state": "healthy",
+            "exchange_ts_ms": 1707044096200,
+            "ingest_ts_ms": 1707044096205,
+            "source_channel": "fills",
+        })
+        await asyncio.sleep(0.1)
+
+        assert len(activities) == 1
+        a = activities[0]
+        assert a.kind == "fill"
+        assert a.fill_id == "fill_456"
+        assert a.order_id == "order_789"
+        assert a.trade_id is None
+        assert a.aggressor_side is None
+        assert a.price == 0.72
+        assert a.size == 50
+        assert a.source_channel == "fills"
+
+        await ws.close()
+
+
+class TestBookStateVariants:
+    @pytest.mark.asyncio
+    async def test_stale_book_state(self, server: MockServer) -> None:
+        ws = await connect_and_auth(server)
+        books: List[OrderbookSnapshot] = []
+
+        @ws.on("orderbook")
+        async def _on_book(b: OrderbookSnapshot) -> None:
+            books.append(b)
+
+        ws.subscribe(parsec_id="polymarket:0x123", outcome="Yes")
+        await asyncio.sleep(0.05)
+
+        server.send_to_all(sample_snapshot(book_state="stale"))
+        await asyncio.sleep(0.1)
+
+        assert len(books) == 1
+        assert books[0].book_state == "stale"
+
+        await ws.close()
+
+    @pytest.mark.asyncio
+    async def test_needs_refresh_book_state(self, server: MockServer) -> None:
+        ws = await connect_and_auth(server)
+        books: List[OrderbookSnapshot] = []
+
+        @ws.on("orderbook")
+        async def _on_book(b: OrderbookSnapshot) -> None:
+            books.append(b)
+
+        ws.subscribe(parsec_id="polymarket:0x123", outcome="Yes")
+        await asyncio.sleep(0.05)
+
+        server.send_to_all(sample_snapshot(book_state="needs_refresh"))
+        await asyncio.sleep(0.1)
+
+        assert len(books) == 1
+        assert books[0].book_state == "needs_refresh"
+
+        await ws.close()
+
+    @pytest.mark.asyncio
+    async def test_needs_refresh_on_delta(self, server: MockServer) -> None:
+        ws = await connect_and_auth(server)
+        books: List[OrderbookSnapshot] = []
+
+        @ws.on("orderbook")
+        async def _on_book(b: OrderbookSnapshot) -> None:
+            books.append(b)
+
+        ws.subscribe(parsec_id="polymarket:0x123", outcome="Yes")
+        await asyncio.sleep(0.05)
+
+        server.send_to_all(sample_snapshot())
+        await asyncio.sleep(0.1)
+
+        server.send_to_all({
+            "type": "orderbook_delta",
+            "parsec_id": "polymarket:0x123",
+            "outcome": "Yes",
+            "changes": [{"side": "bid", "price": 0.65, "size": 1200}],
+            "server_seq": 2,
+            "feed_state": "degraded",
+            "book_state": "needs_refresh",
+            "stale_after_ms": 5000,
+        })
+        await asyncio.sleep(0.1)
+
+        assert len(books) == 2
+        assert books[1].book_state == "needs_refresh"
+        assert books[1].feed_state == "degraded"
+
+        await ws.close()
+
+
 class TestSlowReaderHeartbeat:
     @pytest.mark.asyncio
     async def test_slow_reader_event(self, server: MockServer) -> None:

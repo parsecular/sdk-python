@@ -43,7 +43,7 @@ class OrderbookSnapshot:
     kind: str  # "snapshot" | "delta"
     server_seq: int
     feed_state: str  # "healthy" | "degraded" | "disconnected"
-    book_state: str  # "fresh" | "stale"
+    book_state: str  # "fresh" | "stale" | "needs_refresh"
     stale_after_ms: int
     exchange_ts_ms: Optional[int]
     ingest_ts_ms: Optional[int]
