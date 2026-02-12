@@ -31,7 +31,18 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import orders, account, markets, approvals, exchanges, orderbook, positions, websocket
+    from .resources import (
+        orders,
+        account,
+        markets,
+        approvals,
+        exchanges,
+        orderbook,
+        positions,
+        websocket,
+        price_history,
+    )
+    from .streaming import ParsecWebSocket
     from .resources.orders import OrdersResource, AsyncOrdersResource
     from .resources.account import AccountResource, AsyncAccountResource
     from .resources.markets import MarketsResource, AsyncMarketsResource
@@ -40,6 +51,7 @@ if TYPE_CHECKING:
     from .resources.orderbook import OrderbookResource, AsyncOrderbookResource
     from .resources.positions import PositionsResource, AsyncPositionsResource
     from .resources.websocket import WebsocketResource, AsyncWebsocketResource
+    from .resources.price_history import PriceHistoryResource, AsyncPriceHistoryResource
 
 __all__ = [
     "ENVIRONMENTS",
@@ -157,6 +169,12 @@ class ParsecAPI(SyncAPIClient):
         return OrderbookResource(self)
 
     @cached_property
+    def price_history(self) -> PriceHistoryResource:
+        from .resources.price_history import PriceHistoryResource
+
+        return PriceHistoryResource(self)
+
+    @cached_property
     def websocket(self) -> WebsocketResource:
         from .resources.websocket import WebsocketResource
 
@@ -185,6 +203,30 @@ class ParsecAPI(SyncAPIClient):
         from .resources.approvals import ApprovalsResource
 
         return ApprovalsResource(self)
+
+    def ws(self, *, url: str | None = None) -> "ParsecWebSocket":
+        """Create a WebSocket client for real-time orderbook and trade streaming.
+
+        Inherits ``api_key`` and derives the WebSocket URL from ``base_url``.
+
+        Args:
+            url: Override the WebSocket URL (derived from base_url by default).
+
+        Returns:
+            A new :class:`ParsecWebSocket` instance.
+        """
+        from .streaming import ParsecWebSocket
+
+        ws_url = url or self._derive_ws_url()
+        return ParsecWebSocket(self.api_key, ws_url)
+
+    def _derive_ws_url(self) -> str:
+        base = str(self.base_url).rstrip("/")
+        if base.startswith("https://"):
+            return base.replace("https://", "wss://", 1) + "/ws"
+        if base.startswith("http://"):
+            return base.replace("http://", "ws://", 1) + "/ws"
+        return "wss://" + base + "/ws"
 
     @cached_property
     def with_raw_response(self) -> ParsecAPIWithRawResponse:
@@ -399,6 +441,12 @@ class AsyncParsecAPI(AsyncAPIClient):
         return AsyncOrderbookResource(self)
 
     @cached_property
+    def price_history(self) -> AsyncPriceHistoryResource:
+        from .resources.price_history import AsyncPriceHistoryResource
+
+        return AsyncPriceHistoryResource(self)
+
+    @cached_property
     def websocket(self) -> AsyncWebsocketResource:
         from .resources.websocket import AsyncWebsocketResource
 
@@ -427,6 +475,30 @@ class AsyncParsecAPI(AsyncAPIClient):
         from .resources.approvals import AsyncApprovalsResource
 
         return AsyncApprovalsResource(self)
+
+    def ws(self, *, url: str | None = None) -> "ParsecWebSocket":
+        """Create a WebSocket client for real-time orderbook and trade streaming.
+
+        Inherits ``api_key`` and derives the WebSocket URL from ``base_url``.
+
+        Args:
+            url: Override the WebSocket URL (derived from base_url by default).
+
+        Returns:
+            A new :class:`ParsecWebSocket` instance.
+        """
+        from .streaming import ParsecWebSocket
+
+        ws_url = url or self._derive_ws_url()
+        return ParsecWebSocket(self.api_key, ws_url)
+
+    def _derive_ws_url(self) -> str:
+        base = str(self.base_url).rstrip("/")
+        if base.startswith("https://"):
+            return base.replace("https://", "wss://", 1) + "/ws"
+        if base.startswith("http://"):
+            return base.replace("http://", "ws://", 1) + "/ws"
+        return "wss://" + base + "/ws"
 
     @cached_property
     def with_raw_response(self) -> AsyncParsecAPIWithRawResponse:
@@ -568,6 +640,12 @@ class ParsecAPIWithRawResponse:
         return OrderbookResourceWithRawResponse(self._client.orderbook)
 
     @cached_property
+    def price_history(self) -> price_history.PriceHistoryResourceWithRawResponse:
+        from .resources.price_history import PriceHistoryResourceWithRawResponse
+
+        return PriceHistoryResourceWithRawResponse(self._client.price_history)
+
+    @cached_property
     def websocket(self) -> websocket.WebsocketResourceWithRawResponse:
         from .resources.websocket import WebsocketResourceWithRawResponse
 
@@ -621,6 +699,12 @@ class AsyncParsecAPIWithRawResponse:
         from .resources.orderbook import AsyncOrderbookResourceWithRawResponse
 
         return AsyncOrderbookResourceWithRawResponse(self._client.orderbook)
+
+    @cached_property
+    def price_history(self) -> price_history.AsyncPriceHistoryResourceWithRawResponse:
+        from .resources.price_history import AsyncPriceHistoryResourceWithRawResponse
+
+        return AsyncPriceHistoryResourceWithRawResponse(self._client.price_history)
 
     @cached_property
     def websocket(self) -> websocket.AsyncWebsocketResourceWithRawResponse:
@@ -678,6 +762,12 @@ class ParsecAPIWithStreamedResponse:
         return OrderbookResourceWithStreamingResponse(self._client.orderbook)
 
     @cached_property
+    def price_history(self) -> price_history.PriceHistoryResourceWithStreamingResponse:
+        from .resources.price_history import PriceHistoryResourceWithStreamingResponse
+
+        return PriceHistoryResourceWithStreamingResponse(self._client.price_history)
+
+    @cached_property
     def websocket(self) -> websocket.WebsocketResourceWithStreamingResponse:
         from .resources.websocket import WebsocketResourceWithStreamingResponse
 
@@ -731,6 +821,12 @@ class AsyncParsecAPIWithStreamedResponse:
         from .resources.orderbook import AsyncOrderbookResourceWithStreamingResponse
 
         return AsyncOrderbookResourceWithStreamingResponse(self._client.orderbook)
+
+    @cached_property
+    def price_history(self) -> price_history.AsyncPriceHistoryResourceWithStreamingResponse:
+        from .resources.price_history import AsyncPriceHistoryResourceWithStreamingResponse
+
+        return AsyncPriceHistoryResourceWithStreamingResponse(self._client.price_history)
 
     @cached_property
     def websocket(self) -> websocket.AsyncWebsocketResourceWithStreamingResponse:

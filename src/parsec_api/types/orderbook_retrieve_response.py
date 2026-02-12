@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List, Optional, Tuple
+from typing import List, Tuple, Optional
 from datetime import datetime
 
 from .._models import BaseModel

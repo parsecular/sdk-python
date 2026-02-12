@@ -1,6 +1,6 @@
 [project]
 name = "parsec_api"
-version = "0.0.1"
+version = "0.1.0"
 description = "The official Python library for the Parsec API API"
 dynamic = ["readme"]
 license = "Apache-2.0"
@@ -15,6 +15,7 @@ dependencies = [
   "anyio>=3.5.0, <5",
   "distro>=1.7.0, <2",
   "sniffio",
+  "websockets>=12.0, <15",
 ]
 
 requires-python = ">= 3.9"
@@ -136,6 +137,7 @@ exclude = [
     ".venv",
     ".nox",
     ".git",
+    "tests",
 ]
 
 reportImplicitOverride = true
