@@ -48,6 +48,7 @@ class MarketsResource(SyncAPIResource):
         *,
         cursor: str | Omit = omit,
         exchanges: SequenceNotStr[str] | Omit = omit,
+        group_id: str | Omit = omit,
         limit: int | Omit = omit,
         min_liquidity: int | Omit = omit,
         min_volume: int | Omit = omit,
@@ -71,6 +72,8 @@ class MarketsResource(SyncAPIResource):
 
           exchanges: Exchanges to query. In SDKs this is typically an array encoded as CSV on the
               wire. Required unless `parsec_ids` is provided.
+
+          group_id: Group/event ID filter (exact match).
 
           limit: Results per page (default 100).
 
@@ -105,6 +108,7 @@ class MarketsResource(SyncAPIResource):
                     {
                         "cursor": cursor,
                         "exchanges": exchanges,
+                        "group_id": group_id,
                         "limit": limit,
                         "min_liquidity": min_liquidity,
                         "min_volume": min_volume,
@@ -144,6 +148,7 @@ class AsyncMarketsResource(AsyncAPIResource):
         *,
         cursor: str | Omit = omit,
         exchanges: SequenceNotStr[str] | Omit = omit,
+        group_id: str | Omit = omit,
         limit: int | Omit = omit,
         min_liquidity: int | Omit = omit,
         min_volume: int | Omit = omit,
@@ -167,6 +172,8 @@ class AsyncMarketsResource(AsyncAPIResource):
 
           exchanges: Exchanges to query. In SDKs this is typically an array encoded as CSV on the
               wire. Required unless `parsec_ids` is provided.
+
+          group_id: Group/event ID filter (exact match).
 
           limit: Results per page (default 100).
 
@@ -201,6 +208,7 @@ class AsyncMarketsResource(AsyncAPIResource):
                     {
                         "cursor": cursor,
                         "exchanges": exchanges,
+                        "group_id": group_id,
                         "limit": limit,
                         "min_liquidity": min_liquidity,
                         "min_volume": min_volume,

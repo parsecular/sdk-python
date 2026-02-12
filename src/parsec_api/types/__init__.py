@@ -4,12 +4,14 @@ from __future__ import annotations
 
 from .order import Order as Order
 from .order_list_params import OrderListParams as OrderListParams
+from .trade_list_params import TradeListParams as TradeListParams
 from .market_list_params import MarketListParams as MarketListParams
 from .account_ping_params import AccountPingParams as AccountPingParams
 from .approval_set_params import ApprovalSetParams as ApprovalSetParams
 from .order_cancel_params import OrderCancelParams as OrderCancelParams
 from .order_create_params import OrderCreateParams as OrderCreateParams
 from .order_list_response import OrderListResponse as OrderListResponse
+from .trade_list_response import TradeListResponse as TradeListResponse
 from .approval_list_params import ApprovalListParams as ApprovalListParams
 from .market_list_response import MarketListResponse as MarketListResponse
 from .position_list_params import PositionListParams as PositionListParams

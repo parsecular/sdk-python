@@ -8,6 +8,14 @@ from .orders import (
     OrdersResourceWithStreamingResponse,
     AsyncOrdersResourceWithStreamingResponse,
 )
+from .trades import (
+    TradesResource,
+    AsyncTradesResource,
+    TradesResourceWithRawResponse,
+    AsyncTradesResourceWithRawResponse,
+    TradesResourceWithStreamingResponse,
+    AsyncTradesResourceWithStreamingResponse,
+)
 from .account import (
     AccountResource,
     AsyncAccountResource,
@@ -98,6 +106,12 @@ __all__ = [
     "AsyncPriceHistoryResourceWithRawResponse",
     "PriceHistoryResourceWithStreamingResponse",
     "AsyncPriceHistoryResourceWithStreamingResponse",
+    "TradesResource",
+    "AsyncTradesResource",
+    "TradesResourceWithRawResponse",
+    "AsyncTradesResourceWithRawResponse",
+    "TradesResourceWithStreamingResponse",
+    "AsyncTradesResourceWithStreamingResponse",
     "WebsocketResource",
     "AsyncWebsocketResource",
     "WebsocketResourceWithRawResponse",
