@@ -16,12 +16,9 @@ The REST API documentation can be found on [docs.parsecapi.com](https://docs.par
 ## Installation
 
 ```sh
-# install from the production repo
-pip install git+ssh://git@github.com/parsecular/sdk-python.git
+# install from PyPI
+pip install parsec_api
 ```
-
-> [!NOTE]
-> Once this package is [published to PyPI](https://www.stainless.com/docs/guides/publish), this will become: `pip install parsec_api`
 
 ## Usage
 
@@ -85,13 +82,8 @@ By default, the async client uses `httpx` for HTTP requests. However, for improv
 You can enable this by installing `aiohttp`:
 
 ```sh
-<<<<<<< HEAD
-# install from this staging repo
-pip install 'parsec_api[aiohttp] @ git+ssh://git@github.com:parsecular/sdk-python.git'
-=======
-# install from the production repo
-pip install 'parsec_api[aiohttp] @ git+ssh://git@github.com/parsecular/sdk-python.git'
->>>>>>> origin/next
+# install from PyPI
+pip install parsec_api[aiohttp]
 ```
 
 Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:

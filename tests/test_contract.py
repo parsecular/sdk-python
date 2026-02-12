@@ -11,8 +11,8 @@ Opt-in: set PARSEC_CONTRACT_TESTS=1 and PARSEC_API_KEY=pk_live_...
 from __future__ import annotations
 
 import os
-import asyncio
 import time
+import asyncio
 from typing import Any, List
 
 import pytest
@@ -139,9 +139,9 @@ class TestRESTPriceHistory:
 
         if len(history.candles) > 0:
             candle = history.candles[0]
-            assert hasattr(candle, "t")
-            assert isinstance(candle.t, (int, float))
-            assert candle.t > 0
+            assert hasattr(candle, "timestamp")
+            assert isinstance(candle.timestamp, str)
+            assert len(candle.timestamp) > 0
 
 
 class TestRESTWsUsage:
