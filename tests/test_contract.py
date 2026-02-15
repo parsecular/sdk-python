@@ -66,10 +66,12 @@ class TestRESTMarkets:
         assert market.parsec_id.startswith("kalshi:")  # parsec_id has exchange prefix
         assert market.exchange == "kalshi"  # filtered to kalshi
         assert len(market.outcomes) > 0
-        assert isinstance(market.outcomes[0], str)
-        assert market.status in ("active", "closed", "settled")
-        assert isinstance(market.title, str)
-        assert len(market.title) > 0
+        assert hasattr(market.outcomes[0], "name")
+        assert isinstance(market.outcomes[0].name, str)
+        assert isinstance(market.status, str)
+        assert len(market.status) > 0
+        assert isinstance(market.question, str)
+        assert len(market.question) > 0
 
     def test_list_markets_multi_exchange(self, client: Any) -> None:
         resp = client.markets.list(exchanges=["kalshi", "polymarket"], limit=20)
@@ -82,6 +84,35 @@ class TestRESTMarkets:
         assert exchange_set <= {"kalshi", "polymarket"}, f"Unexpected exchanges: {exchange_set}"
 
 
+class TestRESTEvents:
+    def test_list_events_shape(self, client: Any) -> None:
+        resp = client.events.list(exchanges=["kalshi"], limit=3)
+        assert hasattr(resp, "events")
+        assert isinstance(resp.events, list)
+        assert len(resp.events) > 0
+        assert len(resp.events) <= 3
+
+        event = resp.events[0]
+        assert isinstance(event.event_id, str)
+        assert isinstance(event.title, str)
+        assert len(event.title) > 0
+        assert isinstance(event.market_count, int)
+        assert event.market_count > 0
+        assert isinstance(event.total_volume, (int, float))
+        assert isinstance(event.exchanges, list)
+        assert isinstance(event.status, str)
+
+    def test_list_events_with_markets(self, client: Any) -> None:
+        resp = client.events.list(exchanges=["kalshi"], limit=1, include_markets=True)
+        event = resp.events[0]
+        assert event.markets is not None
+        assert isinstance(event.markets, list)
+        if len(event.markets) > 0:
+            market = event.markets[0]
+            assert isinstance(market.parsec_id, str)
+            assert isinstance(market.question, str)
+
+
 class TestRESTOrderbook:
     @staticmethod
     def _find_market_with_depth(client: Any) -> Any:
@@ -91,7 +122,7 @@ class TestRESTOrderbook:
         for m in resp.markets:
             if m.status != "active" or len(m.outcomes) == 0:
                 continue
-            ob = client.orderbook.retrieve(parsec_id=m.parsec_id, outcome=m.outcomes[0])
+            ob = client.orderbook.retrieve(parsec_id=m.parsec_id, outcome=m.outcomes[0].name)
             if len(ob.bids) + len(ob.asks) > 0:
                 return m, ob
         return None, None
@@ -131,7 +162,7 @@ class TestRESTPriceHistory:
 
         history = client.price_history.retrieve(
             parsec_id=market.parsec_id,
-            outcome=market.outcomes[0],
+            outcome=market.outcomes[0].name,
             interval="1h",
         )
         assert hasattr(history, "candles")
@@ -140,8 +171,7 @@ class TestRESTPriceHistory:
         if len(history.candles) > 0:
             candle = history.candles[0]
             assert hasattr(candle, "timestamp")
-            assert isinstance(candle.timestamp, str)
-            assert len(candle.timestamp) > 0
+            assert candle.timestamp is not None
 
 
 class TestRESTWsUsage:
@@ -217,17 +247,21 @@ class TestWebSocketContract:
     @staticmethod
     def _find_active_markets_with_depth(client: Any, count: int = 1) -> List[Any]:
         """Find active markets that have actual orderbook depth.
-        Probes each market's orderbook to avoid picking empty/illiquid ones."""
-        resp = client.markets.list(exchanges=["kalshi"], limit=30)
-        result = []
-        for m in resp.markets:
-            if m.status != "active" or len(m.outcomes) == 0:
-                continue
-            ob = client.orderbook.retrieve(parsec_id=m.parsec_id, outcome=m.outcomes[0])
-            if len(ob.bids) + len(ob.asks) > 0:
-                result.append(m)
-                if len(result) >= count:
-                    break
+        Probes each market's orderbook to avoid picking empty/illiquid ones.
+        Searches across multiple exchanges to maximise chances of finding enough markets."""
+        result: List[Any] = []
+        for exchange in ["kalshi", "polymarket"]:
+            if len(result) >= count:
+                break
+            resp = client.markets.list(exchanges=[exchange], limit=30)
+            for m in resp.markets:
+                if m.status != "active" or len(m.outcomes) == 0:
+                    continue
+                ob = client.orderbook.retrieve(parsec_id=m.parsec_id, outcome=m.outcomes[0].name)
+                if len(ob.bids) + len(ob.asks) > 0:
+                    result.append(m)
+                    if len(result) >= count:
+                        break
         assert len(result) >= count, f"Need {count} markets with depth, found {len(result)}"
         return result
 
@@ -238,7 +272,7 @@ class TestWebSocketContract:
 
         markets = self._find_active_markets_with_depth(client, 1)
         parsec_id = markets[0].parsec_id
-        outcome = markets[0].outcomes[0]
+        outcome = markets[0].outcomes[0].name
 
         ws = client.ws()
         books: List[OrderbookSnapshot] = []
@@ -331,7 +365,7 @@ class TestWebSocketContract:
         await ws.connect()
         try:
             ws.subscribe([
-                MarketSubscription(parsec_id=m.parsec_id, outcome=m.outcomes[0])
+                MarketSubscription(parsec_id=m.parsec_id, outcome=m.outcomes[0].name)
                 for m in markets
             ])
 
@@ -360,7 +394,7 @@ class TestWebSocketContract:
 
         markets = self._find_active_markets_with_depth(client, 1)
         parsec_id = markets[0].parsec_id
-        outcome = markets[0].outcomes[0]
+        outcome = markets[0].outcomes[0].name
 
         ws = client.ws()
         books: List[OrderbookSnapshot] = []
@@ -390,7 +424,8 @@ class TestWebSocketContract:
 
     @pytest.mark.asyncio
     async def test_heartbeat_received_with_valid_timestamp(self, client: Any) -> None:
-        """Connect and wait for a heartbeat within 35s. Validates timestamp is recent."""
+        """Connect and wait for a heartbeat within 45s. Validates timestamp is recent.
+        Server sends heartbeats in response to WS Ping frames (~20s default interval)."""
         ws = client.ws()
         heartbeats: List[int] = []
 
@@ -400,11 +435,11 @@ class TestWebSocketContract:
 
         await ws.connect()
         try:
-            deadline = asyncio.get_event_loop().time() + 35.0
+            deadline = asyncio.get_event_loop().time() + 45.0
             while len(heartbeats) == 0 and asyncio.get_event_loop().time() < deadline:
                 await asyncio.sleep(0.5)
 
-            assert len(heartbeats) >= 1, "No heartbeat received within 35s"
+            assert len(heartbeats) >= 1, "No heartbeat received within 45s"
             assert isinstance(heartbeats[0], int)
             # Timestamp should be a recent epoch ms (within last 60s)
             now_ms = int(time.time() * 1000)

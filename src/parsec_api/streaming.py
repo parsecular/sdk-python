@@ -11,10 +11,14 @@ persists across SDK regenerations.
 
 from __future__ import annotations
 
+import copy
 import json
 import asyncio
+import logging
 from typing import Any, Dict, List, Union, Callable, Optional, Sequence, Awaitable, cast
 from dataclasses import field, dataclass
+
+logger = logging.getLogger(__name__)
 
 import websockets
 import websockets.asyncio.client
@@ -216,63 +220,82 @@ class ParsecWebSocket:
 
         return decorator
 
+    def off(self, event: str, fn: Any) -> None:
+        """Remove a previously registered event handler."""
+        listeners: Dict[str, List[Any]] = {
+            "orderbook": self._on_orderbook,
+            "activity": self._on_activity,
+            "error": self._on_error,
+            "connected": self._on_connected,
+            "disconnected": self._on_disconnected,
+            "reconnecting": self._on_reconnecting,
+            "slow_reader": self._on_slow_reader,
+            "heartbeat": self._on_heartbeat,
+        }
+        lst = listeners.get(event)
+        if lst is not None:
+            try:
+                lst.remove(fn)
+            except ValueError:
+                pass
+
     # ── Emit helpers ───────────────────────────────────────
 
     async def _emit_orderbook(self, book: OrderbookSnapshot) -> None:
         for cb in self._on_orderbook:
             try:
                 await cb(book)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Callback error in %s handler: %s", "orderbook", e)
 
     async def _emit_activity(self, activity: Activity) -> None:
         for cb in self._on_activity:
             try:
                 await cb(activity)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Callback error in %s handler: %s", "activity", e)
 
     async def _emit_error(self, err: WsError) -> None:
         for cb in self._on_error:
             try:
                 await cb(err)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Callback error in %s handler: %s", "error", e)
 
     async def _emit_connected(self) -> None:
         for cb in self._on_connected:
             try:
                 await cb()
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Callback error in %s handler: %s", "connected", e)
 
     async def _emit_disconnected(self, reason: str) -> None:
         for cb in self._on_disconnected:
             try:
                 await cb(reason)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Callback error in %s handler: %s", "disconnected", e)
 
     async def _emit_reconnecting(self, attempt: int, delay_ms: int) -> None:
         for cb in self._on_reconnecting:
             try:
                 await cb(attempt, delay_ms)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Callback error in %s handler: %s", "reconnecting", e)
 
     async def _emit_slow_reader(self, parsec_id: str, outcome: str) -> None:
         for cb in self._on_slow_reader:
             try:
                 await cb(parsec_id, outcome)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Callback error in %s handler: %s", "slow_reader", e)
 
     async def _emit_heartbeat(self, ts_ms: int) -> None:
         for cb in self._on_heartbeat:
             try:
                 await cb(ts_ms)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Callback error in %s handler: %s", "heartbeat", e)
 
     # ── Connection lifecycle ───────────────────────────────
 
@@ -403,6 +426,28 @@ class ParsecWebSocket:
         while self._state not in ("closed",) and not self._intentional_close:
             await asyncio.sleep(0.1)
 
+    def get_book(self, parsec_id: str, outcome: str = "yes") -> Optional[Dict[str, Any]]:
+        """Return a deep copy of the current local book state, or None if not available."""
+        key = _market_key(parsec_id, outcome)
+        book = self._books.get(key)
+        if book is None:
+            return None
+        mid, spread = _compute_mid_spread(book.bids, book.asks)
+        result: Dict[str, Any] = {
+            "parsec_id": book.parsec_id,
+            "outcome": book.outcome,
+            "exchange": book.exchange,
+            "token_id": book.token_id,
+            "market_id": book.market_id,
+            "bids": [{"price": l.price, "size": l.size} for l in book.bids],
+            "asks": [{"price": l.price, "size": l.size} for l in book.asks],
+            "mid_price": mid,
+            "spread": spread,
+            "tick_size": book.tick_size,
+            "last_seq": book.last_seq,
+        }
+        return copy.deepcopy(result)
+
     # ── Internals ──────────────────────────────────────────
 
     async def _do_connect(self, initial: bool = False) -> None:
@@ -425,7 +470,6 @@ class ParsecWebSocket:
             return
 
         self._state = "authenticating"
-        await self._emit_connected()
 
         # Send auth
         self._ws_send({"type": "auth", "api_key": self._api_key})
@@ -433,8 +477,11 @@ class ParsecWebSocket:
         if initial:
             # Wait for auth response synchronously for the initial connect()
             try:
-                raw = await self._ws.recv()
+                raw = await asyncio.wait_for(self._ws.recv(), timeout=10.0)
                 msg = json.loads(raw)
+            except asyncio.TimeoutError as exc:
+                await self._emit_disconnected("Auth timeout")
+                raise ConnectionError("Auth timeout: no response from server within 10s") from exc
             except Exception as exc:
                 await self._emit_disconnected("Connection closed during authentication")
                 raise ConnectionError("Connection closed during authentication") from exc
@@ -442,6 +489,7 @@ class ParsecWebSocket:
             if msg.get("type") == "auth_ok":
                 self._state = "connected"
                 self._reconnect_attempt = 0
+                await self._emit_connected()
                 self._resubscribe_all()
                 # Start background receive loop
                 self._recv_task = asyncio.create_task(self._recv_loop())
@@ -496,6 +544,7 @@ class ParsecWebSocket:
         if msg_type == "auth_ok":
             self._state = "connected"
             self._reconnect_attempt = 0
+            await self._emit_connected()
             self._resubscribe_all()
 
         elif msg_type == "auth_error":
@@ -726,7 +775,12 @@ class ParsecWebSocket:
     def _ws_send(self, msg: Any) -> None:
         if self._ws:
             try:
-                # Use the sync-compatible send (queues internally in websockets)
-                asyncio.ensure_future(self._ws.send(json.dumps(msg)))
-            except Exception:
-                pass
+                fut = asyncio.ensure_future(self._ws.send(json.dumps(msg)))
+                fut.add_done_callback(self._on_send_complete)
+            except Exception as e:
+                logger.warning("Failed to queue WS send: %s", e)
+
+    def _on_send_complete(self, fut: "asyncio.Future[Any]") -> None:
+        exc = fut.exception()
+        if exc:
+            logger.warning("WS send failed: %s", exc)

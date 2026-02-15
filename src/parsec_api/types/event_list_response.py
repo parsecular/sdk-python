@@ -5,10 +5,10 @@ from datetime import datetime
 
 from .._models import BaseModel
 
-__all__ = ["MarketListResponse", "Market", "MarketOutcome", "Pagination"]
+__all__ = ["EventListResponse", "Event", "EventMarket", "EventMarketOutcome", "Pagination"]
 
 
-class MarketOutcome(BaseModel):
+class EventMarketOutcome(BaseModel):
     name: str
     """Outcome label (e.g., "Yes", "No", or a categorical name)."""
 
@@ -19,7 +19,7 @@ class MarketOutcome(BaseModel):
     """Exchange-native token ID for this outcome."""
 
 
-class Market(BaseModel):
+class EventMarket(BaseModel):
     exchange: str
 
     exchange_group_id: str
@@ -34,7 +34,7 @@ class Market(BaseModel):
     market_type: str
     """Market type (e.g., binary, categorical)."""
 
-    outcomes: List[MarketOutcome]
+    outcomes: List[EventMarketOutcome]
     """Market outcomes with optional price and token ID."""
 
     parsec_group_id: str
@@ -107,6 +107,32 @@ class Market(BaseModel):
     """Cross-reference data (exchange-specific metadata)."""
 
 
+class Event(BaseModel):
+    event_id: str
+    """Canonical Parsec event ID."""
+
+    exchanges: List[str]
+    """Deduplicated list of exchanges with markets in this event."""
+
+    market_count: int
+    """Number of markets in this event."""
+
+    status: str
+    """Event status. Common values: active, closed, resolved, archived."""
+
+    title: str
+    """Event title (derived from shortest constituent market title)."""
+
+    total_volume: float
+    """Sum of volume across all markets in this event."""
+
+    close_time: Optional[datetime] = None
+    """Earliest close time across constituent markets."""
+
+    markets: Optional[List[EventMarket]] = None
+    """Constituent markets (only included when `include_markets=true`)."""
+
+
 class Pagination(BaseModel):
     count: int
     """Number of items in this response."""
@@ -121,7 +147,7 @@ class Pagination(BaseModel):
     """Cursor for the next page (offset-based)."""
 
 
-class MarketListResponse(BaseModel):
-    markets: List[Market]
+class EventListResponse(BaseModel):
+    events: List[Event]
 
     pagination: Pagination

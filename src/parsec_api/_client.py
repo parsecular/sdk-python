@@ -32,6 +32,7 @@ from ._base_client import (
 
 if TYPE_CHECKING:
     from .resources import (
+        events,
         orders,
         trades,
         account,
@@ -44,6 +45,7 @@ if TYPE_CHECKING:
         price_history,
     )
     from .streaming import ParsecWebSocket
+    from .resources.events import EventsResource, AsyncEventsResource
     from .resources.orders import OrdersResource, AsyncOrdersResource
     from .resources.trades import TradesResource, AsyncTradesResource
     from .resources.account import AccountResource, AsyncAccountResource
@@ -157,6 +159,12 @@ class ParsecAPI(SyncAPIClient):
         from .resources.exchanges import ExchangesResource
 
         return ExchangesResource(self)
+
+    @cached_property
+    def events(self) -> EventsResource:
+        from .resources.events import EventsResource
+
+        return EventsResource(self)
 
     @cached_property
     def markets(self) -> MarketsResource:
@@ -437,6 +445,12 @@ class AsyncParsecAPI(AsyncAPIClient):
         return AsyncExchangesResource(self)
 
     @cached_property
+    def events(self) -> AsyncEventsResource:
+        from .resources.events import AsyncEventsResource
+
+        return AsyncEventsResource(self)
+
+    @cached_property
     def markets(self) -> AsyncMarketsResource:
         from .resources.markets import AsyncMarketsResource
 
@@ -642,6 +656,12 @@ class ParsecAPIWithRawResponse:
         return ExchangesResourceWithRawResponse(self._client.exchanges)
 
     @cached_property
+    def events(self) -> events.EventsResourceWithRawResponse:
+        from .resources.events import EventsResourceWithRawResponse
+
+        return EventsResourceWithRawResponse(self._client.events)
+
+    @cached_property
     def markets(self) -> markets.MarketsResourceWithRawResponse:
         from .resources.markets import MarketsResourceWithRawResponse
 
@@ -707,6 +727,12 @@ class AsyncParsecAPIWithRawResponse:
         from .resources.exchanges import AsyncExchangesResourceWithRawResponse
 
         return AsyncExchangesResourceWithRawResponse(self._client.exchanges)
+
+    @cached_property
+    def events(self) -> events.AsyncEventsResourceWithRawResponse:
+        from .resources.events import AsyncEventsResourceWithRawResponse
+
+        return AsyncEventsResourceWithRawResponse(self._client.events)
 
     @cached_property
     def markets(self) -> markets.AsyncMarketsResourceWithRawResponse:
@@ -776,6 +802,12 @@ class ParsecAPIWithStreamedResponse:
         return ExchangesResourceWithStreamingResponse(self._client.exchanges)
 
     @cached_property
+    def events(self) -> events.EventsResourceWithStreamingResponse:
+        from .resources.events import EventsResourceWithStreamingResponse
+
+        return EventsResourceWithStreamingResponse(self._client.events)
+
+    @cached_property
     def markets(self) -> markets.MarketsResourceWithStreamingResponse:
         from .resources.markets import MarketsResourceWithStreamingResponse
 
@@ -841,6 +873,12 @@ class AsyncParsecAPIWithStreamedResponse:
         from .resources.exchanges import AsyncExchangesResourceWithStreamingResponse
 
         return AsyncExchangesResourceWithStreamingResponse(self._client.exchanges)
+
+    @cached_property
+    def events(self) -> events.AsyncEventsResourceWithStreamingResponse:
+        from .resources.events import AsyncEventsResourceWithStreamingResponse
+
+        return AsyncEventsResourceWithStreamingResponse(self._client.events)
 
     @cached_property
     def markets(self) -> markets.AsyncMarketsResourceWithStreamingResponse:
