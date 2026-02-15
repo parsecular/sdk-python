@@ -426,28 +426,27 @@ class ParsecWebSocket:
         while self._state not in ("closed",) and not self._intentional_close:
             await asyncio.sleep(0.1)
 
-    def get_book(self, parsec_id: str, outcome: str = "yes") -> Optional[dict]:
+    def get_book(self, parsec_id: str, outcome: str = "yes") -> Optional[Dict[str, Any]]:
         """Return a deep copy of the current local book state, or None if not available."""
         key = _market_key(parsec_id, outcome)
         book = self._books.get(key)
         if book is None:
             return None
         mid, spread = _compute_mid_spread(book.bids, book.asks)
-        return copy.deepcopy(
-            {
-                "parsec_id": book.parsec_id,
-                "outcome": book.outcome,
-                "exchange": book.exchange,
-                "token_id": book.token_id,
-                "market_id": book.market_id,
-                "bids": [{"price": l.price, "size": l.size} for l in book.bids],
-                "asks": [{"price": l.price, "size": l.size} for l in book.asks],
-                "mid_price": mid,
-                "spread": spread,
-                "tick_size": book.tick_size,
-                "last_seq": book.last_seq,
-            }
-        )
+        result: Dict[str, Any] = {
+            "parsec_id": book.parsec_id,
+            "outcome": book.outcome,
+            "exchange": book.exchange,
+            "token_id": book.token_id,
+            "market_id": book.market_id,
+            "bids": [{"price": l.price, "size": l.size} for l in book.bids],
+            "asks": [{"price": l.price, "size": l.size} for l in book.asks],
+            "mid_price": mid,
+            "spread": spread,
+            "tick_size": book.tick_size,
+            "last_seq": book.last_seq,
+        }
+        return copy.deepcopy(result)
 
     # ── Internals ──────────────────────────────────────────
 
