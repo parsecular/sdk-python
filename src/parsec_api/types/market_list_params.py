@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing_extensions import Literal, TypedDict
+from typing_extensions import TypedDict
 
 from .._types import SequenceNotStr
 
@@ -29,10 +29,10 @@ class MarketListParams(TypedDict, total=False):
     limit: int
     """Results per page (default 100)."""
 
-    min_liquidity: int
+    min_liquidity: float
     """Minimum liquidity filter."""
 
-    min_volume: int
+    min_volume: float
     """Minimum volume filter."""
 
     parsec_ids: SequenceNotStr[str]
@@ -43,7 +43,7 @@ class MarketListParams(TypedDict, total=False):
     """
 
     search: str
-    """Keyword search in title/description/question (case-insensitive)."""
+    """Keyword search in question/description (case-insensitive)."""
 
-    status: Literal["active", "closed", "resolved"]
-    """Status filter."""
+    status: str
+    """Status filter (e.g., active, closed, resolved, archived)."""

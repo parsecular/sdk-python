@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from ..types import market_list_params
+from ..types import event_list_params
 from .._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
 from .._utils import maybe_transform, async_maybe_transform
 from .._compat import cached_property
@@ -16,42 +16,39 @@ from .._response import (
     async_to_streamed_response_wrapper,
 )
 from .._base_client import make_request_options
-from ..types.market_list_response import MarketListResponse
+from ..types.event_list_response import EventListResponse
 
-__all__ = ["MarketsResource", "AsyncMarketsResource"]
+__all__ = ["EventsResource", "AsyncEventsResource"]
 
 
-class MarketsResource(SyncAPIResource):
+class EventsResource(SyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> MarketsResourceWithRawResponse:
+    def with_raw_response(self) -> EventsResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/parsecular/sdk-python#accessing-raw-response-data-eg-headers
         """
-        return MarketsResourceWithRawResponse(self)
+        return EventsResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> MarketsResourceWithStreamingResponse:
+    def with_streaming_response(self) -> EventsResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/parsecular/sdk-python#with_streaming_response
         """
-        return MarketsResourceWithStreamingResponse(self)
+        return EventsResourceWithStreamingResponse(self)
 
     def list(
         self,
         *,
         cursor: str | Omit = omit,
-        event_id: str | Omit = omit,
         exchanges: SequenceNotStr[str] | Omit = omit,
-        group_id: str | Omit = omit,
+        include_markets: bool | Omit = omit,
         limit: int | Omit = omit,
-        min_liquidity: float | Omit = omit,
         min_volume: float | Omit = omit,
-        parsec_ids: SequenceNotStr[str] | Omit = omit,
         search: str | Omit = omit,
         status: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -60,33 +57,24 @@ class MarketsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> MarketListResponse:
-        """Provide either `exchanges` (CSV) or `parsec_ids` (CSV).
+    ) -> EventListResponse:
+        """Aggregates markets by event ID from the Silver cache.
 
-        When `parsec_ids` is
-        provided, other filters are not allowed.
+        Returns event summaries
+        sorted by total volume (descending). Markets without an event_id are excluded.
 
         Args:
           cursor: Pagination cursor (offset-based).
 
-          event_id: Canonical Parsec event ID filter (exact match).
+          exchanges: Exchanges to include (CSV). Defaults to all exchanges in the cache.
 
-          exchanges: Exchanges to query. In SDKs this is typically an array encoded as CSV on the
-              wire. Required unless `parsec_ids` is provided.
+          include_markets: Include constituent markets in the response (default false).
 
-          group_id: Source-native exchange event/group ID filter (exact match).
+          limit: Results per page (default 50, max 100).
 
-          limit: Results per page (default 100).
+          min_volume: Minimum total volume across all markets in event.
 
-          min_liquidity: Minimum liquidity filter.
-
-          min_volume: Minimum volume filter.
-
-          parsec_ids: Parsec market IDs to fetch directly (format: `{exchange}:{native_id}`). In SDKs
-              this is typically an array encoded as CSV on the wire. Required unless
-              `exchanges` is provided.
-
-          search: Keyword search in question/description (case-insensitive).
+          search: Keyword search in event title (case-insensitive).
 
           status: Status filter (e.g., active, closed, resolved, archived).
 
@@ -99,7 +87,7 @@ class MarketsResource(SyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return self._get(
-            "/api/v1/markets",
+            "/api/v1/events",
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -108,54 +96,48 @@ class MarketsResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "cursor": cursor,
-                        "event_id": event_id,
                         "exchanges": exchanges,
-                        "group_id": group_id,
+                        "include_markets": include_markets,
                         "limit": limit,
-                        "min_liquidity": min_liquidity,
                         "min_volume": min_volume,
-                        "parsec_ids": parsec_ids,
                         "search": search,
                         "status": status,
                     },
-                    market_list_params.MarketListParams,
+                    event_list_params.EventListParams,
                 ),
             ),
-            cast_to=MarketListResponse,
+            cast_to=EventListResponse,
         )
 
 
-class AsyncMarketsResource(AsyncAPIResource):
+class AsyncEventsResource(AsyncAPIResource):
     @cached_property
-    def with_raw_response(self) -> AsyncMarketsResourceWithRawResponse:
+    def with_raw_response(self) -> AsyncEventsResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
         For more information, see https://www.github.com/parsecular/sdk-python#accessing-raw-response-data-eg-headers
         """
-        return AsyncMarketsResourceWithRawResponse(self)
+        return AsyncEventsResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AsyncMarketsResourceWithStreamingResponse:
+    def with_streaming_response(self) -> AsyncEventsResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
         For more information, see https://www.github.com/parsecular/sdk-python#with_streaming_response
         """
-        return AsyncMarketsResourceWithStreamingResponse(self)
+        return AsyncEventsResourceWithStreamingResponse(self)
 
     async def list(
         self,
         *,
         cursor: str | Omit = omit,
-        event_id: str | Omit = omit,
         exchanges: SequenceNotStr[str] | Omit = omit,
-        group_id: str | Omit = omit,
+        include_markets: bool | Omit = omit,
         limit: int | Omit = omit,
-        min_liquidity: float | Omit = omit,
         min_volume: float | Omit = omit,
-        parsec_ids: SequenceNotStr[str] | Omit = omit,
         search: str | Omit = omit,
         status: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -164,33 +146,24 @@ class AsyncMarketsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> MarketListResponse:
-        """Provide either `exchanges` (CSV) or `parsec_ids` (CSV).
+    ) -> EventListResponse:
+        """Aggregates markets by event ID from the Silver cache.
 
-        When `parsec_ids` is
-        provided, other filters are not allowed.
+        Returns event summaries
+        sorted by total volume (descending). Markets without an event_id are excluded.
 
         Args:
           cursor: Pagination cursor (offset-based).
 
-          event_id: Canonical Parsec event ID filter (exact match).
+          exchanges: Exchanges to include (CSV). Defaults to all exchanges in the cache.
 
-          exchanges: Exchanges to query. In SDKs this is typically an array encoded as CSV on the
-              wire. Required unless `parsec_ids` is provided.
+          include_markets: Include constituent markets in the response (default false).
 
-          group_id: Source-native exchange event/group ID filter (exact match).
+          limit: Results per page (default 50, max 100).
 
-          limit: Results per page (default 100).
+          min_volume: Minimum total volume across all markets in event.
 
-          min_liquidity: Minimum liquidity filter.
-
-          min_volume: Minimum volume filter.
-
-          parsec_ids: Parsec market IDs to fetch directly (format: `{exchange}:{native_id}`). In SDKs
-              this is typically an array encoded as CSV on the wire. Required unless
-              `exchanges` is provided.
-
-          search: Keyword search in question/description (case-insensitive).
+          search: Keyword search in event title (case-insensitive).
 
           status: Status filter (e.g., active, closed, resolved, archived).
 
@@ -203,7 +176,7 @@ class AsyncMarketsResource(AsyncAPIResource):
           timeout: Override the client-level default timeout for this request, in seconds
         """
         return await self._get(
-            "/api/v1/markets",
+            "/api/v1/events",
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -212,54 +185,51 @@ class AsyncMarketsResource(AsyncAPIResource):
                 query=await async_maybe_transform(
                     {
                         "cursor": cursor,
-                        "event_id": event_id,
                         "exchanges": exchanges,
-                        "group_id": group_id,
+                        "include_markets": include_markets,
                         "limit": limit,
-                        "min_liquidity": min_liquidity,
                         "min_volume": min_volume,
-                        "parsec_ids": parsec_ids,
                         "search": search,
                         "status": status,
                     },
-                    market_list_params.MarketListParams,
+                    event_list_params.EventListParams,
                 ),
             ),
-            cast_to=MarketListResponse,
+            cast_to=EventListResponse,
         )
 
 
-class MarketsResourceWithRawResponse:
-    def __init__(self, markets: MarketsResource) -> None:
-        self._markets = markets
+class EventsResourceWithRawResponse:
+    def __init__(self, events: EventsResource) -> None:
+        self._events = events
 
         self.list = to_raw_response_wrapper(
-            markets.list,
+            events.list,
         )
 
 
-class AsyncMarketsResourceWithRawResponse:
-    def __init__(self, markets: AsyncMarketsResource) -> None:
-        self._markets = markets
+class AsyncEventsResourceWithRawResponse:
+    def __init__(self, events: AsyncEventsResource) -> None:
+        self._events = events
 
         self.list = async_to_raw_response_wrapper(
-            markets.list,
+            events.list,
         )
 
 
-class MarketsResourceWithStreamingResponse:
-    def __init__(self, markets: MarketsResource) -> None:
-        self._markets = markets
+class EventsResourceWithStreamingResponse:
+    def __init__(self, events: EventsResource) -> None:
+        self._events = events
 
         self.list = to_streamed_response_wrapper(
-            markets.list,
+            events.list,
         )
 
 
-class AsyncMarketsResourceWithStreamingResponse:
-    def __init__(self, markets: AsyncMarketsResource) -> None:
-        self._markets = markets
+class AsyncEventsResourceWithStreamingResponse:
+    def __init__(self, events: AsyncEventsResource) -> None:
+        self._events = events
 
         self.list = async_to_streamed_response_wrapper(
-            markets.list,
+            events.list,
         )

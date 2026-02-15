@@ -58,6 +58,18 @@ Methods:
 
 - <code title="get /api/v1/trades">client.trades.<a href="./src/parsec_api/resources/trades.py">list</a>(\*\*<a href="src/parsec_api/types/trade_list_params.py">params</a>) -> <a href="./src/parsec_api/types/trade_list_response.py">TradeListResponse</a></code>
 
+# Events
+
+Types:
+
+```python
+from parsec_api.types import EventListResponse
+```
+
+Methods:
+
+- <code title="get /api/v1/events">client.events.<a href="./src/parsec_api/resources/events.py">list</a>(\*\*<a href="src/parsec_api/types/event_list_params.py">params</a>) -> <a href="./src/parsec_api/types/event_list_response.py">EventListResponse</a></code>
+
 # Websocket
 
 Types:

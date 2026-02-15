@@ -1,5 +1,13 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+from .events import (
+    EventsResource,
+    AsyncEventsResource,
+    EventsResourceWithRawResponse,
+    AsyncEventsResourceWithRawResponse,
+    EventsResourceWithStreamingResponse,
+    AsyncEventsResourceWithStreamingResponse,
+)
 from .orders import (
     OrdersResource,
     AsyncOrdersResource,
@@ -82,6 +90,12 @@ from .price_history import (
 )
 
 __all__ = [
+    "EventsResource",
+    "AsyncEventsResource",
+    "EventsResourceWithRawResponse",
+    "AsyncEventsResourceWithRawResponse",
+    "EventsResourceWithStreamingResponse",
+    "AsyncEventsResourceWithStreamingResponse",
     "ExchangesResource",
     "AsyncExchangesResource",
     "ExchangesResourceWithRawResponse",
