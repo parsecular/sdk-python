@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List
+from typing import List, Optional
 from datetime import datetime
 from typing_extensions import Literal
 
@@ -27,6 +27,9 @@ class Candle(BaseModel):
 
     volume: float
     """Trade volume in contracts."""
+
+    open_interest: Optional[float] = None
+    """Open interest at this candle's close."""
 
 
 class PriceHistoryRetrieveResponse(BaseModel):

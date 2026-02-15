@@ -1,5 +1,13 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+from .events import (
+    EventsResource,
+    AsyncEventsResource,
+    EventsResourceWithRawResponse,
+    AsyncEventsResourceWithRawResponse,
+    EventsResourceWithStreamingResponse,
+    AsyncEventsResourceWithStreamingResponse,
+)
 from .orders import (
     OrdersResource,
     AsyncOrdersResource,
@@ -112,6 +120,12 @@ __all__ = [
     "AsyncTradesResourceWithRawResponse",
     "TradesResourceWithStreamingResponse",
     "AsyncTradesResourceWithStreamingResponse",
+    "EventsResource",
+    "AsyncEventsResource",
+    "EventsResourceWithRawResponse",
+    "AsyncEventsResourceWithRawResponse",
+    "EventsResourceWithStreamingResponse",
+    "AsyncEventsResourceWithStreamingResponse",
     "WebsocketResource",
     "AsyncWebsocketResource",
     "WebsocketResourceWithRawResponse",

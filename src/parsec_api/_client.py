@@ -32,6 +32,7 @@ from ._base_client import (
 
 if TYPE_CHECKING:
     from .resources import (
+        events,
         orders,
         trades,
         account,
@@ -43,6 +44,7 @@ if TYPE_CHECKING:
         websocket,
         price_history,
     )
+    from .resources.events import EventsResource, AsyncEventsResource
     from .resources.orders import OrdersResource, AsyncOrdersResource
     from .resources.trades import TradesResource, AsyncTradesResource
     from .resources.account import AccountResource, AsyncAccountResource
@@ -180,6 +182,12 @@ class ParsecAPI(SyncAPIClient):
         from .resources.trades import TradesResource
 
         return TradesResource(self)
+
+    @cached_property
+    def events(self) -> EventsResource:
+        from .resources.events import EventsResource
+
+        return EventsResource(self)
 
     @cached_property
     def websocket(self) -> WebsocketResource:
@@ -436,6 +444,12 @@ class AsyncParsecAPI(AsyncAPIClient):
         return AsyncTradesResource(self)
 
     @cached_property
+    def events(self) -> AsyncEventsResource:
+        from .resources.events import AsyncEventsResource
+
+        return AsyncEventsResource(self)
+
+    @cached_property
     def websocket(self) -> AsyncWebsocketResource:
         from .resources.websocket import AsyncWebsocketResource
 
@@ -617,6 +631,12 @@ class ParsecAPIWithRawResponse:
         return TradesResourceWithRawResponse(self._client.trades)
 
     @cached_property
+    def events(self) -> events.EventsResourceWithRawResponse:
+        from .resources.events import EventsResourceWithRawResponse
+
+        return EventsResourceWithRawResponse(self._client.events)
+
+    @cached_property
     def websocket(self) -> websocket.WebsocketResourceWithRawResponse:
         from .resources.websocket import WebsocketResourceWithRawResponse
 
@@ -682,6 +702,12 @@ class AsyncParsecAPIWithRawResponse:
         from .resources.trades import AsyncTradesResourceWithRawResponse
 
         return AsyncTradesResourceWithRawResponse(self._client.trades)
+
+    @cached_property
+    def events(self) -> events.AsyncEventsResourceWithRawResponse:
+        from .resources.events import AsyncEventsResourceWithRawResponse
+
+        return AsyncEventsResourceWithRawResponse(self._client.events)
 
     @cached_property
     def websocket(self) -> websocket.AsyncWebsocketResourceWithRawResponse:
@@ -751,6 +777,12 @@ class ParsecAPIWithStreamedResponse:
         return TradesResourceWithStreamingResponse(self._client.trades)
 
     @cached_property
+    def events(self) -> events.EventsResourceWithStreamingResponse:
+        from .resources.events import EventsResourceWithStreamingResponse
+
+        return EventsResourceWithStreamingResponse(self._client.events)
+
+    @cached_property
     def websocket(self) -> websocket.WebsocketResourceWithStreamingResponse:
         from .resources.websocket import WebsocketResourceWithStreamingResponse
 
@@ -816,6 +848,12 @@ class AsyncParsecAPIWithStreamedResponse:
         from .resources.trades import AsyncTradesResourceWithStreamingResponse
 
         return AsyncTradesResourceWithStreamingResponse(self._client.trades)
+
+    @cached_property
+    def events(self) -> events.AsyncEventsResourceWithStreamingResponse:
+        from .resources.events import AsyncEventsResourceWithStreamingResponse
+
+        return AsyncEventsResourceWithStreamingResponse(self._client.events)
 
     @cached_property
     def websocket(self) -> websocket.AsyncWebsocketResourceWithStreamingResponse:
