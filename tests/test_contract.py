@@ -253,9 +253,11 @@ class TestWebSocketContract:
         for exchange in ["kalshi", "polymarket"]:
             if len(result) >= count:
                 break
-            resp = client.markets.list(exchanges=[exchange], limit=30)
+            resp = client.markets.list(
+                exchanges=[exchange], status="active", min_volume=10000, limit=50,
+            )
             for m in resp.markets:
-                if m.status != "active" or len(m.outcomes) == 0:
+                if len(m.outcomes) == 0:
                     continue
                 ob = client.orderbook.retrieve(parsec_id=m.parsec_id, outcome=m.outcomes[0].name)
                 if len(ob.bids) + len(ob.asks) > 0:
