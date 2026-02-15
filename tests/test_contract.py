@@ -247,17 +247,21 @@ class TestWebSocketContract:
     @staticmethod
     def _find_active_markets_with_depth(client: Any, count: int = 1) -> List[Any]:
         """Find active markets that have actual orderbook depth.
-        Probes each market's orderbook to avoid picking empty/illiquid ones."""
-        resp = client.markets.list(exchanges=["kalshi"], limit=30)
-        result = []
-        for m in resp.markets:
-            if m.status != "active" or len(m.outcomes) == 0:
-                continue
-            ob = client.orderbook.retrieve(parsec_id=m.parsec_id, outcome=m.outcomes[0].name)
-            if len(ob.bids) + len(ob.asks) > 0:
-                result.append(m)
-                if len(result) >= count:
-                    break
+        Probes each market's orderbook to avoid picking empty/illiquid ones.
+        Searches across multiple exchanges to maximise chances of finding enough markets."""
+        result: List[Any] = []
+        for exchange in ["kalshi", "polymarket"]:
+            if len(result) >= count:
+                break
+            resp = client.markets.list(exchanges=[exchange], limit=30)
+            for m in resp.markets:
+                if m.status != "active" or len(m.outcomes) == 0:
+                    continue
+                ob = client.orderbook.retrieve(parsec_id=m.parsec_id, outcome=m.outcomes[0].name)
+                if len(ob.bids) + len(ob.asks) > 0:
+                    result.append(m)
+                    if len(result) >= count:
+                        break
         assert len(result) >= count, f"Need {count} markets with depth, found {len(result)}"
         return result
 
@@ -420,7 +424,8 @@ class TestWebSocketContract:
 
     @pytest.mark.asyncio
     async def test_heartbeat_received_with_valid_timestamp(self, client: Any) -> None:
-        """Connect and wait for a heartbeat within 35s. Validates timestamp is recent."""
+        """Connect and wait for a heartbeat within 45s. Validates timestamp is recent.
+        Server sends heartbeats in response to WS Ping frames (~20s default interval)."""
         ws = client.ws()
         heartbeats: List[int] = []
 
@@ -430,11 +435,11 @@ class TestWebSocketContract:
 
         await ws.connect()
         try:
-            deadline = asyncio.get_event_loop().time() + 35.0
+            deadline = asyncio.get_event_loop().time() + 45.0
             while len(heartbeats) == 0 and asyncio.get_event_loop().time() < deadline:
                 await asyncio.sleep(0.5)
 
-            assert len(heartbeats) >= 1, "No heartbeat received within 35s"
+            assert len(heartbeats) >= 1, "No heartbeat received within 45s"
             assert isinstance(heartbeats[0], int)
             # Timestamp should be a recent epoch ms (within last 60s)
             now_ms = int(time.time() * 1000)
