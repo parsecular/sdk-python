@@ -4,6 +4,35 @@
 
 Full Changelog: [v0.3.0...v0.4.0](https://github.com/parsecular/sdk-python/compare/v0.3.0...v0.4.0)
 
+### Features
+
+* **api:** api update ([7812685](https://github.com/parsecular/sdk-python/commit/7812685f9db3883665699b5e6e9e3e30d7cfa502))
+* **api:** api update ([395fa8e](https://github.com/parsecular/sdk-python/commit/395fa8ec6f1fcdbfb9dbe0691631244612b4f574))
+* **api:** api update ([9919e3e](https://github.com/parsecular/sdk-python/commit/9919e3ec1dda1fe91457b4755b1de7f38b9e5d47))
+* **api:** api update ([d2cc12c](https://github.com/parsecular/sdk-python/commit/d2cc12c26519e29f30eb5585839f894d87819fb3))
+* **api:** api update ([734cf98](https://github.com/parsecular/sdk-python/commit/734cf98642f17b1c738bd39044fe86c7bfed10b1))
+* v0.4.0 streaming fixes, events resource, docs, and test updates ([75c746e](https://github.com/parsecular/sdk-python/commit/75c746e05494f4911c7ade4e6c781b35107b4a7f))
+
+
+### Bug Fixes
+
+* add type annotations for get_book() (pyright strict) ([58a4af3](https://github.com/parsecular/sdk-python/commit/58a4af3ae0aba2002abbcbe21237de36bc2ac9fb))
+* sort imports in types/__init__.py (ruff I001) ([3f8145d](https://github.com/parsecular/sdk-python/commit/3f8145d321e171b31d7d6bf7ab77f9691ec70e9b))
+* type annotation for off() listener dict (pyright strict) ([544ad37](https://github.com/parsecular/sdk-python/commit/544ad37552965fd9d3a5ee161940b8ea879a748c))
+
+
+### Chores
+
+* format all `api.md` files ([d92f361](https://github.com/parsecular/sdk-python/commit/d92f361128a47be116a64b6c8226b8fbb38f8eb6))
+* **internal:** fix lint error on Python 3.14 ([e80583f](https://github.com/parsecular/sdk-python/commit/e80583f8e4614539753335eec01083998840d6d2))
+* **internal:** version bump ([aefc392](https://github.com/parsecular/sdk-python/commit/aefc39286f0592b92d1fe49e131df97ec7033a15))
+* **internal:** version bump ([af27e44](https://github.com/parsecular/sdk-python/commit/af27e44cfc02f7c6b77bc25f757a174653f39479))
+* **internal:** version bump ([820ad76](https://github.com/parsecular/sdk-python/commit/820ad76023c4c30843ad67d48f4161b763d29a6a))
+
+## 0.4.0 (2026-02-15)
+
+Full Changelog: [v0.3.0...v0.4.0](https://github.com/parsecular/sdk-python/compare/v0.3.0...v0.4.0)
+
 ### ⚠ BREAKING CHANGES
 
 This release migrates the `Market` type to the new Silver layer schema. All field names have changed. See the **Migration Guide** below.
