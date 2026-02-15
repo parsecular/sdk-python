@@ -222,7 +222,7 @@ class ParsecWebSocket:
 
     def off(self, event: str, fn: Any) -> None:
         """Remove a previously registered event handler."""
-        listeners = {
+        listeners: Dict[str, List[Any]] = {
             "orderbook": self._on_orderbook,
             "activity": self._on_activity,
             "error": self._on_error,
