@@ -35,6 +35,8 @@ class Totals(BaseModel):
 
 
 class WebsocketUsageResponse(BaseModel):
+    customers: List[CustomerUsage]
+
     scope: str
 
     top_markets: List[TopMarket]
@@ -44,5 +46,3 @@ class WebsocketUsageResponse(BaseModel):
     updated_at_ms: int
 
     customer: Optional[CustomerUsage] = None
-
-    customers: Optional[List[CustomerUsage]] = None
