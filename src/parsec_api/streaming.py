@@ -152,11 +152,11 @@ def _parse_wire_levels(raw: Any) -> List[StreamingOrderbookLevel]:
 
 
 def _market_key(parsec_id: str, outcome: str) -> str:
-    return f"{parsec_id}:{outcome}"
+    return f"{parsec_id}:{outcome.lower()}"
 
 
 def _sub_key(parsec_id: str, outcome: Optional[str] = None) -> str:
-    return f"{parsec_id}:{outcome}" if outcome else parsec_id
+    return f"{parsec_id}:{outcome.lower()}" if outcome else parsec_id
 
 
 # ── WebSocket client ─────────────────────────────────────────
