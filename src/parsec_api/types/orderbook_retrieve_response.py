@@ -21,6 +21,6 @@ class OrderbookRetrieveResponse(BaseModel):
 
     parsec_id: str
 
-    timestamp: Optional[datetime] = None
-
     token_id: str
+
+    timestamp: Optional[datetime] = None
