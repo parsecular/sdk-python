@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.5.0 (2026-02-16)
+
+Full Changelog: [v0.4.0...v0.5.0](https://github.com/parsecular/sdk-python/compare/v0.4.0...v0.5.0)
+
+### Features
+
+* **api:** api update ([d16f3d9](https://github.com/parsecular/sdk-python/commit/d16f3d999af934631f76a1ac593c6f38e49c7cdb))
+* **api:** api update ([85a08f0](https://github.com/parsecular/sdk-python/commit/85a08f037f6e96dd6bfcafe69d0e4f88bc98dde4))
+
+
+### Bug Fixes
+
+* remove duplicate events resource properties from merge ([340fc15](https://github.com/parsecular/sdk-python/commit/340fc15ad7f95cae8bcda025ea45c136f072028e))
+
 ## 0.4.0 (2026-02-15)
 
 Full Changelog: [v0.3.0...v0.4.0](https://github.com/parsecular/sdk-python/compare/v0.3.0...v0.4.0)
