@@ -22,6 +22,18 @@ Methods:
 
 - <code title="get /api/v1/markets">client.markets.<a href="./src/parsec_api/resources/markets.py">list</a>(\*\*<a href="src/parsec_api/types/market_list_params.py">params</a>) -> <a href="./src/parsec_api/types/market_list_response.py">MarketListResponse</a></code>
 
+# ExecutionPrice
+
+Types:
+
+```python
+from parsec_api.types import ExecutionPriceRetrieveResponse
+```
+
+Methods:
+
+- <code title="get /api/v1/execution-price">client.execution_price.<a href="./src/parsec_api/resources/execution_price.py">retrieve</a>(\*\*<a href="src/parsec_api/types/execution_price_retrieve_params.py">params</a>) -> <a href="./src/parsec_api/types/execution_price_retrieve_response.py">ExecutionPriceRetrieveResponse</a></code>
+
 # Orderbook
 
 Types:

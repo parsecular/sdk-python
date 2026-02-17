@@ -103,6 +103,7 @@ def sample_snapshot(**overrides: Any) -> dict[str, Any]:
         "outcome": "Yes",
         "token_id": "tok_abc",
         "market_id": "0x123",
+        "title": "Will X happen?",
         "tick_size": 0.01,
         "kind": "snapshot",
         "bids": [[0.65, 1000], [0.64, 2500], [0.63, 500]],
@@ -167,6 +168,7 @@ class TestConnectionAuth:
         await task
 
         assert len(connected_events) >= 1
+        assert ws.customer_id == "cust_123"
         auth_msg = next((m for m in server.received if m.get("type") == "auth"), None)
         assert auth_msg is not None
         assert auth_msg["api_key"] == "pk_test"
@@ -194,6 +196,30 @@ class TestConnectionAuth:
 
         assert len(errors) == 1
         assert errors[0].code == 1002
+
+        await ws.close()
+
+    @pytest.mark.asyncio
+    async def test_connect_sends_auth_terminal(self, server: MockServer) -> None:
+        ws = ParsecWebSocket("pk_test", server.url, terminal_token="term_tok_abc")
+
+        async def _auth() -> None:
+            await server.wait_for_client()
+            await asyncio.sleep(0.05)
+            server.send_to_all({"type": "auth_ok", "customer_id": "cust_456"})
+
+        task = asyncio.create_task(_auth())
+        await ws.connect()
+        await task
+
+        auth_msg = next((m for m in server.received if m.get("type") == "auth_terminal"), None)
+        assert auth_msg is not None
+        assert auth_msg["token"] == "term_tok_abc"
+        # Should NOT have sent regular auth
+        regular_auth = next((m for m in server.received if m.get("type") == "auth"), None)
+        assert regular_auth is None
+
+        assert ws.customer_id == "cust_456"
 
         await ws.close()
 
@@ -236,9 +262,48 @@ class TestOrderbookSnapshot:
         assert book.kind == "snapshot"
         assert book.parsec_id == "polymarket:0x123"
         assert book.exchange == "polymarket"
+        assert book.title == "Will X happen?"
         assert book.tick_size == 0.01
         assert book.server_seq == 1
         assert book.stale_after_ms == 5000
+
+        await ws.close()
+
+    @pytest.mark.asyncio
+    async def test_get_book_includes_title(self, server: MockServer) -> None:
+        ws = await connect_and_auth(server)
+
+        ws.subscribe(parsec_id="polymarket:0x123", outcome="Yes")
+        await asyncio.sleep(0.05)
+
+        server.send_to_all(sample_snapshot())
+        await asyncio.sleep(0.1)
+
+        book = ws.get_book("polymarket:0x123", "Yes")
+        assert book is not None
+        assert book["title"] == "Will X happen?"
+
+        await ws.close()
+
+    @pytest.mark.asyncio
+    async def test_title_none_when_absent(self, server: MockServer) -> None:
+        ws = await connect_and_auth(server)
+        books: List[OrderbookSnapshot] = []
+
+        @ws.on("orderbook")
+        async def _on_book(b: OrderbookSnapshot) -> None:
+            books.append(b)
+
+        ws.subscribe(parsec_id="polymarket:0x123", outcome="Yes")
+        await asyncio.sleep(0.05)
+
+        snap = sample_snapshot()
+        del snap["title"]
+        server.send_to_all(snap)
+        await asyncio.sleep(0.1)
+
+        assert len(books) == 1
+        assert books[0].title is None
 
         await ws.close()
 
@@ -276,6 +341,8 @@ class TestDeltaApplication:
         assert delta.kind == "delta"
         assert delta.bids[0].price == 0.65
         assert delta.bids[0].size == 1500
+        # Delta preserves title from snapshot
+        assert delta.title == "Will X happen?"
 
         await ws.close()
 

@@ -48,9 +48,13 @@ class TestRESTExchanges:
         exchanges = client.exchanges.list()
         assert isinstance(exchanges, list)
         assert len(exchanges) > 0
-        assert isinstance(exchanges[0], str)
-        # Should include known exchanges
-        assert "kalshi" in exchanges
+        first = exchanges[0]
+        assert isinstance(first.id, str)
+        assert isinstance(first.name, str)
+        assert isinstance(first.has.fetch_markets, bool)
+        assert isinstance(first.has.create_order, bool)
+        assert isinstance(first.has.websocket, bool)
+        assert any(ex.id == "kalshi" for ex in exchanges)
 
 
 class TestRESTMarkets:
@@ -154,6 +158,28 @@ class TestRESTOrderbook:
             assert ob.asks[i - 1][0] <= ob.asks[i][0], "Asks should be sorted ascending"
 
 
+class TestRESTExecutionPrice:
+    def test_get_execution_price_shape(self, client: Any) -> None:
+        resp = client.markets.list(exchanges=["kalshi"], limit=5)
+        market = next((m for m in resp.markets if len(m.outcomes) > 0), None)
+        assert market is not None, "No market found with outcomes"
+
+        estimate = client.execution_price.retrieve(
+            parsec_id=market.parsec_id,
+            outcome=market.outcomes[0].name,
+            side="buy",
+            amount=1,
+        )
+        assert isinstance(estimate.filled_amount, (int, float))
+        assert isinstance(estimate.total_cost, (int, float))
+        assert isinstance(estimate.fully_filled, bool)
+        assert isinstance(estimate.levels_consumed, int)
+        if estimate.avg_price is not None:
+            assert isinstance(estimate.avg_price, (int, float))
+        if estimate.slippage is not None:
+            assert isinstance(estimate.slippage, (int, float))
+
+
 class TestRESTPriceHistory:
     def test_get_price_history_structure(self, client: Any) -> None:
         resp = client.markets.list(exchanges=["kalshi"], limit=5)
@@ -185,10 +211,10 @@ class TestRESTWsUsage:
 
 
 class TestRESTOrders:
-    def test_invalid_order_returns_400(self, client: Any) -> None:
-        from parsec_api._exceptions import BadRequestError
+    def test_unsupported_order_type_returns_501(self, client: Any) -> None:
+        from parsec_api._exceptions import APIStatusError
 
-        with pytest.raises(BadRequestError) as exc_info:
+        with pytest.raises(APIStatusError) as exc_info:
             client.orders.create(
                 exchange="kalshi",
                 market_id="does-not-matter",
@@ -198,7 +224,7 @@ class TestRESTOrders:
                 size=1,
                 params={"order_type": "fok"},
             )
-        assert exc_info.value.status_code == 400
+        assert exc_info.value.status_code == 501
 
     def test_list_orders(self, client: Any) -> None:
         orders = client.orders.list(exchange="kalshi")
@@ -206,8 +232,9 @@ class TestRESTOrders:
         assert isinstance(orders, list)
         # If any orders exist, verify structure
         if len(orders) > 0:
-            assert hasattr(orders[0], "order_id")
-            assert hasattr(orders[0], "exchange")
+            assert hasattr(orders[0], "id")
+            assert hasattr(orders[0], "market_id")
+            assert hasattr(orders[0], "status")
 
 
 class TestRESTPositions:
@@ -218,7 +245,8 @@ class TestRESTPositions:
         # If any positions exist, verify structure
         if len(positions) > 0:
             assert hasattr(positions[0], "market_id")
-            assert hasattr(positions[0], "exchange")
+            assert hasattr(positions[0], "outcome")
+            assert hasattr(positions[0], "size")
 
 
 class TestRESTAccount:

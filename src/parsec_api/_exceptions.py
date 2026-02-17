@@ -65,6 +65,33 @@ class APIStatusError(APIError):
         self.response = response
         self.status_code = response.status_code
 
+    @property
+    def code(self) -> str | None:
+        """Machine-readable error code from API response body, when provided."""
+        if isinstance(self.body, dict):
+            code = self.body.get("code")
+            if isinstance(code, str):
+                return code
+        return None
+
+    @property
+    def retryable(self) -> bool | None:
+        """Retry hint from API response body, when provided."""
+        if isinstance(self.body, dict):
+            retryable = self.body.get("retryable")
+            if isinstance(retryable, bool):
+                return retryable
+        return None
+
+    def is_code(self, code: str) -> bool:
+        return self.code == code
+
+    def is_retryable(self) -> bool:
+        return self.retryable is True
+
+    def is_insufficient_funds(self) -> bool:
+        return self.code == "insufficient_funds"
+
 
 class APIConnectionError(APIError):
     def __init__(self, *, message: str = "Connection error.", request: httpx.Request) -> None:

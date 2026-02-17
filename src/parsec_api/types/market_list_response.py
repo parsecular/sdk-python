@@ -106,6 +106,23 @@ class Market(BaseModel):
     xref: Optional[Dict[str, object]] = None
     """Cross-reference data (exchange-specific metadata)."""
 
+    def _outcome(self, label: str) -> Optional[MarketOutcome]:
+        target = label.lower()
+        for outcome in self.outcomes:
+            if outcome.name.lower() == target:
+                return outcome
+        return None
+
+    @property
+    def yes(self) -> Optional[MarketOutcome]:
+        """Convenience getter for binary markets: outcome where name is \"Yes\"."""
+        return self._outcome("yes")
+
+    @property
+    def no(self) -> Optional[MarketOutcome]:
+        """Convenience getter for binary markets: outcome where name is \"No\"."""
+        return self._outcome("no")
+
 
 class Pagination(BaseModel):
     count: int

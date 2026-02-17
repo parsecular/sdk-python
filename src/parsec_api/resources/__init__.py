@@ -56,6 +56,14 @@ from .exchanges import (
     ExchangesResourceWithStreamingResponse,
     AsyncExchangesResourceWithStreamingResponse,
 )
+from .execution_price import (
+    ExecutionPriceResource,
+    AsyncExecutionPriceResource,
+    ExecutionPriceResourceWithRawResponse,
+    AsyncExecutionPriceResourceWithRawResponse,
+    ExecutionPriceResourceWithStreamingResponse,
+    AsyncExecutionPriceResourceWithStreamingResponse,
+)
 from .orderbook import (
     OrderbookResource,
     AsyncOrderbookResource,
@@ -102,6 +110,12 @@ __all__ = [
     "AsyncExchangesResourceWithRawResponse",
     "ExchangesResourceWithStreamingResponse",
     "AsyncExchangesResourceWithStreamingResponse",
+    "ExecutionPriceResource",
+    "AsyncExecutionPriceResource",
+    "ExecutionPriceResourceWithRawResponse",
+    "AsyncExecutionPriceResourceWithRawResponse",
+    "ExecutionPriceResourceWithStreamingResponse",
+    "AsyncExecutionPriceResourceWithStreamingResponse",
     "MarketsResource",
     "AsyncMarketsResource",
     "MarketsResourceWithRawResponse",
