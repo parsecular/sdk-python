@@ -43,6 +43,7 @@ if TYPE_CHECKING:
         positions,
         websocket,
         price_history,
+        execution_price,
     )
     from .streaming import ParsecWebSocket
     from .resources.events import EventsResource, AsyncEventsResource
@@ -56,6 +57,7 @@ if TYPE_CHECKING:
     from .resources.positions import PositionsResource, AsyncPositionsResource
     from .resources.websocket import WebsocketResource, AsyncWebsocketResource
     from .resources.price_history import PriceHistoryResource, AsyncPriceHistoryResource
+    from .resources.execution_price import ExecutionPriceResource, AsyncExecutionPriceResource
 
 __all__ = [
     "ENVIRONMENTS",
@@ -91,6 +93,10 @@ class ParsecAPI(SyncAPIClient):
         max_retries: int = DEFAULT_MAX_RETRIES,
         default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,
+        # TODO(verbose-mode): Add per-request debug override that logs raw request/response
+        # details (method, URL, headers, body, status) independent of global logging.
+        # pmxt exposes `verbose: true` per request, which is useful during strategy
+        # integration debugging without enabling globally noisy logs.
         # Configure a custom httpx client.
         # We provide a `DefaultHttpxClient` class that you can pass to retain the default values we use for `limits`, `timeout` & `follow_redirects`.
         # See the [httpx documentation](https://www.python-httpx.org/api/#client) for more details.
@@ -171,6 +177,12 @@ class ParsecAPI(SyncAPIClient):
         from .resources.markets import MarketsResource
 
         return MarketsResource(self)
+
+    @cached_property
+    def execution_price(self) -> ExecutionPriceResource:
+        from .resources.execution_price import ExecutionPriceResource
+
+        return ExecutionPriceResource(self)
 
     @cached_property
     def orderbook(self) -> OrderbookResource:
@@ -375,6 +387,10 @@ class AsyncParsecAPI(AsyncAPIClient):
         max_retries: int = DEFAULT_MAX_RETRIES,
         default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,
+        # TODO(verbose-mode): Add per-request debug override that logs raw request/response
+        # details (method, URL, headers, body, status) independent of global logging.
+        # pmxt exposes `verbose: true` per request, which is useful during strategy
+        # integration debugging without enabling globally noisy logs.
         # Configure a custom httpx client.
         # We provide a `DefaultAsyncHttpxClient` class that you can pass to retain the default values we use for `limits`, `timeout` & `follow_redirects`.
         # See the [httpx documentation](https://www.python-httpx.org/api/#asyncclient) for more details.
@@ -455,6 +471,12 @@ class AsyncParsecAPI(AsyncAPIClient):
         from .resources.markets import AsyncMarketsResource
 
         return AsyncMarketsResource(self)
+
+    @cached_property
+    def execution_price(self) -> AsyncExecutionPriceResource:
+        from .resources.execution_price import AsyncExecutionPriceResource
+
+        return AsyncExecutionPriceResource(self)
 
     @cached_property
     def orderbook(self) -> AsyncOrderbookResource:
@@ -668,6 +690,12 @@ class ParsecAPIWithRawResponse:
         return MarketsResourceWithRawResponse(self._client.markets)
 
     @cached_property
+    def execution_price(self) -> execution_price.ExecutionPriceResourceWithRawResponse:
+        from .resources.execution_price import ExecutionPriceResourceWithRawResponse
+
+        return ExecutionPriceResourceWithRawResponse(self._client.execution_price)
+
+    @cached_property
     def orderbook(self) -> orderbook.OrderbookResourceWithRawResponse:
         from .resources.orderbook import OrderbookResourceWithRawResponse
 
@@ -739,6 +767,12 @@ class AsyncParsecAPIWithRawResponse:
         from .resources.markets import AsyncMarketsResourceWithRawResponse
 
         return AsyncMarketsResourceWithRawResponse(self._client.markets)
+
+    @cached_property
+    def execution_price(self) -> execution_price.AsyncExecutionPriceResourceWithRawResponse:
+        from .resources.execution_price import AsyncExecutionPriceResourceWithRawResponse
+
+        return AsyncExecutionPriceResourceWithRawResponse(self._client.execution_price)
 
     @cached_property
     def orderbook(self) -> orderbook.AsyncOrderbookResourceWithRawResponse:
@@ -814,6 +848,12 @@ class ParsecAPIWithStreamedResponse:
         return MarketsResourceWithStreamingResponse(self._client.markets)
 
     @cached_property
+    def execution_price(self) -> execution_price.ExecutionPriceResourceWithStreamingResponse:
+        from .resources.execution_price import ExecutionPriceResourceWithStreamingResponse
+
+        return ExecutionPriceResourceWithStreamingResponse(self._client.execution_price)
+
+    @cached_property
     def orderbook(self) -> orderbook.OrderbookResourceWithStreamingResponse:
         from .resources.orderbook import OrderbookResourceWithStreamingResponse
 
@@ -885,6 +925,12 @@ class AsyncParsecAPIWithStreamedResponse:
         from .resources.markets import AsyncMarketsResourceWithStreamingResponse
 
         return AsyncMarketsResourceWithStreamingResponse(self._client.markets)
+
+    @cached_property
+    def execution_price(self) -> execution_price.AsyncExecutionPriceResourceWithStreamingResponse:
+        from .resources.execution_price import AsyncExecutionPriceResourceWithStreamingResponse
+
+        return AsyncExecutionPriceResourceWithStreamingResponse(self._client.execution_price)
 
     @cached_property
     def orderbook(self) -> orderbook.AsyncOrderbookResourceWithStreamingResponse:

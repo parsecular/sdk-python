@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import copy
 import json
+import random
 import asyncio
 import logging
 from typing import Any, Dict, List, Union, Callable, Optional, Sequence, Awaitable, cast
@@ -39,6 +40,7 @@ class OrderbookSnapshot:
     exchange: str
     token_id: str
     market_id: str
+    title: Optional[str]
     bids: List[StreamingOrderbookLevel]
     asks: List[StreamingOrderbookLevel]
     mid_price: float
@@ -113,6 +115,7 @@ class _LocalBook:
     exchange: str
     token_id: str
     market_id: str
+    title: Optional[str] = None
     bids: List[StreamingOrderbookLevel] = field(default_factory=lambda: [])
     asks: List[StreamingOrderbookLevel] = field(default_factory=lambda: [])
     tick_size: Optional[float] = None
@@ -165,9 +168,13 @@ def _sub_key(parsec_id: str, outcome: Optional[str] = None) -> str:
 class ParsecWebSocket:
     """Async WebSocket client with stateful local orderbook."""
 
-    def __init__(self, api_key: str, ws_url: str) -> None:
+    def __init__(self, api_key: str, ws_url: str, terminal_token: Optional[str] = None) -> None:
         self._api_key = api_key
         self._ws_url = ws_url
+        self._terminal_token = terminal_token
+
+        self.customer_id: Optional[str] = None
+        """Customer ID returned by the server on successful auth."""
 
         self._ws: Optional[websockets.asyncio.client.ClientConnection] = None
         self._state = "disconnected"
@@ -439,6 +446,7 @@ class ParsecWebSocket:
             "exchange": book.exchange,
             "token_id": book.token_id,
             "market_id": book.market_id,
+            "title": book.title,
             "bids": [{"price": l.price, "size": l.size} for l in book.bids],
             "asks": [{"price": l.price, "size": l.size} for l in book.asks],
             "mid_price": mid,
@@ -472,7 +480,10 @@ class ParsecWebSocket:
         self._state = "authenticating"
 
         # Send auth
-        self._ws_send({"type": "auth", "api_key": self._api_key})
+        if self._terminal_token:
+            self._ws_send({"type": "auth_terminal", "token": self._terminal_token})
+        else:
+            self._ws_send({"type": "auth", "api_key": self._api_key})
 
         if initial:
             # Wait for auth response synchronously for the initial connect()
@@ -489,6 +500,7 @@ class ParsecWebSocket:
             if msg.get("type") == "auth_ok":
                 self._state = "connected"
                 self._reconnect_attempt = 0
+                self.customer_id = msg.get("customer_id")
                 await self._emit_connected()
                 self._resubscribe_all()
                 # Start background receive loop
@@ -544,6 +556,7 @@ class ParsecWebSocket:
         if msg_type == "auth_ok":
             self._state = "connected"
             self._reconnect_attempt = 0
+            self.customer_id = msg.get("customer_id")
             await self._emit_connected()
             self._resubscribe_all()
 
@@ -632,6 +645,7 @@ class ParsecWebSocket:
             exchange=exchange,
             token_id=token_id,
             market_id=market_id,
+            title=msg.get("title"),
             bids=bids,
             asks=asks,
             tick_size=msg.get("tick_size"),
@@ -647,6 +661,7 @@ class ParsecWebSocket:
                 exchange=exchange,
                 token_id=token_id,
                 market_id=market_id,
+                title=msg.get("title"),
                 bids=bids,
                 asks=asks,
                 mid_price=mid,
@@ -726,6 +741,7 @@ class ParsecWebSocket:
                 exchange=book.exchange,
                 token_id=book.token_id,
                 market_id=book.market_id,
+                title=book.title,
                 bids=book.bids,
                 asks=book.asks,
                 mid_price=mid,
@@ -749,10 +765,13 @@ class ParsecWebSocket:
 
         self._state = "reconnecting"
         self._reconnect_attempt += 1
-        delay_ms = min(
+        base_delay_ms = min(
             _BASE_RECONNECT_DELAY_MS * (2 ** (self._reconnect_attempt - 1)),
             _MAX_RECONNECT_DELAY_MS,
         )
+        # ±25% jitter to avoid thundering herd on reconnect
+        jitter = random.uniform(0.75, 1.25)
+        delay_ms = int(base_delay_ms * jitter)
 
         async def _reconnect() -> None:
             await self._emit_reconnecting(self._reconnect_attempt, delay_ms)

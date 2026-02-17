@@ -49,7 +49,7 @@ class ExchangesResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ExchangeListResponse:
-        """Returns the exchange IDs that the current API key can access."""
+        """Returns exchange capabilities available to the authenticated customer."""
         return self._get(
             "/api/v1/exchanges",
             options=make_request_options(
@@ -89,7 +89,7 @@ class AsyncExchangesResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ExchangeListResponse:
-        """Returns the exchange IDs that the current API key can access."""
+        """Returns exchange capabilities available to the authenticated customer."""
         return await self._get(
             "/api/v1/exchanges",
             options=make_request_options(

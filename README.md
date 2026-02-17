@@ -38,6 +38,11 @@ markets = client.markets.list(
     exchanges=["kalshi"],
     limit=1,
 )
+estimate = client.execution_price.retrieve(
+    parsec_id=markets.markets[0].parsec_id,
+    side="buy",
+    amount=10,
+)
 print(markets.markets)
 ```
 
@@ -254,6 +259,8 @@ except parsec_api.APIStatusError as e:
     print("Another non-200-range status code was received")
     print(e.status_code)
     print(e.response)
+    print(e.code)  # "insufficient_funds" (when provided)
+    print(e.retryable)  # True/False (when provided)
 ```
 
 Error codes are as follows:

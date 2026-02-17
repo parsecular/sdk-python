@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from typing import Mapping, cast
 from typing_extensions import Literal
 
 import httpx
@@ -64,6 +65,41 @@ class APIStatusError(APIError):
         super().__init__(message, response.request, body=body)
         self.response = response
         self.status_code = response.status_code
+
+    @property
+    def code(self) -> str | None:
+        """Machine-readable error code from API response body, when provided."""
+        if isinstance(self.body, dict):
+            payload = cast(
+                Mapping[str, object],
+                self.body,  # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]
+            )
+            code = payload.get("code")
+            if isinstance(code, str):
+                return code
+        return None
+
+    @property
+    def retryable(self) -> bool | None:
+        """Retry hint from API response body, when provided."""
+        if isinstance(self.body, dict):
+            payload = cast(
+                Mapping[str, object],
+                self.body,  # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]
+            )
+            retryable = payload.get("retryable")
+            if isinstance(retryable, bool):
+                return retryable
+        return None
+
+    def is_code(self, code: str) -> bool:
+        return self.code == code
+
+    def is_retryable(self) -> bool:
+        return self.retryable is True
+
+    def is_insufficient_funds(self) -> bool:
+        return self.code == "insufficient_funds"
 
 
 class APIConnectionError(APIError):
