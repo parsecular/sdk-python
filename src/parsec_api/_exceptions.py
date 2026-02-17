@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from typing import Mapping, cast
 from typing_extensions import Literal
 
 import httpx
@@ -69,7 +70,11 @@ class APIStatusError(APIError):
     def code(self) -> str | None:
         """Machine-readable error code from API response body, when provided."""
         if isinstance(self.body, dict):
-            code = self.body.get("code")
+            payload = cast(
+                Mapping[str, object],
+                self.body,  # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]
+            )
+            code = payload.get("code")
             if isinstance(code, str):
                 return code
         return None
@@ -78,7 +83,11 @@ class APIStatusError(APIError):
     def retryable(self) -> bool | None:
         """Retry hint from API response body, when provided."""
         if isinstance(self.body, dict):
-            retryable = self.body.get("retryable")
+            payload = cast(
+                Mapping[str, object],
+                self.body,  # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]
+            )
+            retryable = payload.get("retryable")
             if isinstance(retryable, bool):
                 return retryable
         return None
