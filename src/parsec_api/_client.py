@@ -37,13 +37,13 @@ if TYPE_CHECKING:
         trades,
         account,
         markets,
-        execution_price,
         approvals,
         exchanges,
         orderbook,
         positions,
         websocket,
         price_history,
+        execution_price,
     )
     from .streaming import ParsecWebSocket
     from .resources.events import EventsResource, AsyncEventsResource
@@ -51,13 +51,13 @@ if TYPE_CHECKING:
     from .resources.trades import TradesResource, AsyncTradesResource
     from .resources.account import AccountResource, AsyncAccountResource
     from .resources.markets import MarketsResource, AsyncMarketsResource
-    from .resources.execution_price import ExecutionPriceResource, AsyncExecutionPriceResource
     from .resources.approvals import ApprovalsResource, AsyncApprovalsResource
     from .resources.exchanges import ExchangesResource, AsyncExchangesResource
     from .resources.orderbook import OrderbookResource, AsyncOrderbookResource
     from .resources.positions import PositionsResource, AsyncPositionsResource
     from .resources.websocket import WebsocketResource, AsyncWebsocketResource
     from .resources.price_history import PriceHistoryResource, AsyncPriceHistoryResource
+    from .resources.execution_price import ExecutionPriceResource, AsyncExecutionPriceResource
 
 __all__ = [
     "ENVIRONMENTS",

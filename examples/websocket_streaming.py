@@ -56,7 +56,7 @@ async def main():
         print(f"[error] {err}")
 
     @ws.on("disconnected")
-    async def on_disconnected(*args):
+    async def on_disconnected(*_args):
         print("[disconnected]")
 
     # Connect and keep alive until Ctrl-C
