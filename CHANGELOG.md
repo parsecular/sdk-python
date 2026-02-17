@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.6.0 (2026-02-17)
+
+Full Changelog: [v0.5.0...v0.6.0](https://github.com/parsecular/sdk-python/compare/v0.5.0...v0.6.0)
+
+### Features
+
+* **api:** 0.5.1 contract and execution-price update ([3a1493c](https://github.com/parsecular/sdk-python/commit/3a1493cc0d0a5342830865fdaca43a7ae482b0ea))
+
+
+### Bug Fixes
+
+* **pyright:** relax example typing and guard error-body casting ([c65f22f](https://github.com/parsecular/sdk-python/commit/c65f22fd68a8e2cb7ad912ecaef648b710805304))
+
+
+### Styles
+
+* fix lint failures ([26e987c](https://github.com/parsecular/sdk-python/commit/26e987c71c07e4ea464ca9392d9142323b702498))
+
 ## 0.5.0 (2026-02-16)
 
 Full Changelog: [v0.4.0...v0.5.0](https://github.com/parsecular/sdk-python/compare/v0.4.0...v0.5.0)
