@@ -24,9 +24,11 @@ from .order_retrieve_params import OrderRetrieveParams as OrderRetrieveParams
 from .account_balance_params import AccountBalanceParams as AccountBalanceParams
 from .approval_list_response import ApprovalListResponse as ApprovalListResponse
 from .exchange_list_response import (
-    CapabilityMap as CapabilityMap,
-    ExchangeCapability as ExchangeCapability,
     ExchangeListResponse as ExchangeListResponse,
+    ExchangeListResponseItem as ExchangeListResponseItem,
+    ExchangeListResponseItemHas as ExchangeListResponseItemHas,
+    ExchangeListResponseItem as ExchangeCapability,
+    ExchangeListResponseItemHas as CapabilityMap,
 )
 from .position_list_response import PositionListResponse as PositionListResponse
 from .websocket_usage_params import WebsocketUsageParams as WebsocketUsageParams
