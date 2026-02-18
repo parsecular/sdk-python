@@ -101,6 +101,9 @@ class EventMarket(BaseModel):
 
     slug: Optional[str] = None
 
+    tick_size: Optional[float] = None
+    """Minimum price increment for orders on this market."""
+
     updated_at: Optional[datetime] = None
 
     url: Optional[str] = None

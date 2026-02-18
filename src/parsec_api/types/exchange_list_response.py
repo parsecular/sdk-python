@@ -9,9 +9,29 @@ __all__ = ["ExchangeListResponse", "ExchangeListResponseItem", "ExchangeListResp
 
 
 class ExchangeListResponseItemHas(BaseModel):
+    approvals: bool
+
+    cancel_order: bool
+
     create_order: bool
 
+    fetch_balance: bool
+
+    fetch_events: bool
+
     fetch_markets: bool
+
+    fetch_orderbook: bool
+
+    fetch_positions: bool
+
+    fetch_price_history: bool
+
+    fetch_trades: bool
+
+    fetch_user_activity: bool
+
+    refresh_balance: bool
 
     websocket: bool
 

@@ -320,31 +320,31 @@ class ParsecWebSocket:
         self._intentional_close = True
         self._state = "closed"
 
-        if self._reconnect_task and not self._reconnect_task.done():
-            self._reconnect_task.cancel()
-            try:
-                await self._reconnect_task
-            except (asyncio.CancelledError, Exception):
-                pass
+        if self._reconnect_task:
+            if not self._reconnect_task.done():
+                self._reconnect_task.cancel()
+                try:
+                    await self._reconnect_task
+                except (asyncio.CancelledError, Exception):
+                    pass
             self._reconnect_task = None
 
-        if self._recv_task and not self._recv_task.done():
-            self._recv_task.cancel()
-            try:
-                await self._recv_task
-            except (asyncio.CancelledError, Exception):
-                pass
+        # Close the socket first so we don't leak transports if the recv task
+        # exits and clears `self._ws` before shutdown completes.
+        ws = self._ws
+        await self._close_ws(ws)
+
+        if self._recv_task:
+            if not self._recv_task.done():
+                self._recv_task.cancel()
+                try:
+                    await self._recv_task
+                except (asyncio.CancelledError, Exception):
+                    pass
             self._recv_task = None
 
         self._subscriptions.clear()
         self._books.clear()
-
-        if self._ws:
-            try:
-                await self._ws.close()
-            except Exception:
-                pass
-            self._ws = None
 
         await self._emit_disconnected("Client closed")
 
@@ -458,13 +458,25 @@ class ParsecWebSocket:
 
     # ── Internals ──────────────────────────────────────────
 
+    async def _close_ws(
+        self,
+        ws: Optional[websockets.asyncio.client.ClientConnection] = None,
+    ) -> None:
+        conn = ws if ws is not None else self._ws
+        if conn is None:
+            return
+
+        try:
+            await conn.close()
+        except Exception:
+            pass
+
+        if conn is self._ws:
+            self._ws = None
+
     async def _do_connect(self, initial: bool = False) -> None:
         if self._ws:
-            try:
-                await self._ws.close()
-            except Exception:
-                pass
-            self._ws = None
+            await self._close_ws()
 
         self._state = "connecting"
 
@@ -491,9 +503,11 @@ class ParsecWebSocket:
                 raw = await asyncio.wait_for(self._ws.recv(), timeout=10.0)
                 msg = json.loads(raw)
             except asyncio.TimeoutError as exc:
+                await self._close_ws()
                 await self._emit_disconnected("Auth timeout")
                 raise ConnectionError("Auth timeout: no response from server within 10s") from exc
             except Exception as exc:
+                await self._close_ws()
                 await self._emit_disconnected("Connection closed during authentication")
                 raise ConnectionError("Connection closed during authentication") from exc
 
@@ -510,13 +524,10 @@ class ParsecWebSocket:
                 await self._emit_error(WsError(code=msg.get("code"), message=err_msg))
                 self._intentional_close = True
                 self._state = "closed"
-                try:
-                    await self._ws.close()
-                except Exception:
-                    pass
-                self._ws = None
+                await self._close_ws()
                 raise ConnectionError(err_msg)
             else:
+                await self._close_ws()
                 raise ConnectionError(f"Unexpected auth response: {msg.get('type')}")
         else:
             # Reconnect path: start recv loop which handles auth
@@ -565,12 +576,7 @@ class ParsecWebSocket:
             await self._emit_error(WsError(code=msg.get("code"), message=err_msg))
             self._intentional_close = True
             self._state = "closed"
-            if self._ws:
-                try:
-                    await self._ws.close()
-                except Exception:
-                    pass
-                self._ws = None
+            await self._close_ws()
 
         elif msg_type == "orderbook":
             await self._handle_orderbook_snapshot(msg)

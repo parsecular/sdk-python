@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.8.0 (2026-02-18)
+
+Full Changelog: [v0.7.0...v0.8.0](https://github.com/parsecular/sdk-python/compare/v0.7.0...v0.8.0)
+
+### Features
+
+* **api:** api update ([aebf341](https://github.com/parsecular/sdk-python/commit/aebf341783113c8101ce62cf57e13c7e7564ca5e))
+
+
+### Bug Fixes
+
+* **ws:** deterministic socket teardown and stronger contract checks ([21eead3](https://github.com/parsecular/sdk-python/commit/21eead31765bec3049d29906ae12941fce3b4c53))
+
 ## 0.7.0 (2026-02-18)
 
 Full Changelog: [v0.6.0...v0.7.0](https://github.com/parsecular/sdk-python/compare/v0.6.0...v0.7.0)
