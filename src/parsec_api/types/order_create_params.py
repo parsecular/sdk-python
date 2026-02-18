@@ -23,3 +23,8 @@ class OrderCreateParams(TypedDict, total=False):
     size: Required[float]
 
     params: Dict[str, str]
+    """Optional key-value parameters. Supported keys:
+
+    - `order_type`: Order time-in-force. Values: `gtc` (default), `ioc`, `fok`.
+      Unsupported types return 501 per exchange.
+    """

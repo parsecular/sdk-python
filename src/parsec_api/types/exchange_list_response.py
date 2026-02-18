@@ -5,23 +5,25 @@ from typing_extensions import TypeAlias
 
 from .._models import BaseModel
 
-__all__ = ["ExchangeListResponse", "ExchangeCapability", "CapabilityMap"]
+__all__ = ["ExchangeListResponse", "ExchangeListResponseItem", "ExchangeListResponseItemHas"]
 
 
-class CapabilityMap(BaseModel):
+class ExchangeListResponseItemHas(BaseModel):
     create_order: bool
+
     fetch_markets: bool
+
     websocket: bool
 
 
-class ExchangeCapability(BaseModel):
+class ExchangeListResponseItem(BaseModel):
     id: str
     """Exchange identifier (e.g., "polymarket", "kalshi")."""
+
+    has: ExchangeListResponseItemHas
 
     name: str
     """Human-readable exchange name."""
 
-    has: CapabilityMap
 
-
-ExchangeListResponse: TypeAlias = List[ExchangeCapability]
+ExchangeListResponse: TypeAlias = List[ExchangeListResponseItem]

@@ -12,16 +12,16 @@ class ExecutionPriceRetrieveResponse(BaseModel):
     """Number of contracts that would be filled."""
 
     fully_filled: bool
-    """True when the full requested amount is fillable from current depth."""
+    """True if the entire requested amount can be filled."""
 
     levels_consumed: int
     """Number of orderbook levels consumed."""
 
     total_cost: float
-    """Total notional cost of the filled amount."""
+    """Total cost of the filled portion."""
 
     avg_price: Optional[float] = None
-    """Volume-weighted average execution price, or null when no liquidity is available."""
+    """Volume-weighted average execution price (null if no liquidity)."""
 
     slippage: Optional[float] = None
-    """Price impact vs best price, or null when no liquidity is available."""
+    """Price impact vs best price (null if no liquidity)."""

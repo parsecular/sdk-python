@@ -68,6 +68,12 @@ class OrdersResource(SyncAPIResource):
         Args:
           exchange: Exchange identifier (e.g., kalshi, polymarket).
 
+          params:
+              Optional key-value parameters. Supported keys:
+
+              - `order_type`: Order time-in-force. Values: `gtc` (default), `ioc`, `fok`.
+                Unsupported types return 501 per exchange.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -268,6 +274,12 @@ class AsyncOrdersResource(AsyncAPIResource):
 
         Args:
           exchange: Exchange identifier (e.g., kalshi, polymarket).
+
+          params:
+              Optional key-value parameters. Supported keys:
+
+              - `order_type`: Order time-in-force. Values: `gtc` (default), `ioc`, `fok`.
+                Unsupported types return 501 per exchange.
 
           extra_headers: Send extra headers
 

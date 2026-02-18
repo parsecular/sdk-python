@@ -18,6 +18,7 @@ class Result(BaseModel):
     tx_hash: Optional[str] = None
 
     error: Optional[str] = None
+    """Error message, omitted on success."""
 
 
 class ApprovalSetResponse(BaseModel):

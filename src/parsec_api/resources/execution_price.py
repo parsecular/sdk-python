@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+from typing_extensions import Literal
+
 import httpx
 
 from ..types import execution_price_retrieve_params
-from .._types import Body, Query, Headers, NotGiven, not_given
+from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from .._utils import maybe_transform, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -46,8 +48,8 @@ class ExecutionPriceResource(SyncAPIResource):
         *,
         amount: float,
         parsec_id: str,
-        side: str,
-        outcome: str | NotGiven = not_given,
+        side: Literal["buy", "sell"],
+        outcome: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -55,7 +57,28 @@ class ExecutionPriceResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ExecutionPriceRetrieveResponse:
-        """Estimates execution price (VWAP) for a hypothetical order without placing it."""
+        """
+        Walks the orderbook to estimate the volume-weighted average price (VWAP) for a
+        hypothetical order of the given size. Does not place an order.
+
+        Args:
+          amount: Order size in contracts.
+
+          parsec_id: Unified market ID in format `{exchange}:{native_id}`.
+
+          side: Order side ("buy" or "sell").
+
+          outcome: Outcome selector. For binary markets this is typically "yes" or "no"
+              (case-insensitive). For categorical markets, this is required.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
         return self._get(
             "/api/v1/execution-price",
             options=make_request_options(
@@ -102,8 +125,8 @@ class AsyncExecutionPriceResource(AsyncAPIResource):
         *,
         amount: float,
         parsec_id: str,
-        side: str,
-        outcome: str | NotGiven = not_given,
+        side: Literal["buy", "sell"],
+        outcome: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -111,7 +134,28 @@ class AsyncExecutionPriceResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ExecutionPriceRetrieveResponse:
-        """Estimates execution price (VWAP) for a hypothetical order without placing it."""
+        """
+        Walks the orderbook to estimate the volume-weighted average price (VWAP) for a
+        hypothetical order of the given size. Does not place an order.
+
+        Args:
+          amount: Order size in contracts.
+
+          parsec_id: Unified market ID in format `{exchange}:{native_id}`.
+
+          side: Order side ("buy" or "sell").
+
+          outcome: Outcome selector. For binary markets this is typically "yes" or "no"
+              (case-insensitive). For categorical markets, this is required.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
         return await self._get(
             "/api/v1/execution-price",
             options=make_request_options(

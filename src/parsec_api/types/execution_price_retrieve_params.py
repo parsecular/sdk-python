@@ -9,13 +9,13 @@ __all__ = ["ExecutionPriceRetrieveParams"]
 
 class ExecutionPriceRetrieveParams(TypedDict, total=False):
     amount: Required[float]
-    """Requested order size in contracts."""
+    """Order size in contracts."""
 
     parsec_id: Required[str]
     """Unified market ID in format `{exchange}:{native_id}`."""
 
     side: Required[Literal["buy", "sell"]]
-    """Order side."""
+    """Order side ("buy" or "sell")."""
 
     outcome: str
     """Outcome selector.

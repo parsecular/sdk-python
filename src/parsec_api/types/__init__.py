@@ -24,10 +24,14 @@ from .order_retrieve_params import OrderRetrieveParams as OrderRetrieveParams
 from .account_balance_params import AccountBalanceParams as AccountBalanceParams
 from .approval_list_response import ApprovalListResponse as ApprovalListResponse
 from .exchange_list_response import (
-    CapabilityMap as CapabilityMap,
-    ExchangeCapability as ExchangeCapability,
     ExchangeListResponse as ExchangeListResponse,
+    ExchangeListResponseItem as ExchangeListResponseItem,
+    ExchangeListResponseItemHas as ExchangeListResponseItemHas,
 )
+
+# Backward-compatible aliases for pre-0.7 naming.
+ExchangeCapability = ExchangeListResponseItem
+CapabilityMap = ExchangeListResponseItemHas
 from .position_list_response import PositionListResponse as PositionListResponse
 from .websocket_usage_params import WebsocketUsageParams as WebsocketUsageParams
 from .account_balance_response import AccountBalanceResponse as AccountBalanceResponse
@@ -35,6 +39,7 @@ from .websocket_usage_response import WebsocketUsageResponse as WebsocketUsageRe
 from .orderbook_retrieve_params import OrderbookRetrieveParams as OrderbookRetrieveParams
 from .orderbook_retrieve_response import OrderbookRetrieveResponse as OrderbookRetrieveResponse
 from .account_user_activity_params import AccountUserActivityParams as AccountUserActivityParams
+from .account_capabilities_response import AccountCapabilitiesResponse as AccountCapabilitiesResponse
 from .price_history_retrieve_params import PriceHistoryRetrieveParams as PriceHistoryRetrieveParams
 from .account_user_activity_response import AccountUserActivityResponse as AccountUserActivityResponse
 from .execution_price_retrieve_params import ExecutionPriceRetrieveParams as ExecutionPriceRetrieveParams

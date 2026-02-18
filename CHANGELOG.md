@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.7.0 (2026-02-18)
+
+Full Changelog: [v0.6.0...v0.7.0](https://github.com/parsecular/sdk-python/compare/v0.6.0...v0.7.0)
+
+### Features
+
+* **api:** api update ([047ead2](https://github.com/parsecular/sdk-python/commit/047ead2398813972a84cef02818ca99fffb95f7e))
+* **api:** api update ([0251820](https://github.com/parsecular/sdk-python/commit/0251820889990f62543235574369c225d747c4c2))
+
+
+### Bug Fixes
+
+* **py:** align exchange re-export aliases with lint rules ([ed3e89d](https://github.com/parsecular/sdk-python/commit/ed3e89dff5a795f06b6de8b3bd0f72be94bce59d))
+* **py:** re-export exchange aliases without triggering F401 ([6c5bd24](https://github.com/parsecular/sdk-python/commit/6c5bd24b9485f873d8f78098e835b9b0781415d0))
+* **py:** restore exchange type aliases after codegen rename ([05f02c8](https://github.com/parsecular/sdk-python/commit/05f02c81634c683bbd538576535ace87622399de))
+
 ## 0.6.0 (2026-02-17)
 
 Full Changelog: [v0.5.0...v0.6.0](https://github.com/parsecular/sdk-python/compare/v0.5.0...v0.6.0)
