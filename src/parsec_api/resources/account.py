@@ -25,6 +25,7 @@ from .._response import (
 from .._base_client import make_request_options
 from ..types.account_ping_response import AccountPingResponse
 from ..types.account_balance_response import AccountBalanceResponse
+from ..types.account_capabilities_response import AccountCapabilitiesResponse
 from ..types.account_user_activity_response import AccountUserActivityResponse
 
 __all__ = ["AccountResource", "AsyncAccountResource"]
@@ -94,6 +95,25 @@ class AccountResource(SyncAPIResource):
                 ),
             ),
             cast_to=AccountBalanceResponse,
+        )
+
+    def capabilities(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AccountCapabilitiesResponse:
+        """Returns the customer's tier and list of linked exchanges."""
+        return self._get(
+            "/api/v1/session/capabilities",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AccountCapabilitiesResponse,
         )
 
     def ping(
@@ -300,6 +320,25 @@ class AsyncAccountResource(AsyncAPIResource):
             cast_to=AccountBalanceResponse,
         )
 
+    async def capabilities(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AccountCapabilitiesResponse:
+        """Returns the customer's tier and list of linked exchanges."""
+        return await self._get(
+            "/api/v1/session/capabilities",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AccountCapabilitiesResponse,
+        )
+
     async def ping(
         self,
         *,
@@ -445,6 +484,9 @@ class AccountResourceWithRawResponse:
         self.balance = to_raw_response_wrapper(
             account.balance,
         )
+        self.capabilities = to_raw_response_wrapper(
+            account.capabilities,
+        )
         self.ping = to_raw_response_wrapper(
             account.ping,
         )
@@ -462,6 +504,9 @@ class AsyncAccountResourceWithRawResponse:
 
         self.balance = async_to_raw_response_wrapper(
             account.balance,
+        )
+        self.capabilities = async_to_raw_response_wrapper(
+            account.capabilities,
         )
         self.ping = async_to_raw_response_wrapper(
             account.ping,
@@ -481,6 +526,9 @@ class AccountResourceWithStreamingResponse:
         self.balance = to_streamed_response_wrapper(
             account.balance,
         )
+        self.capabilities = to_streamed_response_wrapper(
+            account.capabilities,
+        )
         self.ping = to_streamed_response_wrapper(
             account.ping,
         )
@@ -498,6 +546,9 @@ class AsyncAccountResourceWithStreamingResponse:
 
         self.balance = async_to_streamed_response_wrapper(
             account.balance,
+        )
+        self.capabilities = async_to_streamed_response_wrapper(
+            account.capabilities,
         )
         self.ping = async_to_streamed_response_wrapper(
             account.ping,

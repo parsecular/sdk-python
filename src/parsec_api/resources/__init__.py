@@ -88,6 +88,14 @@ from .price_history import (
     PriceHistoryResourceWithStreamingResponse,
     AsyncPriceHistoryResourceWithStreamingResponse,
 )
+from .execution_price import (
+    ExecutionPriceResource,
+    AsyncExecutionPriceResource,
+    ExecutionPriceResourceWithRawResponse,
+    AsyncExecutionPriceResourceWithRawResponse,
+    ExecutionPriceResourceWithStreamingResponse,
+    AsyncExecutionPriceResourceWithStreamingResponse,
+)
 
 __all__ = [
     "ExchangesResource",
@@ -102,6 +110,12 @@ __all__ = [
     "AsyncMarketsResourceWithRawResponse",
     "MarketsResourceWithStreamingResponse",
     "AsyncMarketsResourceWithStreamingResponse",
+    "ExecutionPriceResource",
+    "AsyncExecutionPriceResource",
+    "ExecutionPriceResourceWithRawResponse",
+    "AsyncExecutionPriceResourceWithRawResponse",
+    "ExecutionPriceResourceWithStreamingResponse",
+    "AsyncExecutionPriceResourceWithStreamingResponse",
     "OrderbookResource",
     "AsyncOrderbookResource",
     "OrderbookResourceWithRawResponse",

@@ -3,6 +3,27 @@
 from typing import List
 from typing_extensions import TypeAlias
 
-__all__ = ["ExchangeListResponse"]
+from .._models import BaseModel
 
-ExchangeListResponse: TypeAlias = List[str]
+__all__ = ["ExchangeListResponse", "ExchangeListResponseItem", "ExchangeListResponseItemHas"]
+
+
+class ExchangeListResponseItemHas(BaseModel):
+    create_order: bool
+
+    fetch_markets: bool
+
+    websocket: bool
+
+
+class ExchangeListResponseItem(BaseModel):
+    id: str
+    """Exchange identifier (e.g., "polymarket", "kalshi")."""
+
+    has: ExchangeListResponseItemHas
+
+    name: str
+    """Human-readable exchange name."""
+
+
+ExchangeListResponse: TypeAlias = List[ExchangeListResponseItem]

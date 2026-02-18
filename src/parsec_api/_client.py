@@ -43,6 +43,7 @@ if TYPE_CHECKING:
         positions,
         websocket,
         price_history,
+        execution_price,
     )
     from .resources.events import EventsResource, AsyncEventsResource
     from .resources.orders import OrdersResource, AsyncOrdersResource
@@ -55,6 +56,7 @@ if TYPE_CHECKING:
     from .resources.positions import PositionsResource, AsyncPositionsResource
     from .resources.websocket import WebsocketResource, AsyncWebsocketResource
     from .resources.price_history import PriceHistoryResource, AsyncPriceHistoryResource
+    from .resources.execution_price import ExecutionPriceResource, AsyncExecutionPriceResource
 
 __all__ = [
     "ENVIRONMENTS",
@@ -164,6 +166,12 @@ class ParsecAPI(SyncAPIClient):
         from .resources.markets import MarketsResource
 
         return MarketsResource(self)
+
+    @cached_property
+    def execution_price(self) -> ExecutionPriceResource:
+        from .resources.execution_price import ExecutionPriceResource
+
+        return ExecutionPriceResource(self)
 
     @cached_property
     def orderbook(self) -> OrderbookResource:
@@ -426,6 +434,12 @@ class AsyncParsecAPI(AsyncAPIClient):
         return AsyncMarketsResource(self)
 
     @cached_property
+    def execution_price(self) -> AsyncExecutionPriceResource:
+        from .resources.execution_price import AsyncExecutionPriceResource
+
+        return AsyncExecutionPriceResource(self)
+
+    @cached_property
     def orderbook(self) -> AsyncOrderbookResource:
         from .resources.orderbook import AsyncOrderbookResource
 
@@ -613,6 +627,12 @@ class ParsecAPIWithRawResponse:
         return MarketsResourceWithRawResponse(self._client.markets)
 
     @cached_property
+    def execution_price(self) -> execution_price.ExecutionPriceResourceWithRawResponse:
+        from .resources.execution_price import ExecutionPriceResourceWithRawResponse
+
+        return ExecutionPriceResourceWithRawResponse(self._client.execution_price)
+
+    @cached_property
     def orderbook(self) -> orderbook.OrderbookResourceWithRawResponse:
         from .resources.orderbook import OrderbookResourceWithRawResponse
 
@@ -684,6 +704,12 @@ class AsyncParsecAPIWithRawResponse:
         from .resources.markets import AsyncMarketsResourceWithRawResponse
 
         return AsyncMarketsResourceWithRawResponse(self._client.markets)
+
+    @cached_property
+    def execution_price(self) -> execution_price.AsyncExecutionPriceResourceWithRawResponse:
+        from .resources.execution_price import AsyncExecutionPriceResourceWithRawResponse
+
+        return AsyncExecutionPriceResourceWithRawResponse(self._client.execution_price)
 
     @cached_property
     def orderbook(self) -> orderbook.AsyncOrderbookResourceWithRawResponse:
@@ -759,6 +785,12 @@ class ParsecAPIWithStreamedResponse:
         return MarketsResourceWithStreamingResponse(self._client.markets)
 
     @cached_property
+    def execution_price(self) -> execution_price.ExecutionPriceResourceWithStreamingResponse:
+        from .resources.execution_price import ExecutionPriceResourceWithStreamingResponse
+
+        return ExecutionPriceResourceWithStreamingResponse(self._client.execution_price)
+
+    @cached_property
     def orderbook(self) -> orderbook.OrderbookResourceWithStreamingResponse:
         from .resources.orderbook import OrderbookResourceWithStreamingResponse
 
@@ -830,6 +862,12 @@ class AsyncParsecAPIWithStreamedResponse:
         from .resources.markets import AsyncMarketsResourceWithStreamingResponse
 
         return AsyncMarketsResourceWithStreamingResponse(self._client.markets)
+
+    @cached_property
+    def execution_price(self) -> execution_price.AsyncExecutionPriceResourceWithStreamingResponse:
+        from .resources.execution_price import AsyncExecutionPriceResourceWithStreamingResponse
+
+        return AsyncExecutionPriceResourceWithStreamingResponse(self._client.execution_price)
 
     @cached_property
     def orderbook(self) -> orderbook.AsyncOrderbookResourceWithStreamingResponse:
