@@ -23,4 +23,10 @@ class OrderbookRetrieveResponse(BaseModel):
 
     token_id: str
 
+    min_order_size: Optional[float] = None
+    """Minimum order size in contracts."""
+
+    tick_size: Optional[float] = None
+    """Minimum price increment for orders on this market."""
+
     timestamp: Optional[datetime] = None

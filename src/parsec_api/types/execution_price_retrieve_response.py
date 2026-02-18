@@ -23,5 +23,20 @@ class ExecutionPriceRetrieveResponse(BaseModel):
     avg_price: Optional[float] = None
     """Volume-weighted average execution price (null if no liquidity)."""
 
+    fee_estimate: Optional[float] = None
+    """Estimated exchange fee (null when fee rate is unknown)."""
+
+    net_cost: Optional[float] = None
+    """Total cost including fees (total_cost + fee_estimate).
+
+    Null when fee rate is unknown.
+    """
+
     slippage: Optional[float] = None
     """Price impact vs best price (null if no liquidity)."""
+
+    worst_price: Optional[float] = None
+    """Price of the last consumed orderbook level (worst fill price).
+
+    Null if no liquidity.
+    """

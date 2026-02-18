@@ -19,13 +19,13 @@ class Trade(BaseModel):
 
     timestamp: datetime
 
+    id: Optional[str] = None
+
     aggressor_side: Optional[str] = None
     """Aggressor side (typically "buy" or "sell")."""
 
     side: Optional[str] = None
     """Trade side (typically "buy" or "sell")."""
-
-    trade_id: Optional[str] = None
 
 
 class TradeListResponse(BaseModel):
