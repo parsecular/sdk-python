@@ -128,6 +128,7 @@ Types:
 ```python
 from parsec_api.types import (
     AccountBalanceResponse,
+    AccountCapabilitiesResponse,
     AccountPingResponse,
     AccountUserActivityResponse,
 )
@@ -136,6 +137,7 @@ from parsec_api.types import (
 Methods:
 
 - <code title="get /api/v1/balance">client.account.<a href="./src/parsec_api/resources/account.py">balance</a>(\*\*<a href="src/parsec_api/types/account_balance_params.py">params</a>) -> <a href="./src/parsec_api/types/account_balance_response.py">AccountBalanceResponse</a></code>
+- <code title="get /api/v1/session/capabilities">client.account.<a href="./src/parsec_api/resources/account.py">capabilities</a>() -> <a href="./src/parsec_api/types/account_capabilities_response.py">AccountCapabilitiesResponse</a></code>
 - <code title="get /api/v1/ping">client.account.<a href="./src/parsec_api/resources/account.py">ping</a>(\*\*<a href="src/parsec_api/types/account_ping_params.py">params</a>) -> <a href="./src/parsec_api/types/account_ping_response.py">AccountPingResponse</a></code>
 - <code title="put /api/v1/credentials">client.account.<a href="./src/parsec_api/resources/account.py">update_credentials</a>(\*\*<a href="src/parsec_api/types/account_update_credentials_params.py">params</a>) -> None</code>
 - <code title="get /api/v1/user-activity">client.account.<a href="./src/parsec_api/resources/account.py">user_activity</a>(\*\*<a href="src/parsec_api/types/account_user_activity_params.py">params</a>) -> <a href="./src/parsec_api/types/account_user_activity_response.py">AccountUserActivityResponse</a></code>

@@ -12,6 +12,7 @@ from tests.utils import assert_matches_type
 from parsec_api.types import (
     AccountPingResponse,
     AccountBalanceResponse,
+    AccountCapabilitiesResponse,
     AccountUserActivityResponse,
 )
 
@@ -61,6 +62,34 @@ class TestAccount:
 
             account = response.parse()
             assert_matches_type(AccountBalanceResponse, account, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_method_capabilities(self, client: ParsecAPI) -> None:
+        account = client.account.capabilities()
+        assert_matches_type(AccountCapabilitiesResponse, account, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_raw_response_capabilities(self, client: ParsecAPI) -> None:
+        response = client.account.with_raw_response.capabilities()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        account = response.parse()
+        assert_matches_type(AccountCapabilitiesResponse, account, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    def test_streaming_response_capabilities(self, client: ParsecAPI) -> None:
+        with client.account.with_streaming_response.capabilities() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            account = response.parse()
+            assert_matches_type(AccountCapabilitiesResponse, account, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -230,6 +259,34 @@ class TestAsyncAccount:
 
             account = await response.parse()
             assert_matches_type(AccountBalanceResponse, account, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_method_capabilities(self, async_client: AsyncParsecAPI) -> None:
+        account = await async_client.account.capabilities()
+        assert_matches_type(AccountCapabilitiesResponse, account, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_raw_response_capabilities(self, async_client: AsyncParsecAPI) -> None:
+        response = await async_client.account.with_raw_response.capabilities()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        account = await response.parse()
+        assert_matches_type(AccountCapabilitiesResponse, account, path=["response"])
+
+    @pytest.mark.skip(reason="Prism tests are disabled")
+    @parametrize
+    async def test_streaming_response_capabilities(self, async_client: AsyncParsecAPI) -> None:
+        async with async_client.account.with_streaming_response.capabilities() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            account = await response.parse()
+            assert_matches_type(AccountCapabilitiesResponse, account, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
