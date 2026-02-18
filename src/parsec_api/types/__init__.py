@@ -25,8 +25,6 @@ from .account_balance_params import AccountBalanceParams as AccountBalanceParams
 from .approval_list_response import ApprovalListResponse as ApprovalListResponse
 from .exchange_list_response import (
     ExchangeListResponse as ExchangeListResponse,
-    ExchangeListResponseItem as ExchangeListResponseItem,
-    ExchangeListResponseItemHas as ExchangeListResponseItemHas,
     ExchangeListResponseItem as ExchangeCapability,
     ExchangeListResponseItemHas as CapabilityMap,
 )
