@@ -84,6 +84,12 @@ class Market(BaseModel):
     liquidity: Optional[float] = None
     """Current liquidity (USDC)."""
 
+    min_order_size: Optional[float] = None
+    """Minimum order size in contracts.
+
+    Varies per market on Polymarket (e.g. 5, 15); typically 1 on Kalshi.
+    """
+
     open_interest: Optional[float] = None
     """Current open interest (contracts/pairs)."""
 
