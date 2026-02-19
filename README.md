@@ -80,6 +80,18 @@ asyncio.run(main())
 
 Functionality between the synchronous and asynchronous clients is otherwise identical.
 
+## Examples
+
+The SDK ships with runnable examples in the [`examples/`](examples/) directory:
+
+| Example | Description |
+|---------|-------------|
+| [`getting_started.py`](examples/getting_started.py) | Fetch markets, read orderbooks, check execution price |
+| [`order_lifecycle.py`](examples/order_lifecycle.py) | Place, monitor, and cancel an order end-to-end |
+| [`websocket_streaming.py`](examples/websocket_streaming.py) | Stream real-time orderbook and trade data via WebSocket |
+
+Run any example with `python examples/getting_started.py` (requires `PARSEC_API_KEY`).
+
 ### With aiohttp
 
 By default, the async client uses `httpx` for HTTP requests. However, for improved concurrency performance you may also use `aiohttp` as the HTTP backend.
