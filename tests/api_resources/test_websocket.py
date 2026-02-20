@@ -17,13 +17,13 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestWebsocket:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_usage(self, client: ParsecAPI) -> None:
         websocket = client.websocket.usage()
         assert_matches_type(WebsocketUsageResponse, websocket, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_usage_with_all_params(self, client: ParsecAPI) -> None:
         websocket = client.websocket.usage(
@@ -32,7 +32,7 @@ class TestWebsocket:
         )
         assert_matches_type(WebsocketUsageResponse, websocket, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_usage(self, client: ParsecAPI) -> None:
         response = client.websocket.with_raw_response.usage()
@@ -42,7 +42,7 @@ class TestWebsocket:
         websocket = response.parse()
         assert_matches_type(WebsocketUsageResponse, websocket, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_usage(self, client: ParsecAPI) -> None:
         with client.websocket.with_streaming_response.usage() as response:
@@ -60,13 +60,13 @@ class TestAsyncWebsocket:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_usage(self, async_client: AsyncParsecAPI) -> None:
         websocket = await async_client.websocket.usage()
         assert_matches_type(WebsocketUsageResponse, websocket, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_usage_with_all_params(self, async_client: AsyncParsecAPI) -> None:
         websocket = await async_client.websocket.usage(
@@ -75,7 +75,7 @@ class TestAsyncWebsocket:
         )
         assert_matches_type(WebsocketUsageResponse, websocket, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_usage(self, async_client: AsyncParsecAPI) -> None:
         response = await async_client.websocket.with_raw_response.usage()
@@ -85,7 +85,7 @@ class TestAsyncWebsocket:
         websocket = await response.parse()
         assert_matches_type(WebsocketUsageResponse, websocket, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_usage(self, async_client: AsyncParsecAPI) -> None:
         async with async_client.websocket.with_streaming_response.usage() as response:
