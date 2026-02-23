@@ -29,8 +29,8 @@ print(f"Orderbook for {market.parsec_id} ({outcome.upper()}):")
 print(f"  Best bid: {best_bid}  Best ask: {best_ask}")
 print(f"  Depth: {len(book.bids or [])} bids, {len(book.asks or [])} asks\n")
 
-# 3. Get hourly price history (OHLCV candles)
-hist = client.price_history.retrieve(parsec_id=market.parsec_id, outcome=outcome, interval="1h")
+# 3. Get hourly price candles (OHLCV)
+hist = client.price.retrieve(parsec_id=market.parsec_id, outcome=outcome, interval="1h")
 print(f"Loaded {len(hist.candles)} hourly candles:")
 for c in hist.candles:
     print(f"  {c.timestamp}  O={c.open} H={c.high} L={c.low} C={c.close} V={c.volume}")
