@@ -29,7 +29,7 @@ PUBLIC_ENDPOINT_CONTRACT_COVERAGE = (
     "GET /api/v1/exchanges",
     "GET /api/v1/markets",
     "GET /api/v1/orderbook",
-    "GET /api/v1/price-history",
+    "GET /api/v1/price",
     "GET /api/v1/trades",
     "GET /api/v1/events",
     "GET /api/v1/ws/usage",
@@ -263,13 +263,13 @@ class TestRESTExecutionPrice:
             assert abs(estimate.net_cost - (estimate.total_cost + estimate.fee_estimate)) < 1e-8
 
 
-class TestRESTPriceHistory:
-    def test_get_price_history_structure(self, client: Any) -> None:
+class TestRESTPrice:
+    def test_get_price_structure(self, client: Any) -> None:
         resp = client.markets.list(exchanges=["kalshi"], limit=5)
         market = next((m for m in resp.markets if m.status == "active" and len(m.outcomes) > 0), None)
         assert market is not None, "No active market found"
 
-        history = client.price_history.retrieve(
+        history = client.price.retrieve(
             parsec_id=market.parsec_id,
             outcome=market.outcomes[0].name,
             interval="1h",
