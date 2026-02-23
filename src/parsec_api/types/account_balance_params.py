@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from typing_extensions import Required, TypedDict
+from typing_extensions import Required, Annotated, TypedDict
+
+from .._utils import PropertyInfo
 
 __all__ = ["AccountBalanceParams"]
 
@@ -13,3 +15,5 @@ class AccountBalanceParams(TypedDict, total=False):
 
     refresh: bool
     """Refresh balance before returning (default false)."""
+
+    x_exchange_credentials: Annotated[str, PropertyInfo(alias="X-Exchange-Credentials")]

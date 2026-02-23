@@ -11,8 +11,14 @@ class OrderbookRetrieveParams(TypedDict, total=False):
     parsec_id: Required[str]
     """Unified market ID in format `{exchange}:{native_id}`."""
 
+    cursor: str
+    """Opaque pagination cursor for historical mode."""
+
     depth: int
     """Alias for `limit` (REST/WS symmetry)."""
+
+    end_ts: int
+    """Unix seconds — end of time range. Defaults to now."""
 
     limit: int
     """Max depth per side (default 50; server clamps to 1..=100)."""
@@ -23,4 +29,10 @@ class OrderbookRetrieveParams(TypedDict, total=False):
     For binary markets this is typically "yes" or "no" (case-insensitive). For
     categorical markets, this is required and may be an outcome label or numeric
     index.
+    """
+
+    start_ts: int
+    """
+    Unix seconds — when present, switches to historical mode (returns snapshots
+    instead of live book).
     """

@@ -1,5 +1,13 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+from .price import (
+    PriceResource,
+    AsyncPriceResource,
+    PriceResourceWithRawResponse,
+    AsyncPriceResourceWithRawResponse,
+    PriceResourceWithStreamingResponse,
+    AsyncPriceResourceWithStreamingResponse,
+)
 from .events import (
     EventsResource,
     AsyncEventsResource,
@@ -80,14 +88,6 @@ from .websocket import (
     WebsocketResourceWithStreamingResponse,
     AsyncWebsocketResourceWithStreamingResponse,
 )
-from .price_history import (
-    PriceHistoryResource,
-    AsyncPriceHistoryResource,
-    PriceHistoryResourceWithRawResponse,
-    AsyncPriceHistoryResourceWithRawResponse,
-    PriceHistoryResourceWithStreamingResponse,
-    AsyncPriceHistoryResourceWithStreamingResponse,
-)
 from .execution_price import (
     ExecutionPriceResource,
     AsyncExecutionPriceResource,
@@ -122,12 +122,12 @@ __all__ = [
     "AsyncOrderbookResourceWithRawResponse",
     "OrderbookResourceWithStreamingResponse",
     "AsyncOrderbookResourceWithStreamingResponse",
-    "PriceHistoryResource",
-    "AsyncPriceHistoryResource",
-    "PriceHistoryResourceWithRawResponse",
-    "AsyncPriceHistoryResourceWithRawResponse",
-    "PriceHistoryResourceWithStreamingResponse",
-    "AsyncPriceHistoryResourceWithStreamingResponse",
+    "PriceResource",
+    "AsyncPriceResource",
+    "PriceResourceWithRawResponse",
+    "AsyncPriceResourceWithRawResponse",
+    "PriceResourceWithStreamingResponse",
+    "AsyncPriceResourceWithStreamingResponse",
     "TradesResource",
     "AsyncTradesResource",
     "TradesResourceWithRawResponse",

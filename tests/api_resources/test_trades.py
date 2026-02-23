@@ -30,6 +30,7 @@ class TestTrades:
     def test_method_list_with_all_params(self, client: ParsecAPI) -> None:
         trade = client.trades.list(
             parsec_id="parsec_id",
+            cursor="cursor",
             end_ts=0,
             limit=1,
             outcome="outcome",
@@ -82,6 +83,7 @@ class TestAsyncTrades:
     async def test_method_list_with_all_params(self, async_client: AsyncParsecAPI) -> None:
         trade = await async_client.trades.list(
             parsec_id="parsec_id",
+            cursor="cursor",
             end_ts=0,
             limit=1,
             outcome="outcome",

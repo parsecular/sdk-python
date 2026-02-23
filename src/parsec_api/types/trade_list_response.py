@@ -24,8 +24,32 @@ class Trade(BaseModel):
     aggressor_side: Optional[str] = None
     """Aggressor side (typically "buy" or "sell")."""
 
+    no_price: Optional[float] = None
+    """NO-side price from exchange data (never derived).
+
+    May be null if the trade was on the YES side.
+    """
+
+    outcome: Optional[str] = None
+    """Trade outcome side (e.g. "Yes", "No", "yes", "no")."""
+
     side: Optional[str] = None
     """Trade side (typically "buy" or "sell")."""
+
+    taker_address: Optional[str] = None
+    """Taker wallet address (Polymarket proxy_wallet).
+
+    Null for exchanges that don't expose this.
+    """
+
+    tx_hash: Optional[str] = None
+    """Transaction hash (Polymarket only)."""
+
+    yes_price: Optional[float] = None
+    """YES-side price from exchange data (never derived).
+
+    May be null if the trade was on the NO side.
+    """
 
 
 class TradeListResponse(BaseModel):
@@ -40,3 +64,8 @@ class TradeListResponse(BaseModel):
     token_id: str
 
     trades: List[Trade]
+
+    has_more: Optional[bool] = None
+    """True if there are more results available"""
+
+    next_cursor: Optional[str] = None

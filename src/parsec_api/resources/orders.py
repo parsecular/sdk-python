@@ -9,7 +9,7 @@ import httpx
 
 from ..types import order_list_params, order_cancel_params, order_create_params, order_retrieve_params
 from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from .._utils import maybe_transform, async_maybe_transform
+from .._utils import maybe_transform, strip_not_given, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -54,7 +54,9 @@ class OrdersResource(SyncAPIResource):
         price: float,
         side: Literal["buy", "sell"],
         size: float,
+        credentials: order_create_params.Credentials | Omit = omit,
         params: Dict[str, str] | Omit = omit,
+        x_exchange_credentials: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -67,6 +69,10 @@ class OrdersResource(SyncAPIResource):
 
         Args:
           exchange: Exchange identifier (e.g., kalshi, polymarket).
+
+          credentials: Per-request exchange credentials (Mode B). When provided, Parsec creates a
+              transient exchange session instead of using stored credentials. Credentials are
+              never persisted.
 
           params:
               Optional key-value parameters. Supported keys:
@@ -82,6 +88,7 @@ class OrdersResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        extra_headers = {**strip_not_given({"X-Exchange-Credentials": x_exchange_credentials}), **(extra_headers or {})}
         return self._post(
             "/api/v1/orders",
             body=maybe_transform(
@@ -91,6 +98,7 @@ class OrdersResource(SyncAPIResource):
                     "price": price,
                     "side": side,
                     "size": size,
+                    "credentials": credentials,
                     "params": params,
                 },
                 order_create_params.OrderCreateParams,
@@ -110,6 +118,7 @@ class OrdersResource(SyncAPIResource):
         order_id: str,
         *,
         exchange: str,
+        x_exchange_credentials: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -133,6 +142,7 @@ class OrdersResource(SyncAPIResource):
         """
         if not order_id:
             raise ValueError(f"Expected a non-empty value for `order_id` but received {order_id!r}")
+        extra_headers = {**strip_not_given({"X-Exchange-Credentials": x_exchange_credentials}), **(extra_headers or {})}
         return self._get(
             f"/api/v1/orders/{order_id}",
             options=make_request_options(
@@ -150,6 +160,7 @@ class OrdersResource(SyncAPIResource):
         *,
         exchange: str,
         market_id: str | Omit = omit,
+        x_exchange_credentials: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -173,6 +184,7 @@ class OrdersResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        extra_headers = {**strip_not_given({"X-Exchange-Credentials": x_exchange_credentials}), **(extra_headers or {})}
         return self._get(
             "/api/v1/orders",
             options=make_request_options(
@@ -196,6 +208,7 @@ class OrdersResource(SyncAPIResource):
         order_id: str,
         *,
         exchange: str,
+        x_exchange_credentials: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -219,6 +232,7 @@ class OrdersResource(SyncAPIResource):
         """
         if not order_id:
             raise ValueError(f"Expected a non-empty value for `order_id` but received {order_id!r}")
+        extra_headers = {**strip_not_given({"X-Exchange-Credentials": x_exchange_credentials}), **(extra_headers or {})}
         return self._delete(
             f"/api/v1/orders/{order_id}",
             options=make_request_options(
@@ -261,7 +275,9 @@ class AsyncOrdersResource(AsyncAPIResource):
         price: float,
         side: Literal["buy", "sell"],
         size: float,
+        credentials: order_create_params.Credentials | Omit = omit,
         params: Dict[str, str] | Omit = omit,
+        x_exchange_credentials: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -274,6 +290,10 @@ class AsyncOrdersResource(AsyncAPIResource):
 
         Args:
           exchange: Exchange identifier (e.g., kalshi, polymarket).
+
+          credentials: Per-request exchange credentials (Mode B). When provided, Parsec creates a
+              transient exchange session instead of using stored credentials. Credentials are
+              never persisted.
 
           params:
               Optional key-value parameters. Supported keys:
@@ -289,6 +309,7 @@ class AsyncOrdersResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        extra_headers = {**strip_not_given({"X-Exchange-Credentials": x_exchange_credentials}), **(extra_headers or {})}
         return await self._post(
             "/api/v1/orders",
             body=await async_maybe_transform(
@@ -298,6 +319,7 @@ class AsyncOrdersResource(AsyncAPIResource):
                     "price": price,
                     "side": side,
                     "size": size,
+                    "credentials": credentials,
                     "params": params,
                 },
                 order_create_params.OrderCreateParams,
@@ -317,6 +339,7 @@ class AsyncOrdersResource(AsyncAPIResource):
         order_id: str,
         *,
         exchange: str,
+        x_exchange_credentials: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -340,6 +363,7 @@ class AsyncOrdersResource(AsyncAPIResource):
         """
         if not order_id:
             raise ValueError(f"Expected a non-empty value for `order_id` but received {order_id!r}")
+        extra_headers = {**strip_not_given({"X-Exchange-Credentials": x_exchange_credentials}), **(extra_headers or {})}
         return await self._get(
             f"/api/v1/orders/{order_id}",
             options=make_request_options(
@@ -357,6 +381,7 @@ class AsyncOrdersResource(AsyncAPIResource):
         *,
         exchange: str,
         market_id: str | Omit = omit,
+        x_exchange_credentials: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -380,6 +405,7 @@ class AsyncOrdersResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        extra_headers = {**strip_not_given({"X-Exchange-Credentials": x_exchange_credentials}), **(extra_headers or {})}
         return await self._get(
             "/api/v1/orders",
             options=make_request_options(
@@ -403,6 +429,7 @@ class AsyncOrdersResource(AsyncAPIResource):
         order_id: str,
         *,
         exchange: str,
+        x_exchange_credentials: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -426,6 +453,7 @@ class AsyncOrdersResource(AsyncAPIResource):
         """
         if not order_id:
             raise ValueError(f"Expected a non-empty value for `order_id` but received {order_id!r}")
+        extra_headers = {**strip_not_given({"X-Exchange-Credentials": x_exchange_credentials}), **(extra_headers or {})}
         return await self._delete(
             f"/api/v1/orders/{order_id}",
             options=make_request_options(

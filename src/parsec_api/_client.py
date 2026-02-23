@@ -32,6 +32,7 @@ from ._base_client import (
 
 if TYPE_CHECKING:
     from .resources import (
+        price,
         events,
         orders,
         trades,
@@ -42,9 +43,9 @@ if TYPE_CHECKING:
         orderbook,
         positions,
         websocket,
-        price_history,
         execution_price,
     )
+    from .resources.price import PriceResource, AsyncPriceResource
     from .resources.events import EventsResource, AsyncEventsResource
     from .resources.orders import OrdersResource, AsyncOrdersResource
     from .resources.trades import TradesResource, AsyncTradesResource
@@ -55,7 +56,6 @@ if TYPE_CHECKING:
     from .resources.orderbook import OrderbookResource, AsyncOrderbookResource
     from .resources.positions import PositionsResource, AsyncPositionsResource
     from .resources.websocket import WebsocketResource, AsyncWebsocketResource
-    from .resources.price_history import PriceHistoryResource, AsyncPriceHistoryResource
     from .resources.execution_price import ExecutionPriceResource, AsyncExecutionPriceResource
 
 __all__ = [
@@ -180,10 +180,10 @@ class ParsecAPI(SyncAPIClient):
         return OrderbookResource(self)
 
     @cached_property
-    def price_history(self) -> PriceHistoryResource:
-        from .resources.price_history import PriceHistoryResource
+    def price(self) -> PriceResource:
+        from .resources.price import PriceResource
 
-        return PriceHistoryResource(self)
+        return PriceResource(self)
 
     @cached_property
     def trades(self) -> TradesResource:
@@ -446,10 +446,10 @@ class AsyncParsecAPI(AsyncAPIClient):
         return AsyncOrderbookResource(self)
 
     @cached_property
-    def price_history(self) -> AsyncPriceHistoryResource:
-        from .resources.price_history import AsyncPriceHistoryResource
+    def price(self) -> AsyncPriceResource:
+        from .resources.price import AsyncPriceResource
 
-        return AsyncPriceHistoryResource(self)
+        return AsyncPriceResource(self)
 
     @cached_property
     def trades(self) -> AsyncTradesResource:
@@ -639,10 +639,10 @@ class ParsecAPIWithRawResponse:
         return OrderbookResourceWithRawResponse(self._client.orderbook)
 
     @cached_property
-    def price_history(self) -> price_history.PriceHistoryResourceWithRawResponse:
-        from .resources.price_history import PriceHistoryResourceWithRawResponse
+    def price(self) -> price.PriceResourceWithRawResponse:
+        from .resources.price import PriceResourceWithRawResponse
 
-        return PriceHistoryResourceWithRawResponse(self._client.price_history)
+        return PriceResourceWithRawResponse(self._client.price)
 
     @cached_property
     def trades(self) -> trades.TradesResourceWithRawResponse:
@@ -718,10 +718,10 @@ class AsyncParsecAPIWithRawResponse:
         return AsyncOrderbookResourceWithRawResponse(self._client.orderbook)
 
     @cached_property
-    def price_history(self) -> price_history.AsyncPriceHistoryResourceWithRawResponse:
-        from .resources.price_history import AsyncPriceHistoryResourceWithRawResponse
+    def price(self) -> price.AsyncPriceResourceWithRawResponse:
+        from .resources.price import AsyncPriceResourceWithRawResponse
 
-        return AsyncPriceHistoryResourceWithRawResponse(self._client.price_history)
+        return AsyncPriceResourceWithRawResponse(self._client.price)
 
     @cached_property
     def trades(self) -> trades.AsyncTradesResourceWithRawResponse:
@@ -797,10 +797,10 @@ class ParsecAPIWithStreamedResponse:
         return OrderbookResourceWithStreamingResponse(self._client.orderbook)
 
     @cached_property
-    def price_history(self) -> price_history.PriceHistoryResourceWithStreamingResponse:
-        from .resources.price_history import PriceHistoryResourceWithStreamingResponse
+    def price(self) -> price.PriceResourceWithStreamingResponse:
+        from .resources.price import PriceResourceWithStreamingResponse
 
-        return PriceHistoryResourceWithStreamingResponse(self._client.price_history)
+        return PriceResourceWithStreamingResponse(self._client.price)
 
     @cached_property
     def trades(self) -> trades.TradesResourceWithStreamingResponse:
@@ -876,10 +876,10 @@ class AsyncParsecAPIWithStreamedResponse:
         return AsyncOrderbookResourceWithStreamingResponse(self._client.orderbook)
 
     @cached_property
-    def price_history(self) -> price_history.AsyncPriceHistoryResourceWithStreamingResponse:
-        from .resources.price_history import AsyncPriceHistoryResourceWithStreamingResponse
+    def price(self) -> price.AsyncPriceResourceWithStreamingResponse:
+        from .resources.price import AsyncPriceResourceWithStreamingResponse
 
-        return AsyncPriceHistoryResourceWithStreamingResponse(self._client.price_history)
+        return AsyncPriceResourceWithStreamingResponse(self._client.price)
 
     @cached_property
     def trades(self) -> trades.AsyncTradesResourceWithStreamingResponse:

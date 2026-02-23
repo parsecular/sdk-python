@@ -6,7 +6,7 @@ from typing_extensions import Literal
 
 from .._models import BaseModel
 
-__all__ = ["PriceHistoryRetrieveResponse", "Candle"]
+__all__ = ["PriceRetrieveResponse", "Candle"]
 
 
 class Candle(BaseModel):
@@ -32,7 +32,7 @@ class Candle(BaseModel):
     """Open interest at this candle's close."""
 
 
-class PriceHistoryRetrieveResponse(BaseModel):
+class PriceRetrieveResponse(BaseModel):
     candles: List[Candle]
 
     exchange: str
