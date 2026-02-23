@@ -43,7 +43,15 @@ class TestOrders:
             price=0,
             side="buy",
             size=0,
+            credentials={
+                "api_key_id": "api_key_id",
+                "clob_api_key": "clob_api_key",
+                "clob_api_passphrase": "clob_api_passphrase",
+                "clob_api_secret": "clob_api_secret",
+                "private_key": "private_key",
+            },
             params={"foo": "string"},
+            x_exchange_credentials="X-Exchange-Credentials",
         )
         assert_matches_type(Order, order, path=["response"])
 
@@ -89,6 +97,16 @@ class TestOrders:
         order = client.orders.retrieve(
             order_id="order_id",
             exchange="exchange",
+        )
+        assert_matches_type(Order, order, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_retrieve_with_all_params(self, client: ParsecAPI) -> None:
+        order = client.orders.retrieve(
+            order_id="order_id",
+            exchange="exchange",
+            x_exchange_credentials="X-Exchange-Credentials",
         )
         assert_matches_type(Order, order, path=["response"])
 
@@ -143,6 +161,7 @@ class TestOrders:
         order = client.orders.list(
             exchange="exchange",
             market_id="market_id",
+            x_exchange_credentials="X-Exchange-Credentials",
         )
         assert_matches_type(OrderListResponse, order, path=["response"])
 
@@ -178,6 +197,16 @@ class TestOrders:
         order = client.orders.cancel(
             order_id="order_id",
             exchange="exchange",
+        )
+        assert_matches_type(Order, order, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_cancel_with_all_params(self, client: ParsecAPI) -> None:
+        order = client.orders.cancel(
+            order_id="order_id",
+            exchange="exchange",
+            x_exchange_credentials="X-Exchange-Credentials",
         )
         assert_matches_type(Order, order, path=["response"])
 
@@ -247,7 +276,15 @@ class TestAsyncOrders:
             price=0,
             side="buy",
             size=0,
+            credentials={
+                "api_key_id": "api_key_id",
+                "clob_api_key": "clob_api_key",
+                "clob_api_passphrase": "clob_api_passphrase",
+                "clob_api_secret": "clob_api_secret",
+                "private_key": "private_key",
+            },
             params={"foo": "string"},
+            x_exchange_credentials="X-Exchange-Credentials",
         )
         assert_matches_type(Order, order, path=["response"])
 
@@ -293,6 +330,16 @@ class TestAsyncOrders:
         order = await async_client.orders.retrieve(
             order_id="order_id",
             exchange="exchange",
+        )
+        assert_matches_type(Order, order, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_retrieve_with_all_params(self, async_client: AsyncParsecAPI) -> None:
+        order = await async_client.orders.retrieve(
+            order_id="order_id",
+            exchange="exchange",
+            x_exchange_credentials="X-Exchange-Credentials",
         )
         assert_matches_type(Order, order, path=["response"])
 
@@ -347,6 +394,7 @@ class TestAsyncOrders:
         order = await async_client.orders.list(
             exchange="exchange",
             market_id="market_id",
+            x_exchange_credentials="X-Exchange-Credentials",
         )
         assert_matches_type(OrderListResponse, order, path=["response"])
 
@@ -382,6 +430,16 @@ class TestAsyncOrders:
         order = await async_client.orders.cancel(
             order_id="order_id",
             exchange="exchange",
+        )
+        assert_matches_type(Order, order, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_cancel_with_all_params(self, async_client: AsyncParsecAPI) -> None:
+        order = await async_client.orders.cancel(
+            order_id="order_id",
+            exchange="exchange",
+            x_exchange_credentials="X-Exchange-Credentials",
         )
         assert_matches_type(Order, order, path=["response"])
 

@@ -45,9 +45,12 @@ class OrderbookResource(SyncAPIResource):
         self,
         *,
         parsec_id: str,
+        cursor: str | Omit = omit,
         depth: int | Omit = omit,
+        end_ts: int | Omit = omit,
         limit: int | Omit = omit,
         outcome: str | Omit = omit,
+        start_ts: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -56,18 +59,28 @@ class OrderbookResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> OrderbookRetrieveResponse:
         """
-        Returns bids/asks as `[price, size]` tuples.
+        When start_ts or end_ts is provided, returns historical orderbook snapshots
+        instead of a live L2 snapshot. Large time ranges are handled via internal
+        chunking and may be slow for very wide windows. In historical mode, limit
+        defaults to 500 (max 1000).
 
         Args:
           parsec_id: Unified market ID in format `{exchange}:{native_id}`.
 
+          cursor: Opaque pagination cursor for historical mode.
+
           depth: Alias for `limit` (REST/WS symmetry).
+
+          end_ts: Unix seconds — end of time range. Defaults to now.
 
           limit: Max depth per side (default 50; server clamps to 1..=100).
 
           outcome: Outcome selector. For binary markets this is typically "yes" or "no"
               (case-insensitive). For categorical markets, this is required and may be an
               outcome label or numeric index.
+
+          start_ts: Unix seconds — when present, switches to historical mode (returns snapshots
+              instead of live book).
 
           extra_headers: Send extra headers
 
@@ -87,9 +100,12 @@ class OrderbookResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "parsec_id": parsec_id,
+                        "cursor": cursor,
                         "depth": depth,
+                        "end_ts": end_ts,
                         "limit": limit,
                         "outcome": outcome,
+                        "start_ts": start_ts,
                     },
                     orderbook_retrieve_params.OrderbookRetrieveParams,
                 ),
@@ -122,9 +138,12 @@ class AsyncOrderbookResource(AsyncAPIResource):
         self,
         *,
         parsec_id: str,
+        cursor: str | Omit = omit,
         depth: int | Omit = omit,
+        end_ts: int | Omit = omit,
         limit: int | Omit = omit,
         outcome: str | Omit = omit,
+        start_ts: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -133,18 +152,28 @@ class AsyncOrderbookResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> OrderbookRetrieveResponse:
         """
-        Returns bids/asks as `[price, size]` tuples.
+        When start_ts or end_ts is provided, returns historical orderbook snapshots
+        instead of a live L2 snapshot. Large time ranges are handled via internal
+        chunking and may be slow for very wide windows. In historical mode, limit
+        defaults to 500 (max 1000).
 
         Args:
           parsec_id: Unified market ID in format `{exchange}:{native_id}`.
 
+          cursor: Opaque pagination cursor for historical mode.
+
           depth: Alias for `limit` (REST/WS symmetry).
+
+          end_ts: Unix seconds — end of time range. Defaults to now.
 
           limit: Max depth per side (default 50; server clamps to 1..=100).
 
           outcome: Outcome selector. For binary markets this is typically "yes" or "no"
               (case-insensitive). For categorical markets, this is required and may be an
               outcome label or numeric index.
+
+          start_ts: Unix seconds — when present, switches to historical mode (returns snapshots
+              instead of live book).
 
           extra_headers: Send extra headers
 
@@ -164,9 +193,12 @@ class AsyncOrderbookResource(AsyncAPIResource):
                 query=await async_maybe_transform(
                     {
                         "parsec_id": parsec_id,
+                        "cursor": cursor,
                         "depth": depth,
+                        "end_ts": end_ts,
                         "limit": limit,
                         "outcome": outcome,
+                        "start_ts": start_ts,
                     },
                     orderbook_retrieve_params.OrderbookRetrieveParams,
                 ),

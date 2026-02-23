@@ -31,6 +31,7 @@ class TestPositions:
         position = client.positions.list(
             exchange="exchange",
             market_id="market_id",
+            x_exchange_credentials="X-Exchange-Credentials",
         )
         assert_matches_type(PositionListResponse, position, path=["response"])
 
@@ -80,6 +81,7 @@ class TestAsyncPositions:
         position = await async_client.positions.list(
             exchange="exchange",
             market_id="market_id",
+            x_exchange_credentials="X-Exchange-Credentials",
         )
         assert_matches_type(PositionListResponse, position, path=["response"])
 

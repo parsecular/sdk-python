@@ -11,6 +11,9 @@ class TradeListParams(TypedDict, total=False):
     parsec_id: Required[str]
     """Unified market ID in format `{exchange}:{native_id}`."""
 
+    cursor: str
+    """Opaque pagination cursor from a previous response."""
+
     end_ts: int
     """Unix seconds end timestamp (inclusive)."""
 

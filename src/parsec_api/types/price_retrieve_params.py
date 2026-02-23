@@ -4,18 +4,24 @@ from __future__ import annotations
 
 from typing_extensions import Literal, Required, TypedDict
 
-__all__ = ["PriceHistoryRetrieveParams"]
+__all__ = ["PriceRetrieveParams"]
 
 
-class PriceHistoryRetrieveParams(TypedDict, total=False):
-    interval: Required[Literal["1m", "1h", "6h", "1d", "1w", "max"]]
-    """Price history interval."""
-
+class PriceRetrieveParams(TypedDict, total=False):
     parsec_id: Required[str]
     """Unified market ID in format `{exchange}:{native_id}`."""
 
+    at_ts: int
+    """Point-in-time lookup (Unix seconds).
+
+    Returns the single closest candle. Cannot be combined with start_ts/end_ts.
+    """
+
     end_ts: int
     """Unix seconds end timestamp (inclusive). Defaults to now."""
+
+    interval: Literal["1m", "1h", "6h", "1d", "1w", "max"]
+    """Defaults to 1h for point-in-time (at_ts)"""
 
     outcome: str
     """Outcome selector.

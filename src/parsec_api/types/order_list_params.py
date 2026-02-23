@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from typing_extensions import Required, TypedDict
+from typing_extensions import Required, Annotated, TypedDict
+
+from .._utils import PropertyInfo
 
 __all__ = ["OrderListParams"]
 
@@ -13,3 +15,5 @@ class OrderListParams(TypedDict, total=False):
 
     market_id: str
     """Optional market ID filter (exchange-native)."""
+
+    x_exchange_credentials: Annotated[str, PropertyInfo(alias="X-Exchange-Credentials")]

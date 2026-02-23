@@ -45,6 +45,7 @@ class TradesResource(SyncAPIResource):
         self,
         *,
         parsec_id: str,
+        cursor: str | Omit = omit,
         end_ts: int | Omit = omit,
         limit: int | Omit = omit,
         outcome: str | Omit = omit,
@@ -62,6 +63,8 @@ class TradesResource(SyncAPIResource):
 
         Args:
           parsec_id: Unified market ID in format `{exchange}:{native_id}`.
+
+          cursor: Opaque pagination cursor from a previous response.
 
           end_ts: Unix seconds end timestamp (inclusive).
 
@@ -91,6 +94,7 @@ class TradesResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "parsec_id": parsec_id,
+                        "cursor": cursor,
                         "end_ts": end_ts,
                         "limit": limit,
                         "outcome": outcome,
@@ -127,6 +131,7 @@ class AsyncTradesResource(AsyncAPIResource):
         self,
         *,
         parsec_id: str,
+        cursor: str | Omit = omit,
         end_ts: int | Omit = omit,
         limit: int | Omit = omit,
         outcome: str | Omit = omit,
@@ -144,6 +149,8 @@ class AsyncTradesResource(AsyncAPIResource):
 
         Args:
           parsec_id: Unified market ID in format `{exchange}:{native_id}`.
+
+          cursor: Opaque pagination cursor from a previous response.
 
           end_ts: Unix seconds end timestamp (inclusive).
 
@@ -173,6 +180,7 @@ class AsyncTradesResource(AsyncAPIResource):
                 query=await async_maybe_transform(
                     {
                         "parsec_id": parsec_id,
+                        "cursor": cursor,
                         "end_ts": end_ts,
                         "limit": limit,
                         "outcome": outcome,

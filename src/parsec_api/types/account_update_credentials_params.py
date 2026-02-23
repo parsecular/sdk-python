@@ -9,12 +9,17 @@ __all__ = ["AccountUpdateCredentialsParams"]
 
 
 class AccountUpdateCredentialsParams(TypedDict, total=False):
-    evm_private_key: Optional[str]
+    api_key_id: Optional[str]
+    """Kalshi API key ID."""
 
-    kalshi_api_key_id: Optional[str]
+    clob_api_key: Optional[str]
+    """Polymarket CLOB API key."""
 
-    kalshi_private_key: Optional[str]
+    clob_api_passphrase: Optional[str]
+    """Polymarket CLOB API passphrase."""
 
-    poly_funder: Optional[str]
+    clob_api_secret: Optional[str]
+    """Polymarket CLOB API secret."""
 
-    poly_signature_type: Optional[str]
+    private_key: Optional[str]
+    """Kalshi RSA private key (PEM format)."""

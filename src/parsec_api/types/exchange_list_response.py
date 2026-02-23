@@ -23,6 +23,8 @@ class ExchangeListResponseItemHas(BaseModel):
 
     fetch_orderbook: bool
 
+    fetch_orderbook_history: bool
+
     fetch_positions: bool
 
     fetch_price_history: bool

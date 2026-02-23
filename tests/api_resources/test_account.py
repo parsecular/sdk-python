@@ -36,6 +36,7 @@ class TestAccount:
         account = client.account.balance(
             exchange="exchange",
             refresh=True,
+            x_exchange_credentials="X-Exchange-Credentials",
         )
         assert_matches_type(AccountBalanceResponse, account, path=["response"])
 
@@ -139,11 +140,11 @@ class TestAccount:
     @parametrize
     def test_method_update_credentials_with_all_params(self, client: ParsecAPI) -> None:
         account = client.account.update_credentials(
-            evm_private_key="evm_private_key",
-            kalshi_api_key_id="kalshi_api_key_id",
-            kalshi_private_key="kalshi_private_key",
-            poly_funder="poly_funder",
-            poly_signature_type="poly_signature_type",
+            api_key_id="api_key_id",
+            clob_api_key="clob_api_key",
+            clob_api_passphrase="clob_api_passphrase",
+            clob_api_secret="clob_api_secret",
+            private_key="private_key",
         )
         assert account is None
 
@@ -233,6 +234,7 @@ class TestAsyncAccount:
         account = await async_client.account.balance(
             exchange="exchange",
             refresh=True,
+            x_exchange_credentials="X-Exchange-Credentials",
         )
         assert_matches_type(AccountBalanceResponse, account, path=["response"])
 
@@ -336,11 +338,11 @@ class TestAsyncAccount:
     @parametrize
     async def test_method_update_credentials_with_all_params(self, async_client: AsyncParsecAPI) -> None:
         account = await async_client.account.update_credentials(
-            evm_private_key="evm_private_key",
-            kalshi_api_key_id="kalshi_api_key_id",
-            kalshi_private_key="kalshi_private_key",
-            poly_funder="poly_funder",
-            poly_signature_type="poly_signature_type",
+            api_key_id="api_key_id",
+            clob_api_key="clob_api_key",
+            clob_api_passphrase="clob_api_passphrase",
+            clob_api_secret="clob_api_secret",
+            private_key="private_key",
         )
         assert account is None
 

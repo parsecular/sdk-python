@@ -30,9 +30,12 @@ class TestOrderbook:
     def test_method_retrieve_with_all_params(self, client: ParsecAPI) -> None:
         orderbook = client.orderbook.retrieve(
             parsec_id="parsec_id",
+            cursor="cursor",
             depth=1,
+            end_ts=0,
             limit=1,
             outcome="outcome",
+            start_ts=0,
         )
         assert_matches_type(OrderbookRetrieveResponse, orderbook, path=["response"])
 
@@ -81,9 +84,12 @@ class TestAsyncOrderbook:
     async def test_method_retrieve_with_all_params(self, async_client: AsyncParsecAPI) -> None:
         orderbook = await async_client.orderbook.retrieve(
             parsec_id="parsec_id",
+            cursor="cursor",
             depth=1,
+            end_ts=0,
             limit=1,
             outcome="outcome",
+            start_ts=0,
         )
         assert_matches_type(OrderbookRetrieveResponse, orderbook, path=["response"])
 
