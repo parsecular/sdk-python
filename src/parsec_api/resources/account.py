@@ -13,7 +13,7 @@ from ..types import (
     account_update_credentials_params,
 )
 from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
-from .._utils import maybe_transform, async_maybe_transform
+from .._utils import maybe_transform, strip_not_given, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -56,6 +56,7 @@ class AccountResource(SyncAPIResource):
         *,
         exchange: str,
         refresh: bool | Omit = omit,
+        x_exchange_credentials: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -79,6 +80,7 @@ class AccountResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        extra_headers = {**strip_not_given({"X-Exchange-Credentials": x_exchange_credentials}), **(extra_headers or {})}
         return self._get(
             "/api/v1/balance",
             options=make_request_options(
@@ -157,11 +159,11 @@ class AccountResource(SyncAPIResource):
     def update_credentials(
         self,
         *,
-        evm_private_key: Optional[str] | Omit = omit,
-        kalshi_api_key_id: Optional[str] | Omit = omit,
-        kalshi_private_key: Optional[str] | Omit = omit,
-        poly_funder: Optional[str] | Omit = omit,
-        poly_signature_type: Optional[str] | Omit = omit,
+        api_key_id: Optional[str] | Omit = omit,
+        clob_api_key: Optional[str] | Omit = omit,
+        clob_api_passphrase: Optional[str] | Omit = omit,
+        clob_api_secret: Optional[str] | Omit = omit,
+        private_key: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -174,6 +176,16 @@ class AccountResource(SyncAPIResource):
         Returns 204 on success.
 
         Args:
+          api_key_id: Kalshi API key ID.
+
+          clob_api_key: Polymarket CLOB API key.
+
+          clob_api_passphrase: Polymarket CLOB API passphrase.
+
+          clob_api_secret: Polymarket CLOB API secret.
+
+          private_key: Kalshi RSA private key (PEM format).
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -187,11 +199,11 @@ class AccountResource(SyncAPIResource):
             "/api/v1/credentials",
             body=maybe_transform(
                 {
-                    "evm_private_key": evm_private_key,
-                    "kalshi_api_key_id": kalshi_api_key_id,
-                    "kalshi_private_key": kalshi_private_key,
-                    "poly_funder": poly_funder,
-                    "poly_signature_type": poly_signature_type,
+                    "api_key_id": api_key_id,
+                    "clob_api_key": clob_api_key,
+                    "clob_api_passphrase": clob_api_passphrase,
+                    "clob_api_secret": clob_api_secret,
+                    "private_key": private_key,
                 },
                 account_update_credentials_params.AccountUpdateCredentialsParams,
             ),
@@ -279,6 +291,7 @@ class AsyncAccountResource(AsyncAPIResource):
         *,
         exchange: str,
         refresh: bool | Omit = omit,
+        x_exchange_credentials: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -302,6 +315,7 @@ class AsyncAccountResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        extra_headers = {**strip_not_given({"X-Exchange-Credentials": x_exchange_credentials}), **(extra_headers or {})}
         return await self._get(
             "/api/v1/balance",
             options=make_request_options(
@@ -380,11 +394,11 @@ class AsyncAccountResource(AsyncAPIResource):
     async def update_credentials(
         self,
         *,
-        evm_private_key: Optional[str] | Omit = omit,
-        kalshi_api_key_id: Optional[str] | Omit = omit,
-        kalshi_private_key: Optional[str] | Omit = omit,
-        poly_funder: Optional[str] | Omit = omit,
-        poly_signature_type: Optional[str] | Omit = omit,
+        api_key_id: Optional[str] | Omit = omit,
+        clob_api_key: Optional[str] | Omit = omit,
+        clob_api_passphrase: Optional[str] | Omit = omit,
+        clob_api_secret: Optional[str] | Omit = omit,
+        private_key: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -397,6 +411,16 @@ class AsyncAccountResource(AsyncAPIResource):
         Returns 204 on success.
 
         Args:
+          api_key_id: Kalshi API key ID.
+
+          clob_api_key: Polymarket CLOB API key.
+
+          clob_api_passphrase: Polymarket CLOB API passphrase.
+
+          clob_api_secret: Polymarket CLOB API secret.
+
+          private_key: Kalshi RSA private key (PEM format).
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -410,11 +434,11 @@ class AsyncAccountResource(AsyncAPIResource):
             "/api/v1/credentials",
             body=await async_maybe_transform(
                 {
-                    "evm_private_key": evm_private_key,
-                    "kalshi_api_key_id": kalshi_api_key_id,
-                    "kalshi_private_key": kalshi_private_key,
-                    "poly_funder": poly_funder,
-                    "poly_signature_type": poly_signature_type,
+                    "api_key_id": api_key_id,
+                    "clob_api_key": clob_api_key,
+                    "clob_api_passphrase": clob_api_passphrase,
+                    "clob_api_secret": clob_api_secret,
+                    "private_key": private_key,
                 },
                 account_update_credentials_params.AccountUpdateCredentialsParams,
             ),

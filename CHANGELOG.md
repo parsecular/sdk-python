@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.9.0 (2026-02-23)
+
+Full Changelog: [v0.8.1...v0.9.0](https://github.com/parsecular/sdk-python/compare/v0.8.1...v0.9.0)
+
+### Features
+
+* **api:** api update ([7cc742b](https://github.com/parsecular/sdk-python/commit/7cc742b77ce99f7d8a4f7a2012b91cb747c9143c))
+
+
+### Bug Fixes
+
+* update example for price-history → price rename ([2069efc](https://github.com/parsecular/sdk-python/commit/2069efc171f445e2509178f1c68b0865f255f8f5))
+
+
+### Chores
+
+* **internal:** remove mock server code ([3b493dd](https://github.com/parsecular/sdk-python/commit/3b493dddd2c91c5f5fd6b8757ec1fd4760d0a97d))
+* update mock server docs ([9c7eae1](https://github.com/parsecular/sdk-python/commit/9c7eae1225298638cc0a2d48916dea9dd7ee3b12))
+
 ## 0.8.1 (2026-02-19)
 
 Full Changelog: [v0.8.0...v0.8.1](https://github.com/parsecular/sdk-python/compare/v0.8.0...v0.8.1)

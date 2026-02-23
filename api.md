@@ -46,17 +46,17 @@ Methods:
 
 - <code title="get /api/v1/orderbook">client.orderbook.<a href="./src/parsec_api/resources/orderbook.py">retrieve</a>(\*\*<a href="src/parsec_api/types/orderbook_retrieve_params.py">params</a>) -> <a href="./src/parsec_api/types/orderbook_retrieve_response.py">OrderbookRetrieveResponse</a></code>
 
-# PriceHistory
+# Price
 
 Types:
 
 ```python
-from parsec_api.types import PriceHistoryRetrieveResponse
+from parsec_api.types import PriceRetrieveResponse
 ```
 
 Methods:
 
-- <code title="get /api/v1/price-history">client.price_history.<a href="./src/parsec_api/resources/price_history.py">retrieve</a>(\*\*<a href="src/parsec_api/types/price_history_retrieve_params.py">params</a>) -> <a href="./src/parsec_api/types/price_history_retrieve_response.py">PriceHistoryRetrieveResponse</a></code>
+- <code title="get /api/v1/price">client.price.<a href="./src/parsec_api/resources/price.py">retrieve</a>(\*\*<a href="src/parsec_api/types/price_retrieve_params.py">params</a>) -> <a href="./src/parsec_api/types/price_retrieve_response.py">PriceRetrieveResponse</a></code>
 
 # Trades
 

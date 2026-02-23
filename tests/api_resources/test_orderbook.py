@@ -17,7 +17,7 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestOrderbook:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_retrieve(self, client: ParsecAPI) -> None:
         orderbook = client.orderbook.retrieve(
@@ -25,18 +25,21 @@ class TestOrderbook:
         )
         assert_matches_type(OrderbookRetrieveResponse, orderbook, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_retrieve_with_all_params(self, client: ParsecAPI) -> None:
         orderbook = client.orderbook.retrieve(
             parsec_id="parsec_id",
+            cursor="cursor",
             depth=1,
+            end_ts=0,
             limit=1,
             outcome="outcome",
+            start_ts=0,
         )
         assert_matches_type(OrderbookRetrieveResponse, orderbook, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_retrieve(self, client: ParsecAPI) -> None:
         response = client.orderbook.with_raw_response.retrieve(
@@ -48,7 +51,7 @@ class TestOrderbook:
         orderbook = response.parse()
         assert_matches_type(OrderbookRetrieveResponse, orderbook, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_retrieve(self, client: ParsecAPI) -> None:
         with client.orderbook.with_streaming_response.retrieve(
@@ -68,7 +71,7 @@ class TestAsyncOrderbook:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_retrieve(self, async_client: AsyncParsecAPI) -> None:
         orderbook = await async_client.orderbook.retrieve(
@@ -76,18 +79,21 @@ class TestAsyncOrderbook:
         )
         assert_matches_type(OrderbookRetrieveResponse, orderbook, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_retrieve_with_all_params(self, async_client: AsyncParsecAPI) -> None:
         orderbook = await async_client.orderbook.retrieve(
             parsec_id="parsec_id",
+            cursor="cursor",
             depth=1,
+            end_ts=0,
             limit=1,
             outcome="outcome",
+            start_ts=0,
         )
         assert_matches_type(OrderbookRetrieveResponse, orderbook, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_retrieve(self, async_client: AsyncParsecAPI) -> None:
         response = await async_client.orderbook.with_raw_response.retrieve(
@@ -99,7 +105,7 @@ class TestAsyncOrderbook:
         orderbook = await response.parse()
         assert_matches_type(OrderbookRetrieveResponse, orderbook, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_retrieve(self, async_client: AsyncParsecAPI) -> None:
         async with async_client.orderbook.with_streaming_response.retrieve(

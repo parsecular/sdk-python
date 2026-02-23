@@ -20,7 +20,7 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestOrders:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create(self, client: ParsecAPI) -> None:
         order = client.orders.create(
@@ -33,7 +33,7 @@ class TestOrders:
         )
         assert_matches_type(Order, order, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create_with_all_params(self, client: ParsecAPI) -> None:
         order = client.orders.create(
@@ -43,11 +43,19 @@ class TestOrders:
             price=0,
             side="buy",
             size=0,
+            credentials={
+                "api_key_id": "api_key_id",
+                "clob_api_key": "clob_api_key",
+                "clob_api_passphrase": "clob_api_passphrase",
+                "clob_api_secret": "clob_api_secret",
+                "private_key": "private_key",
+            },
             params={"foo": "string"},
+            x_exchange_credentials="X-Exchange-Credentials",
         )
         assert_matches_type(Order, order, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_create(self, client: ParsecAPI) -> None:
         response = client.orders.with_raw_response.create(
@@ -64,7 +72,7 @@ class TestOrders:
         order = response.parse()
         assert_matches_type(Order, order, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_create(self, client: ParsecAPI) -> None:
         with client.orders.with_streaming_response.create(
@@ -83,7 +91,7 @@ class TestOrders:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_retrieve(self, client: ParsecAPI) -> None:
         order = client.orders.retrieve(
@@ -92,7 +100,17 @@ class TestOrders:
         )
         assert_matches_type(Order, order, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_retrieve_with_all_params(self, client: ParsecAPI) -> None:
+        order = client.orders.retrieve(
+            order_id="order_id",
+            exchange="exchange",
+            x_exchange_credentials="X-Exchange-Credentials",
+        )
+        assert_matches_type(Order, order, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_retrieve(self, client: ParsecAPI) -> None:
         response = client.orders.with_raw_response.retrieve(
@@ -105,7 +123,7 @@ class TestOrders:
         order = response.parse()
         assert_matches_type(Order, order, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_retrieve(self, client: ParsecAPI) -> None:
         with client.orders.with_streaming_response.retrieve(
@@ -120,7 +138,7 @@ class TestOrders:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_retrieve(self, client: ParsecAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `order_id` but received ''"):
@@ -129,7 +147,7 @@ class TestOrders:
                 exchange="exchange",
             )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list(self, client: ParsecAPI) -> None:
         order = client.orders.list(
@@ -137,16 +155,17 @@ class TestOrders:
         )
         assert_matches_type(OrderListResponse, order, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list_with_all_params(self, client: ParsecAPI) -> None:
         order = client.orders.list(
             exchange="exchange",
             market_id="market_id",
+            x_exchange_credentials="X-Exchange-Credentials",
         )
         assert_matches_type(OrderListResponse, order, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_list(self, client: ParsecAPI) -> None:
         response = client.orders.with_raw_response.list(
@@ -158,7 +177,7 @@ class TestOrders:
         order = response.parse()
         assert_matches_type(OrderListResponse, order, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_list(self, client: ParsecAPI) -> None:
         with client.orders.with_streaming_response.list(
@@ -172,7 +191,7 @@ class TestOrders:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_cancel(self, client: ParsecAPI) -> None:
         order = client.orders.cancel(
@@ -181,7 +200,17 @@ class TestOrders:
         )
         assert_matches_type(Order, order, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_cancel_with_all_params(self, client: ParsecAPI) -> None:
+        order = client.orders.cancel(
+            order_id="order_id",
+            exchange="exchange",
+            x_exchange_credentials="X-Exchange-Credentials",
+        )
+        assert_matches_type(Order, order, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_cancel(self, client: ParsecAPI) -> None:
         response = client.orders.with_raw_response.cancel(
@@ -194,7 +223,7 @@ class TestOrders:
         order = response.parse()
         assert_matches_type(Order, order, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_cancel(self, client: ParsecAPI) -> None:
         with client.orders.with_streaming_response.cancel(
@@ -209,7 +238,7 @@ class TestOrders:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_cancel(self, client: ParsecAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `order_id` but received ''"):
@@ -224,7 +253,7 @@ class TestAsyncOrders:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_create(self, async_client: AsyncParsecAPI) -> None:
         order = await async_client.orders.create(
@@ -237,7 +266,7 @@ class TestAsyncOrders:
         )
         assert_matches_type(Order, order, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncParsecAPI) -> None:
         order = await async_client.orders.create(
@@ -247,11 +276,19 @@ class TestAsyncOrders:
             price=0,
             side="buy",
             size=0,
+            credentials={
+                "api_key_id": "api_key_id",
+                "clob_api_key": "clob_api_key",
+                "clob_api_passphrase": "clob_api_passphrase",
+                "clob_api_secret": "clob_api_secret",
+                "private_key": "private_key",
+            },
             params={"foo": "string"},
+            x_exchange_credentials="X-Exchange-Credentials",
         )
         assert_matches_type(Order, order, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncParsecAPI) -> None:
         response = await async_client.orders.with_raw_response.create(
@@ -268,7 +305,7 @@ class TestAsyncOrders:
         order = await response.parse()
         assert_matches_type(Order, order, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncParsecAPI) -> None:
         async with async_client.orders.with_streaming_response.create(
@@ -287,7 +324,7 @@ class TestAsyncOrders:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_retrieve(self, async_client: AsyncParsecAPI) -> None:
         order = await async_client.orders.retrieve(
@@ -296,7 +333,17 @@ class TestAsyncOrders:
         )
         assert_matches_type(Order, order, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_retrieve_with_all_params(self, async_client: AsyncParsecAPI) -> None:
+        order = await async_client.orders.retrieve(
+            order_id="order_id",
+            exchange="exchange",
+            x_exchange_credentials="X-Exchange-Credentials",
+        )
+        assert_matches_type(Order, order, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_retrieve(self, async_client: AsyncParsecAPI) -> None:
         response = await async_client.orders.with_raw_response.retrieve(
@@ -309,7 +356,7 @@ class TestAsyncOrders:
         order = await response.parse()
         assert_matches_type(Order, order, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_retrieve(self, async_client: AsyncParsecAPI) -> None:
         async with async_client.orders.with_streaming_response.retrieve(
@@ -324,7 +371,7 @@ class TestAsyncOrders:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_retrieve(self, async_client: AsyncParsecAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `order_id` but received ''"):
@@ -333,7 +380,7 @@ class TestAsyncOrders:
                 exchange="exchange",
             )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_list(self, async_client: AsyncParsecAPI) -> None:
         order = await async_client.orders.list(
@@ -341,16 +388,17 @@ class TestAsyncOrders:
         )
         assert_matches_type(OrderListResponse, order, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncParsecAPI) -> None:
         order = await async_client.orders.list(
             exchange="exchange",
             market_id="market_id",
+            x_exchange_credentials="X-Exchange-Credentials",
         )
         assert_matches_type(OrderListResponse, order, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncParsecAPI) -> None:
         response = await async_client.orders.with_raw_response.list(
@@ -362,7 +410,7 @@ class TestAsyncOrders:
         order = await response.parse()
         assert_matches_type(OrderListResponse, order, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncParsecAPI) -> None:
         async with async_client.orders.with_streaming_response.list(
@@ -376,7 +424,7 @@ class TestAsyncOrders:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_cancel(self, async_client: AsyncParsecAPI) -> None:
         order = await async_client.orders.cancel(
@@ -385,7 +433,17 @@ class TestAsyncOrders:
         )
         assert_matches_type(Order, order, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_cancel_with_all_params(self, async_client: AsyncParsecAPI) -> None:
+        order = await async_client.orders.cancel(
+            order_id="order_id",
+            exchange="exchange",
+            x_exchange_credentials="X-Exchange-Credentials",
+        )
+        assert_matches_type(Order, order, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_cancel(self, async_client: AsyncParsecAPI) -> None:
         response = await async_client.orders.with_raw_response.cancel(
@@ -398,7 +456,7 @@ class TestAsyncOrders:
         order = await response.parse()
         assert_matches_type(Order, order, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_cancel(self, async_client: AsyncParsecAPI) -> None:
         async with async_client.orders.with_streaming_response.cancel(
@@ -413,7 +471,7 @@ class TestAsyncOrders:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_cancel(self, async_client: AsyncParsecAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `order_id` but received ''"):

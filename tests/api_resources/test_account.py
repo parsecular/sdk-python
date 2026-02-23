@@ -22,7 +22,7 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestAccount:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_balance(self, client: ParsecAPI) -> None:
         account = client.account.balance(
@@ -30,16 +30,17 @@ class TestAccount:
         )
         assert_matches_type(AccountBalanceResponse, account, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_balance_with_all_params(self, client: ParsecAPI) -> None:
         account = client.account.balance(
             exchange="exchange",
             refresh=True,
+            x_exchange_credentials="X-Exchange-Credentials",
         )
         assert_matches_type(AccountBalanceResponse, account, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_balance(self, client: ParsecAPI) -> None:
         response = client.account.with_raw_response.balance(
@@ -51,7 +52,7 @@ class TestAccount:
         account = response.parse()
         assert_matches_type(AccountBalanceResponse, account, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_balance(self, client: ParsecAPI) -> None:
         with client.account.with_streaming_response.balance(
@@ -65,13 +66,13 @@ class TestAccount:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_capabilities(self, client: ParsecAPI) -> None:
         account = client.account.capabilities()
         assert_matches_type(AccountCapabilitiesResponse, account, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_capabilities(self, client: ParsecAPI) -> None:
         response = client.account.with_raw_response.capabilities()
@@ -81,7 +82,7 @@ class TestAccount:
         account = response.parse()
         assert_matches_type(AccountCapabilitiesResponse, account, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_capabilities(self, client: ParsecAPI) -> None:
         with client.account.with_streaming_response.capabilities() as response:
@@ -93,13 +94,13 @@ class TestAccount:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_ping(self, client: ParsecAPI) -> None:
         account = client.account.ping()
         assert_matches_type(AccountPingResponse, account, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_ping_with_all_params(self, client: ParsecAPI) -> None:
         account = client.account.ping(
@@ -107,7 +108,7 @@ class TestAccount:
         )
         assert_matches_type(AccountPingResponse, account, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_ping(self, client: ParsecAPI) -> None:
         response = client.account.with_raw_response.ping()
@@ -117,7 +118,7 @@ class TestAccount:
         account = response.parse()
         assert_matches_type(AccountPingResponse, account, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_ping(self, client: ParsecAPI) -> None:
         with client.account.with_streaming_response.ping() as response:
@@ -129,25 +130,25 @@ class TestAccount:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_update_credentials(self, client: ParsecAPI) -> None:
         account = client.account.update_credentials()
         assert account is None
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_update_credentials_with_all_params(self, client: ParsecAPI) -> None:
         account = client.account.update_credentials(
-            evm_private_key="evm_private_key",
-            kalshi_api_key_id="kalshi_api_key_id",
-            kalshi_private_key="kalshi_private_key",
-            poly_funder="poly_funder",
-            poly_signature_type="poly_signature_type",
+            api_key_id="api_key_id",
+            clob_api_key="clob_api_key",
+            clob_api_passphrase="clob_api_passphrase",
+            clob_api_secret="clob_api_secret",
+            private_key="private_key",
         )
         assert account is None
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_update_credentials(self, client: ParsecAPI) -> None:
         response = client.account.with_raw_response.update_credentials()
@@ -157,7 +158,7 @@ class TestAccount:
         account = response.parse()
         assert account is None
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_update_credentials(self, client: ParsecAPI) -> None:
         with client.account.with_streaming_response.update_credentials() as response:
@@ -169,7 +170,7 @@ class TestAccount:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_user_activity(self, client: ParsecAPI) -> None:
         account = client.account.user_activity(
@@ -177,7 +178,7 @@ class TestAccount:
         )
         assert_matches_type(AccountUserActivityResponse, account, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_user_activity_with_all_params(self, client: ParsecAPI) -> None:
         account = client.account.user_activity(
@@ -187,7 +188,7 @@ class TestAccount:
         )
         assert_matches_type(AccountUserActivityResponse, account, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_user_activity(self, client: ParsecAPI) -> None:
         response = client.account.with_raw_response.user_activity(
@@ -199,7 +200,7 @@ class TestAccount:
         account = response.parse()
         assert_matches_type(AccountUserActivityResponse, account, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_user_activity(self, client: ParsecAPI) -> None:
         with client.account.with_streaming_response.user_activity(
@@ -219,7 +220,7 @@ class TestAsyncAccount:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_balance(self, async_client: AsyncParsecAPI) -> None:
         account = await async_client.account.balance(
@@ -227,16 +228,17 @@ class TestAsyncAccount:
         )
         assert_matches_type(AccountBalanceResponse, account, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_balance_with_all_params(self, async_client: AsyncParsecAPI) -> None:
         account = await async_client.account.balance(
             exchange="exchange",
             refresh=True,
+            x_exchange_credentials="X-Exchange-Credentials",
         )
         assert_matches_type(AccountBalanceResponse, account, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_balance(self, async_client: AsyncParsecAPI) -> None:
         response = await async_client.account.with_raw_response.balance(
@@ -248,7 +250,7 @@ class TestAsyncAccount:
         account = await response.parse()
         assert_matches_type(AccountBalanceResponse, account, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_balance(self, async_client: AsyncParsecAPI) -> None:
         async with async_client.account.with_streaming_response.balance(
@@ -262,13 +264,13 @@ class TestAsyncAccount:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_capabilities(self, async_client: AsyncParsecAPI) -> None:
         account = await async_client.account.capabilities()
         assert_matches_type(AccountCapabilitiesResponse, account, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_capabilities(self, async_client: AsyncParsecAPI) -> None:
         response = await async_client.account.with_raw_response.capabilities()
@@ -278,7 +280,7 @@ class TestAsyncAccount:
         account = await response.parse()
         assert_matches_type(AccountCapabilitiesResponse, account, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_capabilities(self, async_client: AsyncParsecAPI) -> None:
         async with async_client.account.with_streaming_response.capabilities() as response:
@@ -290,13 +292,13 @@ class TestAsyncAccount:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_ping(self, async_client: AsyncParsecAPI) -> None:
         account = await async_client.account.ping()
         assert_matches_type(AccountPingResponse, account, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_ping_with_all_params(self, async_client: AsyncParsecAPI) -> None:
         account = await async_client.account.ping(
@@ -304,7 +306,7 @@ class TestAsyncAccount:
         )
         assert_matches_type(AccountPingResponse, account, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_ping(self, async_client: AsyncParsecAPI) -> None:
         response = await async_client.account.with_raw_response.ping()
@@ -314,7 +316,7 @@ class TestAsyncAccount:
         account = await response.parse()
         assert_matches_type(AccountPingResponse, account, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_ping(self, async_client: AsyncParsecAPI) -> None:
         async with async_client.account.with_streaming_response.ping() as response:
@@ -326,25 +328,25 @@ class TestAsyncAccount:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_update_credentials(self, async_client: AsyncParsecAPI) -> None:
         account = await async_client.account.update_credentials()
         assert account is None
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_update_credentials_with_all_params(self, async_client: AsyncParsecAPI) -> None:
         account = await async_client.account.update_credentials(
-            evm_private_key="evm_private_key",
-            kalshi_api_key_id="kalshi_api_key_id",
-            kalshi_private_key="kalshi_private_key",
-            poly_funder="poly_funder",
-            poly_signature_type="poly_signature_type",
+            api_key_id="api_key_id",
+            clob_api_key="clob_api_key",
+            clob_api_passphrase="clob_api_passphrase",
+            clob_api_secret="clob_api_secret",
+            private_key="private_key",
         )
         assert account is None
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_update_credentials(self, async_client: AsyncParsecAPI) -> None:
         response = await async_client.account.with_raw_response.update_credentials()
@@ -354,7 +356,7 @@ class TestAsyncAccount:
         account = await response.parse()
         assert account is None
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_update_credentials(self, async_client: AsyncParsecAPI) -> None:
         async with async_client.account.with_streaming_response.update_credentials() as response:
@@ -366,7 +368,7 @@ class TestAsyncAccount:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_user_activity(self, async_client: AsyncParsecAPI) -> None:
         account = await async_client.account.user_activity(
@@ -374,7 +376,7 @@ class TestAsyncAccount:
         )
         assert_matches_type(AccountUserActivityResponse, account, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_user_activity_with_all_params(self, async_client: AsyncParsecAPI) -> None:
         account = await async_client.account.user_activity(
@@ -384,7 +386,7 @@ class TestAsyncAccount:
         )
         assert_matches_type(AccountUserActivityResponse, account, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_user_activity(self, async_client: AsyncParsecAPI) -> None:
         response = await async_client.account.with_raw_response.user_activity(
@@ -396,7 +398,7 @@ class TestAsyncAccount:
         account = await response.parse()
         assert_matches_type(AccountUserActivityResponse, account, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_user_activity(self, async_client: AsyncParsecAPI) -> None:
         async with async_client.account.with_streaming_response.user_activity(
