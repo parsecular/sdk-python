@@ -17,7 +17,7 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestPriceHistory:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_retrieve(self, client: ParsecAPI) -> None:
         price_history = client.price_history.retrieve(
@@ -26,7 +26,7 @@ class TestPriceHistory:
         )
         assert_matches_type(PriceHistoryRetrieveResponse, price_history, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_retrieve_with_all_params(self, client: ParsecAPI) -> None:
         price_history = client.price_history.retrieve(
@@ -38,7 +38,7 @@ class TestPriceHistory:
         )
         assert_matches_type(PriceHistoryRetrieveResponse, price_history, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_retrieve(self, client: ParsecAPI) -> None:
         response = client.price_history.with_raw_response.retrieve(
@@ -51,7 +51,7 @@ class TestPriceHistory:
         price_history = response.parse()
         assert_matches_type(PriceHistoryRetrieveResponse, price_history, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_retrieve(self, client: ParsecAPI) -> None:
         with client.price_history.with_streaming_response.retrieve(
@@ -72,7 +72,7 @@ class TestAsyncPriceHistory:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_retrieve(self, async_client: AsyncParsecAPI) -> None:
         price_history = await async_client.price_history.retrieve(
@@ -81,7 +81,7 @@ class TestAsyncPriceHistory:
         )
         assert_matches_type(PriceHistoryRetrieveResponse, price_history, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_retrieve_with_all_params(self, async_client: AsyncParsecAPI) -> None:
         price_history = await async_client.price_history.retrieve(
@@ -93,7 +93,7 @@ class TestAsyncPriceHistory:
         )
         assert_matches_type(PriceHistoryRetrieveResponse, price_history, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_retrieve(self, async_client: AsyncParsecAPI) -> None:
         response = await async_client.price_history.with_raw_response.retrieve(
@@ -106,7 +106,7 @@ class TestAsyncPriceHistory:
         price_history = await response.parse()
         assert_matches_type(PriceHistoryRetrieveResponse, price_history, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_retrieve(self, async_client: AsyncParsecAPI) -> None:
         async with async_client.price_history.with_streaming_response.retrieve(

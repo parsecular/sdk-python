@@ -17,13 +17,13 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestMarkets:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list(self, client: ParsecAPI) -> None:
         market = client.markets.list()
         assert_matches_type(MarketListResponse, market, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list_with_all_params(self, client: ParsecAPI) -> None:
         market = client.markets.list(
@@ -40,7 +40,7 @@ class TestMarkets:
         )
         assert_matches_type(MarketListResponse, market, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_list(self, client: ParsecAPI) -> None:
         response = client.markets.with_raw_response.list()
@@ -50,7 +50,7 @@ class TestMarkets:
         market = response.parse()
         assert_matches_type(MarketListResponse, market, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_list(self, client: ParsecAPI) -> None:
         with client.markets.with_streaming_response.list() as response:
@@ -68,13 +68,13 @@ class TestAsyncMarkets:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_list(self, async_client: AsyncParsecAPI) -> None:
         market = await async_client.markets.list()
         assert_matches_type(MarketListResponse, market, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncParsecAPI) -> None:
         market = await async_client.markets.list(
@@ -91,7 +91,7 @@ class TestAsyncMarkets:
         )
         assert_matches_type(MarketListResponse, market, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncParsecAPI) -> None:
         response = await async_client.markets.with_raw_response.list()
@@ -101,7 +101,7 @@ class TestAsyncMarkets:
         market = await response.parse()
         assert_matches_type(MarketListResponse, market, path=["response"])
 
-    @pytest.mark.skip(reason="Prism tests are disabled")
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncParsecAPI) -> None:
         async with async_client.markets.with_streaming_response.list() as response:
