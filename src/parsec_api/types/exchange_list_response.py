@@ -9,8 +9,6 @@ __all__ = ["ExchangeListResponse", "ExchangeListResponseItem", "ExchangeListResp
 
 
 class ExchangeListResponseItemHas(BaseModel):
-    approvals: bool
-
     cancel_order: bool
 
     create_order: bool
@@ -18,6 +16,8 @@ class ExchangeListResponseItemHas(BaseModel):
     fetch_balance: bool
 
     fetch_events: bool
+
+    fetch_fills: bool
 
     fetch_markets: bool
 

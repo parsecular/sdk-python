@@ -12,7 +12,6 @@ from tests.utils import assert_matches_type
 from parsec_api.types import (
     AccountPingResponse,
     AccountBalanceResponse,
-    AccountCapabilitiesResponse,
     AccountUserActivityResponse,
 )
 
@@ -68,34 +67,6 @@ class TestAccount:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_capabilities(self, client: ParsecAPI) -> None:
-        account = client.account.capabilities()
-        assert_matches_type(AccountCapabilitiesResponse, account, path=["response"])
-
-    @pytest.mark.skip(reason="Mock server tests are disabled")
-    @parametrize
-    def test_raw_response_capabilities(self, client: ParsecAPI) -> None:
-        response = client.account.with_raw_response.capabilities()
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        account = response.parse()
-        assert_matches_type(AccountCapabilitiesResponse, account, path=["response"])
-
-    @pytest.mark.skip(reason="Mock server tests are disabled")
-    @parametrize
-    def test_streaming_response_capabilities(self, client: ParsecAPI) -> None:
-        with client.account.with_streaming_response.capabilities() as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            account = response.parse()
-            assert_matches_type(AccountCapabilitiesResponse, account, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip(reason="Mock server tests are disabled")
-    @parametrize
     def test_method_ping(self, client: ParsecAPI) -> None:
         account = client.account.ping()
         assert_matches_type(AccountPingResponse, account, path=["response"])
@@ -127,46 +98,6 @@ class TestAccount:
 
             account = response.parse()
             assert_matches_type(AccountPingResponse, account, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip(reason="Mock server tests are disabled")
-    @parametrize
-    def test_method_update_credentials(self, client: ParsecAPI) -> None:
-        account = client.account.update_credentials()
-        assert account is None
-
-    @pytest.mark.skip(reason="Mock server tests are disabled")
-    @parametrize
-    def test_method_update_credentials_with_all_params(self, client: ParsecAPI) -> None:
-        account = client.account.update_credentials(
-            api_key_id="api_key_id",
-            clob_api_key="clob_api_key",
-            clob_api_passphrase="clob_api_passphrase",
-            clob_api_secret="clob_api_secret",
-            private_key="private_key",
-        )
-        assert account is None
-
-    @pytest.mark.skip(reason="Mock server tests are disabled")
-    @parametrize
-    def test_raw_response_update_credentials(self, client: ParsecAPI) -> None:
-        response = client.account.with_raw_response.update_credentials()
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        account = response.parse()
-        assert account is None
-
-    @pytest.mark.skip(reason="Mock server tests are disabled")
-    @parametrize
-    def test_streaming_response_update_credentials(self, client: ParsecAPI) -> None:
-        with client.account.with_streaming_response.update_credentials() as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            account = response.parse()
-            assert account is None
 
         assert cast(Any, response.is_closed) is True
 
@@ -266,34 +197,6 @@ class TestAsyncAccount:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_method_capabilities(self, async_client: AsyncParsecAPI) -> None:
-        account = await async_client.account.capabilities()
-        assert_matches_type(AccountCapabilitiesResponse, account, path=["response"])
-
-    @pytest.mark.skip(reason="Mock server tests are disabled")
-    @parametrize
-    async def test_raw_response_capabilities(self, async_client: AsyncParsecAPI) -> None:
-        response = await async_client.account.with_raw_response.capabilities()
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        account = await response.parse()
-        assert_matches_type(AccountCapabilitiesResponse, account, path=["response"])
-
-    @pytest.mark.skip(reason="Mock server tests are disabled")
-    @parametrize
-    async def test_streaming_response_capabilities(self, async_client: AsyncParsecAPI) -> None:
-        async with async_client.account.with_streaming_response.capabilities() as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            account = await response.parse()
-            assert_matches_type(AccountCapabilitiesResponse, account, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip(reason="Mock server tests are disabled")
-    @parametrize
     async def test_method_ping(self, async_client: AsyncParsecAPI) -> None:
         account = await async_client.account.ping()
         assert_matches_type(AccountPingResponse, account, path=["response"])
@@ -325,46 +228,6 @@ class TestAsyncAccount:
 
             account = await response.parse()
             assert_matches_type(AccountPingResponse, account, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip(reason="Mock server tests are disabled")
-    @parametrize
-    async def test_method_update_credentials(self, async_client: AsyncParsecAPI) -> None:
-        account = await async_client.account.update_credentials()
-        assert account is None
-
-    @pytest.mark.skip(reason="Mock server tests are disabled")
-    @parametrize
-    async def test_method_update_credentials_with_all_params(self, async_client: AsyncParsecAPI) -> None:
-        account = await async_client.account.update_credentials(
-            api_key_id="api_key_id",
-            clob_api_key="clob_api_key",
-            clob_api_passphrase="clob_api_passphrase",
-            clob_api_secret="clob_api_secret",
-            private_key="private_key",
-        )
-        assert account is None
-
-    @pytest.mark.skip(reason="Mock server tests are disabled")
-    @parametrize
-    async def test_raw_response_update_credentials(self, async_client: AsyncParsecAPI) -> None:
-        response = await async_client.account.with_raw_response.update_credentials()
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        account = await response.parse()
-        assert account is None
-
-    @pytest.mark.skip(reason="Mock server tests are disabled")
-    @parametrize
-    async def test_streaming_response_update_credentials(self, async_client: AsyncParsecAPI) -> None:
-        async with async_client.account.with_streaming_response.update_credentials() as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            account = await response.parse()
-            assert account is None
 
         assert cast(Any, response.is_closed) is True
 
