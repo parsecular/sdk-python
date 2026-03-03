@@ -33,32 +33,39 @@ from ._base_client import (
 
 if TYPE_CHECKING:
     from .resources import (
+        ctf,
         price,
         events,
         orders,
         trades,
+        wallet,
         account,
+        builder,
         markets,
-        approvals,
+        onboard,
         exchanges,
         orderbook,
         positions,
         websocket,
         execution_price,
+        polymarket_auth,
     )
-    from .streaming import ParsecWebSocket
+    from .resources.ctf import CtfResource, AsyncCtfResource
     from .resources.price import PriceResource, AsyncPriceResource
     from .resources.events import EventsResource, AsyncEventsResource
     from .resources.orders import OrdersResource, AsyncOrdersResource
     from .resources.trades import TradesResource, AsyncTradesResource
+    from .resources.wallet import WalletResource, AsyncWalletResource
     from .resources.account import AccountResource, AsyncAccountResource
     from .resources.markets import MarketsResource, AsyncMarketsResource
-    from .resources.approvals import ApprovalsResource, AsyncApprovalsResource
+    from .resources.onboard import OnboardResource, AsyncOnboardResource
     from .resources.exchanges import ExchangesResource, AsyncExchangesResource
     from .resources.orderbook import OrderbookResource, AsyncOrderbookResource
     from .resources.positions import PositionsResource, AsyncPositionsResource
     from .resources.websocket import WebsocketResource, AsyncWebsocketResource
+    from .resources.builder.builder import BuilderResource, AsyncBuilderResource
     from .resources.execution_price import ExecutionPriceResource, AsyncExecutionPriceResource
+    from .resources.polymarket_auth import PolymarketAuthResource, AsyncPolymarketAuthResource
 
 __all__ = [
     "ENVIRONMENTS",
@@ -94,10 +101,6 @@ class ParsecAPI(SyncAPIClient):
         max_retries: int = DEFAULT_MAX_RETRIES,
         default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,
-        # TODO(verbose-mode): Add per-request debug override that logs raw request/response
-        # details (method, URL, headers, body, status) independent of global logging.
-        # pmxt exposes `verbose: true` per request, which is useful during strategy
-        # integration debugging without enabling globally noisy logs.
         # Configure a custom httpx client.
         # We provide a `DefaultHttpxClient` class that you can pass to retain the default values we use for `limits`, `timeout` & `follow_redirects`.
         # See the [httpx documentation](https://www.python-httpx.org/api/#client) for more details.
@@ -168,12 +171,6 @@ class ParsecAPI(SyncAPIClient):
         return ExchangesResource(self)
 
     @cached_property
-    def events(self) -> EventsResource:
-        from .resources.events import EventsResource
-
-        return EventsResource(self)
-
-    @cached_property
     def markets(self) -> MarketsResource:
         from .resources.markets import MarketsResource
 
@@ -204,6 +201,12 @@ class ParsecAPI(SyncAPIClient):
         return TradesResource(self)
 
     @cached_property
+    def events(self) -> EventsResource:
+        from .resources.events import EventsResource
+
+        return EventsResource(self)
+
+    @cached_property
     def websocket(self) -> WebsocketResource:
         from .resources.websocket import WebsocketResource
 
@@ -228,34 +231,34 @@ class ParsecAPI(SyncAPIClient):
         return AccountResource(self)
 
     @cached_property
-    def approvals(self) -> ApprovalsResource:
-        from .resources.approvals import ApprovalsResource
+    def onboard(self) -> OnboardResource:
+        from .resources.onboard import OnboardResource
 
-        return ApprovalsResource(self)
+        return OnboardResource(self)
 
-    def ws(self, *, url: str | None = None) -> "ParsecWebSocket":
-        """Create a WebSocket client for real-time orderbook and trade streaming.
+    @cached_property
+    def wallet(self) -> WalletResource:
+        from .resources.wallet import WalletResource
 
-        Inherits ``api_key`` and derives the WebSocket URL from ``base_url``.
+        return WalletResource(self)
 
-        Args:
-            url: Override the WebSocket URL (derived from base_url by default).
+    @cached_property
+    def polymarket_auth(self) -> PolymarketAuthResource:
+        from .resources.polymarket_auth import PolymarketAuthResource
 
-        Returns:
-            A new :class:`ParsecWebSocket` instance.
-        """
-        from .streaming import ParsecWebSocket
+        return PolymarketAuthResource(self)
 
-        ws_url = url or self._derive_ws_url()
-        return ParsecWebSocket(self.api_key, ws_url)
+    @cached_property
+    def ctf(self) -> CtfResource:
+        from .resources.ctf import CtfResource
 
-    def _derive_ws_url(self) -> str:
-        base = str(self.base_url).rstrip("/")
-        if base.startswith("https://"):
-            return base.replace("https://", "wss://", 1) + "/ws"
-        if base.startswith("http://"):
-            return base.replace("http://", "ws://", 1) + "/ws"
-        return "wss://" + base + "/ws"
+        return CtfResource(self)
+
+    @cached_property
+    def builder(self) -> BuilderResource:
+        from .resources.builder import BuilderResource
+
+        return BuilderResource(self)
 
     @cached_property
     def with_raw_response(self) -> ParsecAPIWithRawResponse:
@@ -393,10 +396,6 @@ class AsyncParsecAPI(AsyncAPIClient):
         max_retries: int = DEFAULT_MAX_RETRIES,
         default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,
-        # TODO(verbose-mode): Add per-request debug override that logs raw request/response
-        # details (method, URL, headers, body, status) independent of global logging.
-        # pmxt exposes `verbose: true` per request, which is useful during strategy
-        # integration debugging without enabling globally noisy logs.
         # Configure a custom httpx client.
         # We provide a `DefaultAsyncHttpxClient` class that you can pass to retain the default values we use for `limits`, `timeout` & `follow_redirects`.
         # See the [httpx documentation](https://www.python-httpx.org/api/#asyncclient) for more details.
@@ -467,12 +466,6 @@ class AsyncParsecAPI(AsyncAPIClient):
         return AsyncExchangesResource(self)
 
     @cached_property
-    def events(self) -> AsyncEventsResource:
-        from .resources.events import AsyncEventsResource
-
-        return AsyncEventsResource(self)
-
-    @cached_property
     def markets(self) -> AsyncMarketsResource:
         from .resources.markets import AsyncMarketsResource
 
@@ -503,6 +496,12 @@ class AsyncParsecAPI(AsyncAPIClient):
         return AsyncTradesResource(self)
 
     @cached_property
+    def events(self) -> AsyncEventsResource:
+        from .resources.events import AsyncEventsResource
+
+        return AsyncEventsResource(self)
+
+    @cached_property
     def websocket(self) -> AsyncWebsocketResource:
         from .resources.websocket import AsyncWebsocketResource
 
@@ -527,34 +526,34 @@ class AsyncParsecAPI(AsyncAPIClient):
         return AsyncAccountResource(self)
 
     @cached_property
-    def approvals(self) -> AsyncApprovalsResource:
-        from .resources.approvals import AsyncApprovalsResource
+    def onboard(self) -> AsyncOnboardResource:
+        from .resources.onboard import AsyncOnboardResource
 
-        return AsyncApprovalsResource(self)
+        return AsyncOnboardResource(self)
 
-    def ws(self, *, url: str | None = None) -> "ParsecWebSocket":
-        """Create a WebSocket client for real-time orderbook and trade streaming.
+    @cached_property
+    def wallet(self) -> AsyncWalletResource:
+        from .resources.wallet import AsyncWalletResource
 
-        Inherits ``api_key`` and derives the WebSocket URL from ``base_url``.
+        return AsyncWalletResource(self)
 
-        Args:
-            url: Override the WebSocket URL (derived from base_url by default).
+    @cached_property
+    def polymarket_auth(self) -> AsyncPolymarketAuthResource:
+        from .resources.polymarket_auth import AsyncPolymarketAuthResource
 
-        Returns:
-            A new :class:`ParsecWebSocket` instance.
-        """
-        from .streaming import ParsecWebSocket
+        return AsyncPolymarketAuthResource(self)
 
-        ws_url = url or self._derive_ws_url()
-        return ParsecWebSocket(self.api_key, ws_url)
+    @cached_property
+    def ctf(self) -> AsyncCtfResource:
+        from .resources.ctf import AsyncCtfResource
 
-    def _derive_ws_url(self) -> str:
-        base = str(self.base_url).rstrip("/")
-        if base.startswith("https://"):
-            return base.replace("https://", "wss://", 1) + "/ws"
-        if base.startswith("http://"):
-            return base.replace("http://", "ws://", 1) + "/ws"
-        return "wss://" + base + "/ws"
+        return AsyncCtfResource(self)
+
+    @cached_property
+    def builder(self) -> AsyncBuilderResource:
+        from .resources.builder import AsyncBuilderResource
+
+        return AsyncBuilderResource(self)
 
     @cached_property
     def with_raw_response(self) -> AsyncParsecAPIWithRawResponse:
@@ -689,12 +688,6 @@ class ParsecAPIWithRawResponse:
         return ExchangesResourceWithRawResponse(self._client.exchanges)
 
     @cached_property
-    def events(self) -> events.EventsResourceWithRawResponse:
-        from .resources.events import EventsResourceWithRawResponse
-
-        return EventsResourceWithRawResponse(self._client.events)
-
-    @cached_property
     def markets(self) -> markets.MarketsResourceWithRawResponse:
         from .resources.markets import MarketsResourceWithRawResponse
 
@@ -725,6 +718,12 @@ class ParsecAPIWithRawResponse:
         return TradesResourceWithRawResponse(self._client.trades)
 
     @cached_property
+    def events(self) -> events.EventsResourceWithRawResponse:
+        from .resources.events import EventsResourceWithRawResponse
+
+        return EventsResourceWithRawResponse(self._client.events)
+
+    @cached_property
     def websocket(self) -> websocket.WebsocketResourceWithRawResponse:
         from .resources.websocket import WebsocketResourceWithRawResponse
 
@@ -749,10 +748,34 @@ class ParsecAPIWithRawResponse:
         return AccountResourceWithRawResponse(self._client.account)
 
     @cached_property
-    def approvals(self) -> approvals.ApprovalsResourceWithRawResponse:
-        from .resources.approvals import ApprovalsResourceWithRawResponse
+    def onboard(self) -> onboard.OnboardResourceWithRawResponse:
+        from .resources.onboard import OnboardResourceWithRawResponse
 
-        return ApprovalsResourceWithRawResponse(self._client.approvals)
+        return OnboardResourceWithRawResponse(self._client.onboard)
+
+    @cached_property
+    def wallet(self) -> wallet.WalletResourceWithRawResponse:
+        from .resources.wallet import WalletResourceWithRawResponse
+
+        return WalletResourceWithRawResponse(self._client.wallet)
+
+    @cached_property
+    def polymarket_auth(self) -> polymarket_auth.PolymarketAuthResourceWithRawResponse:
+        from .resources.polymarket_auth import PolymarketAuthResourceWithRawResponse
+
+        return PolymarketAuthResourceWithRawResponse(self._client.polymarket_auth)
+
+    @cached_property
+    def ctf(self) -> ctf.CtfResourceWithRawResponse:
+        from .resources.ctf import CtfResourceWithRawResponse
+
+        return CtfResourceWithRawResponse(self._client.ctf)
+
+    @cached_property
+    def builder(self) -> builder.BuilderResourceWithRawResponse:
+        from .resources.builder import BuilderResourceWithRawResponse
+
+        return BuilderResourceWithRawResponse(self._client.builder)
 
 
 class AsyncParsecAPIWithRawResponse:
@@ -766,12 +789,6 @@ class AsyncParsecAPIWithRawResponse:
         from .resources.exchanges import AsyncExchangesResourceWithRawResponse
 
         return AsyncExchangesResourceWithRawResponse(self._client.exchanges)
-
-    @cached_property
-    def events(self) -> events.AsyncEventsResourceWithRawResponse:
-        from .resources.events import AsyncEventsResourceWithRawResponse
-
-        return AsyncEventsResourceWithRawResponse(self._client.events)
 
     @cached_property
     def markets(self) -> markets.AsyncMarketsResourceWithRawResponse:
@@ -804,6 +821,12 @@ class AsyncParsecAPIWithRawResponse:
         return AsyncTradesResourceWithRawResponse(self._client.trades)
 
     @cached_property
+    def events(self) -> events.AsyncEventsResourceWithRawResponse:
+        from .resources.events import AsyncEventsResourceWithRawResponse
+
+        return AsyncEventsResourceWithRawResponse(self._client.events)
+
+    @cached_property
     def websocket(self) -> websocket.AsyncWebsocketResourceWithRawResponse:
         from .resources.websocket import AsyncWebsocketResourceWithRawResponse
 
@@ -828,10 +851,34 @@ class AsyncParsecAPIWithRawResponse:
         return AsyncAccountResourceWithRawResponse(self._client.account)
 
     @cached_property
-    def approvals(self) -> approvals.AsyncApprovalsResourceWithRawResponse:
-        from .resources.approvals import AsyncApprovalsResourceWithRawResponse
+    def onboard(self) -> onboard.AsyncOnboardResourceWithRawResponse:
+        from .resources.onboard import AsyncOnboardResourceWithRawResponse
 
-        return AsyncApprovalsResourceWithRawResponse(self._client.approvals)
+        return AsyncOnboardResourceWithRawResponse(self._client.onboard)
+
+    @cached_property
+    def wallet(self) -> wallet.AsyncWalletResourceWithRawResponse:
+        from .resources.wallet import AsyncWalletResourceWithRawResponse
+
+        return AsyncWalletResourceWithRawResponse(self._client.wallet)
+
+    @cached_property
+    def polymarket_auth(self) -> polymarket_auth.AsyncPolymarketAuthResourceWithRawResponse:
+        from .resources.polymarket_auth import AsyncPolymarketAuthResourceWithRawResponse
+
+        return AsyncPolymarketAuthResourceWithRawResponse(self._client.polymarket_auth)
+
+    @cached_property
+    def ctf(self) -> ctf.AsyncCtfResourceWithRawResponse:
+        from .resources.ctf import AsyncCtfResourceWithRawResponse
+
+        return AsyncCtfResourceWithRawResponse(self._client.ctf)
+
+    @cached_property
+    def builder(self) -> builder.AsyncBuilderResourceWithRawResponse:
+        from .resources.builder import AsyncBuilderResourceWithRawResponse
+
+        return AsyncBuilderResourceWithRawResponse(self._client.builder)
 
 
 class ParsecAPIWithStreamedResponse:
@@ -845,12 +892,6 @@ class ParsecAPIWithStreamedResponse:
         from .resources.exchanges import ExchangesResourceWithStreamingResponse
 
         return ExchangesResourceWithStreamingResponse(self._client.exchanges)
-
-    @cached_property
-    def events(self) -> events.EventsResourceWithStreamingResponse:
-        from .resources.events import EventsResourceWithStreamingResponse
-
-        return EventsResourceWithStreamingResponse(self._client.events)
 
     @cached_property
     def markets(self) -> markets.MarketsResourceWithStreamingResponse:
@@ -883,6 +924,12 @@ class ParsecAPIWithStreamedResponse:
         return TradesResourceWithStreamingResponse(self._client.trades)
 
     @cached_property
+    def events(self) -> events.EventsResourceWithStreamingResponse:
+        from .resources.events import EventsResourceWithStreamingResponse
+
+        return EventsResourceWithStreamingResponse(self._client.events)
+
+    @cached_property
     def websocket(self) -> websocket.WebsocketResourceWithStreamingResponse:
         from .resources.websocket import WebsocketResourceWithStreamingResponse
 
@@ -907,10 +954,34 @@ class ParsecAPIWithStreamedResponse:
         return AccountResourceWithStreamingResponse(self._client.account)
 
     @cached_property
-    def approvals(self) -> approvals.ApprovalsResourceWithStreamingResponse:
-        from .resources.approvals import ApprovalsResourceWithStreamingResponse
+    def onboard(self) -> onboard.OnboardResourceWithStreamingResponse:
+        from .resources.onboard import OnboardResourceWithStreamingResponse
 
-        return ApprovalsResourceWithStreamingResponse(self._client.approvals)
+        return OnboardResourceWithStreamingResponse(self._client.onboard)
+
+    @cached_property
+    def wallet(self) -> wallet.WalletResourceWithStreamingResponse:
+        from .resources.wallet import WalletResourceWithStreamingResponse
+
+        return WalletResourceWithStreamingResponse(self._client.wallet)
+
+    @cached_property
+    def polymarket_auth(self) -> polymarket_auth.PolymarketAuthResourceWithStreamingResponse:
+        from .resources.polymarket_auth import PolymarketAuthResourceWithStreamingResponse
+
+        return PolymarketAuthResourceWithStreamingResponse(self._client.polymarket_auth)
+
+    @cached_property
+    def ctf(self) -> ctf.CtfResourceWithStreamingResponse:
+        from .resources.ctf import CtfResourceWithStreamingResponse
+
+        return CtfResourceWithStreamingResponse(self._client.ctf)
+
+    @cached_property
+    def builder(self) -> builder.BuilderResourceWithStreamingResponse:
+        from .resources.builder import BuilderResourceWithStreamingResponse
+
+        return BuilderResourceWithStreamingResponse(self._client.builder)
 
 
 class AsyncParsecAPIWithStreamedResponse:
@@ -924,12 +995,6 @@ class AsyncParsecAPIWithStreamedResponse:
         from .resources.exchanges import AsyncExchangesResourceWithStreamingResponse
 
         return AsyncExchangesResourceWithStreamingResponse(self._client.exchanges)
-
-    @cached_property
-    def events(self) -> events.AsyncEventsResourceWithStreamingResponse:
-        from .resources.events import AsyncEventsResourceWithStreamingResponse
-
-        return AsyncEventsResourceWithStreamingResponse(self._client.events)
 
     @cached_property
     def markets(self) -> markets.AsyncMarketsResourceWithStreamingResponse:
@@ -962,6 +1027,12 @@ class AsyncParsecAPIWithStreamedResponse:
         return AsyncTradesResourceWithStreamingResponse(self._client.trades)
 
     @cached_property
+    def events(self) -> events.AsyncEventsResourceWithStreamingResponse:
+        from .resources.events import AsyncEventsResourceWithStreamingResponse
+
+        return AsyncEventsResourceWithStreamingResponse(self._client.events)
+
+    @cached_property
     def websocket(self) -> websocket.AsyncWebsocketResourceWithStreamingResponse:
         from .resources.websocket import AsyncWebsocketResourceWithStreamingResponse
 
@@ -986,10 +1057,34 @@ class AsyncParsecAPIWithStreamedResponse:
         return AsyncAccountResourceWithStreamingResponse(self._client.account)
 
     @cached_property
-    def approvals(self) -> approvals.AsyncApprovalsResourceWithStreamingResponse:
-        from .resources.approvals import AsyncApprovalsResourceWithStreamingResponse
+    def onboard(self) -> onboard.AsyncOnboardResourceWithStreamingResponse:
+        from .resources.onboard import AsyncOnboardResourceWithStreamingResponse
 
-        return AsyncApprovalsResourceWithStreamingResponse(self._client.approvals)
+        return AsyncOnboardResourceWithStreamingResponse(self._client.onboard)
+
+    @cached_property
+    def wallet(self) -> wallet.AsyncWalletResourceWithStreamingResponse:
+        from .resources.wallet import AsyncWalletResourceWithStreamingResponse
+
+        return AsyncWalletResourceWithStreamingResponse(self._client.wallet)
+
+    @cached_property
+    def polymarket_auth(self) -> polymarket_auth.AsyncPolymarketAuthResourceWithStreamingResponse:
+        from .resources.polymarket_auth import AsyncPolymarketAuthResourceWithStreamingResponse
+
+        return AsyncPolymarketAuthResourceWithStreamingResponse(self._client.polymarket_auth)
+
+    @cached_property
+    def ctf(self) -> ctf.AsyncCtfResourceWithStreamingResponse:
+        from .resources.ctf import AsyncCtfResourceWithStreamingResponse
+
+        return AsyncCtfResourceWithStreamingResponse(self._client.ctf)
+
+    @cached_property
+    def builder(self) -> builder.AsyncBuilderResourceWithStreamingResponse:
+        from .resources.builder import AsyncBuilderResourceWithStreamingResponse
+
+        return AsyncBuilderResourceWithStreamingResponse(self._client.builder)
 
 
 Client = ParsecAPI

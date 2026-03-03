@@ -2,17 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 import httpx
 
-from ..types import (
-    account_ping_params,
-    account_balance_params,
-    account_user_activity_params,
-    account_update_credentials_params,
-)
-from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
+from ..types import account_ping_params, account_balance_params, account_user_activity_params
+from .._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
 from .._utils import maybe_transform, strip_not_given, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
@@ -25,7 +18,6 @@ from .._response import (
 from .._base_client import make_request_options
 from ..types.account_ping_response import AccountPingResponse
 from ..types.account_balance_response import AccountBalanceResponse
-from ..types.account_capabilities_response import AccountCapabilitiesResponse
 from ..types.account_user_activity_response import AccountUserActivityResponse
 
 __all__ = ["AccountResource", "AsyncAccountResource"]
@@ -99,25 +91,6 @@ class AccountResource(SyncAPIResource):
             cast_to=AccountBalanceResponse,
         )
 
-    def capabilities(
-        self,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> AccountCapabilitiesResponse:
-        """Returns the customer's tier and list of linked exchanges."""
-        return self._get(
-            "/api/v1/session/capabilities",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=AccountCapabilitiesResponse,
-        )
-
     def ping(
         self,
         *,
@@ -154,63 +127,6 @@ class AccountResource(SyncAPIResource):
                 query=maybe_transform({"exchange": exchange}, account_ping_params.AccountPingParams),
             ),
             cast_to=AccountPingResponse,
-        )
-
-    def update_credentials(
-        self,
-        *,
-        api_key_id: Optional[str] | Omit = omit,
-        clob_api_key: Optional[str] | Omit = omit,
-        clob_api_passphrase: Optional[str] | Omit = omit,
-        clob_api_secret: Optional[str] | Omit = omit,
-        private_key: Optional[str] | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """Updates stored credentials for this API key.
-
-        Returns 204 on success.
-
-        Args:
-          api_key_id: Kalshi API key ID.
-
-          clob_api_key: Polymarket CLOB API key.
-
-          clob_api_passphrase: Polymarket CLOB API passphrase.
-
-          clob_api_secret: Polymarket CLOB API secret.
-
-          private_key: Kalshi RSA private key (PEM format).
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return self._put(
-            "/api/v1/credentials",
-            body=maybe_transform(
-                {
-                    "api_key_id": api_key_id,
-                    "clob_api_key": clob_api_key,
-                    "clob_api_passphrase": clob_api_passphrase,
-                    "clob_api_secret": clob_api_secret,
-                    "private_key": private_key,
-                },
-                account_update_credentials_params.AccountUpdateCredentialsParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
         )
 
     def user_activity(
@@ -334,25 +250,6 @@ class AsyncAccountResource(AsyncAPIResource):
             cast_to=AccountBalanceResponse,
         )
 
-    async def capabilities(
-        self,
-        *,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> AccountCapabilitiesResponse:
-        """Returns the customer's tier and list of linked exchanges."""
-        return await self._get(
-            "/api/v1/session/capabilities",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=AccountCapabilitiesResponse,
-        )
-
     async def ping(
         self,
         *,
@@ -389,63 +286,6 @@ class AsyncAccountResource(AsyncAPIResource):
                 query=await async_maybe_transform({"exchange": exchange}, account_ping_params.AccountPingParams),
             ),
             cast_to=AccountPingResponse,
-        )
-
-    async def update_credentials(
-        self,
-        *,
-        api_key_id: Optional[str] | Omit = omit,
-        clob_api_key: Optional[str] | Omit = omit,
-        clob_api_passphrase: Optional[str] | Omit = omit,
-        clob_api_secret: Optional[str] | Omit = omit,
-        private_key: Optional[str] | Omit = omit,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> None:
-        """Updates stored credentials for this API key.
-
-        Returns 204 on success.
-
-        Args:
-          api_key_id: Kalshi API key ID.
-
-          clob_api_key: Polymarket CLOB API key.
-
-          clob_api_passphrase: Polymarket CLOB API passphrase.
-
-          clob_api_secret: Polymarket CLOB API secret.
-
-          private_key: Kalshi RSA private key (PEM format).
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        extra_headers = {"Accept": "*/*", **(extra_headers or {})}
-        return await self._put(
-            "/api/v1/credentials",
-            body=await async_maybe_transform(
-                {
-                    "api_key_id": api_key_id,
-                    "clob_api_key": clob_api_key,
-                    "clob_api_passphrase": clob_api_passphrase,
-                    "clob_api_secret": clob_api_secret,
-                    "private_key": private_key,
-                },
-                account_update_credentials_params.AccountUpdateCredentialsParams,
-            ),
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=NoneType,
         )
 
     async def user_activity(
@@ -508,14 +348,8 @@ class AccountResourceWithRawResponse:
         self.balance = to_raw_response_wrapper(
             account.balance,
         )
-        self.capabilities = to_raw_response_wrapper(
-            account.capabilities,
-        )
         self.ping = to_raw_response_wrapper(
             account.ping,
-        )
-        self.update_credentials = to_raw_response_wrapper(
-            account.update_credentials,
         )
         self.user_activity = to_raw_response_wrapper(
             account.user_activity,
@@ -529,14 +363,8 @@ class AsyncAccountResourceWithRawResponse:
         self.balance = async_to_raw_response_wrapper(
             account.balance,
         )
-        self.capabilities = async_to_raw_response_wrapper(
-            account.capabilities,
-        )
         self.ping = async_to_raw_response_wrapper(
             account.ping,
-        )
-        self.update_credentials = async_to_raw_response_wrapper(
-            account.update_credentials,
         )
         self.user_activity = async_to_raw_response_wrapper(
             account.user_activity,
@@ -550,14 +378,8 @@ class AccountResourceWithStreamingResponse:
         self.balance = to_streamed_response_wrapper(
             account.balance,
         )
-        self.capabilities = to_streamed_response_wrapper(
-            account.capabilities,
-        )
         self.ping = to_streamed_response_wrapper(
             account.ping,
-        )
-        self.update_credentials = to_streamed_response_wrapper(
-            account.update_credentials,
         )
         self.user_activity = to_streamed_response_wrapper(
             account.user_activity,
@@ -571,14 +393,8 @@ class AsyncAccountResourceWithStreamingResponse:
         self.balance = async_to_streamed_response_wrapper(
             account.balance,
         )
-        self.capabilities = async_to_streamed_response_wrapper(
-            account.capabilities,
-        )
         self.ping = async_to_streamed_response_wrapper(
             account.ping,
-        )
-        self.update_credentials = async_to_streamed_response_wrapper(
-            account.update_credentials,
         )
         self.user_activity = async_to_streamed_response_wrapper(
             account.user_activity,

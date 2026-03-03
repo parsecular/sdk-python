@@ -139,18 +139,113 @@ Methods:
 - <code title="get /api/v1/balance">client.account.<a href="./src/parsec_api/resources/account.py">balance</a>(\*\*<a href="src/parsec_api/types/account_balance_params.py">params</a>) -> <a href="./src/parsec_api/types/account_balance_response.py">AccountBalanceResponse</a></code>
 - <code title="get /api/v1/session/capabilities">client.account.<a href="./src/parsec_api/resources/account.py">capabilities</a>() -> <a href="./src/parsec_api/types/account_capabilities_response.py">AccountCapabilitiesResponse</a></code>
 - <code title="get /api/v1/ping">client.account.<a href="./src/parsec_api/resources/account.py">ping</a>(\*\*<a href="src/parsec_api/types/account_ping_params.py">params</a>) -> <a href="./src/parsec_api/types/account_ping_response.py">AccountPingResponse</a></code>
-- <code title="put /api/v1/credentials">client.account.<a href="./src/parsec_api/resources/account.py">update_credentials</a>(\*\*<a href="src/parsec_api/types/account_update_credentials_params.py">params</a>) -> None</code>
 - <code title="get /api/v1/user-activity">client.account.<a href="./src/parsec_api/resources/account.py">user_activity</a>(\*\*<a href="src/parsec_api/types/account_user_activity_params.py">params</a>) -> <a href="./src/parsec_api/types/account_user_activity_response.py">AccountUserActivityResponse</a></code>
 
-# Approvals
+# Onboard
 
 Types:
 
 ```python
-from parsec_api.types import ApprovalListResponse, ApprovalSetResponse
+from parsec_api.types import OnboardCreateResponse
 ```
 
 Methods:
 
-- <code title="get /api/v1/approvals">client.approvals.<a href="./src/parsec_api/resources/approvals.py">list</a>(\*\*<a href="src/parsec_api/types/approval_list_params.py">params</a>) -> <a href="./src/parsec_api/types/approval_list_response.py">ApprovalListResponse</a></code>
-- <code title="post /api/v1/approvals">client.approvals.<a href="./src/parsec_api/resources/approvals.py">set</a>(\*\*<a href="src/parsec_api/types/approval_set_params.py">params</a>) -> <a href="./src/parsec_api/types/approval_set_response.py">ApprovalSetResponse</a></code>
+- <code title="post /api/v1/onboard">client.onboard.<a href="./src/parsec_api/resources/onboard.py">create</a>(\*\*<a href="src/parsec_api/types/onboard_create_params.py">params</a>) -> <a href="./src/parsec_api/types/onboard_create_response.py">OnboardCreateResponse</a></code>
+
+# Wallet
+
+Types:
+
+```python
+from parsec_api.types import WalletRetrieveResponse, WalletExportKeyResponse
+```
+
+Methods:
+
+- <code title="get /api/v1/wallet">client.wallet.<a href="./src/parsec_api/resources/wallet.py">retrieve</a>() -> <a href="./src/parsec_api/types/wallet_retrieve_response.py">WalletRetrieveResponse</a></code>
+- <code title="post /api/v1/wallet/export-key">client.wallet.<a href="./src/parsec_api/resources/wallet.py">export_key</a>(\*\*<a href="src/parsec_api/types/wallet_export_key_params.py">params</a>) -> <a href="./src/parsec_api/types/wallet_export_key_response.py">WalletExportKeyResponse</a></code>
+
+# PolymarketAuth
+
+Types:
+
+```python
+from parsec_api.types import PolymarketAuthCredentialsResponse, PolymarketAuthMessageResponse
+```
+
+Methods:
+
+- <code title="post /api/v1/exchange/polymarket/auth-credentials">client.polymarket_auth.<a href="./src/parsec_api/resources/polymarket_auth.py">credentials</a>(\*\*<a href="src/parsec_api/types/polymarket_auth_credentials_params.py">params</a>) -> <a href="./src/parsec_api/types/polymarket_auth_credentials_response.py">PolymarketAuthCredentialsResponse</a></code>
+- <code title="get /api/v1/exchange/polymarket/auth-message">client.polymarket_auth.<a href="./src/parsec_api/resources/polymarket_auth.py">message</a>(\*\*<a href="src/parsec_api/types/polymarket_auth_message_params.py">params</a>) -> <a href="./src/parsec_api/types/polymarket_auth_message_response.py">PolymarketAuthMessageResponse</a></code>
+
+# Ctf
+
+Types:
+
+```python
+from parsec_api.types import CtfResponse
+```
+
+Methods:
+
+- <code title="post /api/v1/polymarket/ctf/merge">client.ctf.<a href="./src/parsec_api/resources/ctf.py">merge</a>(\*\*<a href="src/parsec_api/types/ctf_merge_params.py">params</a>) -> <a href="./src/parsec_api/types/ctf_response.py">CtfResponse</a></code>
+- <code title="post /api/v1/polymarket/ctf/redeem">client.ctf.<a href="./src/parsec_api/resources/ctf.py">redeem</a>(\*\*<a href="src/parsec_api/types/ctf_redeem_params.py">params</a>) -> <a href="./src/parsec_api/types/ctf_response.py">CtfResponse</a></code>
+- <code title="post /api/v1/polymarket/ctf/split">client.ctf.<a href="./src/parsec_api/resources/ctf.py">split</a>(\*\*<a href="src/parsec_api/types/ctf_split_params.py">params</a>) -> <a href="./src/parsec_api/types/ctf_response.py">CtfResponse</a></code>
+
+# Builder
+
+Types:
+
+```python
+from parsec_api.types import BuilderPoolResponse
+```
+
+Methods:
+
+- <code title="get /api/v1/builder/pool">client.builder.<a href="./src/parsec_api/resources/builder/builder.py">pool</a>() -> <a href="./src/parsec_api/types/builder_pool_response.py">BuilderPoolResponse</a></code>
+
+## Users
+
+Types:
+
+```python
+from parsec_api.types.builder import (
+    UserCreateResponse,
+    UserRetrieveResponse,
+    UserUpdateResponse,
+    UserListResponse,
+)
+```
+
+Methods:
+
+- <code title="post /api/v1/builder/users">client.builder.users.<a href="./src/parsec_api/resources/builder/users.py">create</a>(\*\*<a href="src/parsec_api/types/builder/user_create_params.py">params</a>) -> <a href="./src/parsec_api/types/builder/user_create_response.py">UserCreateResponse</a></code>
+- <code title="get /api/v1/builder/users/{customer_id}">client.builder.users.<a href="./src/parsec_api/resources/builder/users.py">retrieve</a>(customer_id) -> <a href="./src/parsec_api/types/builder/user_retrieve_response.py">UserRetrieveResponse</a></code>
+- <code title="patch /api/v1/builder/users/{customer_id}">client.builder.users.<a href="./src/parsec_api/resources/builder/users.py">update</a>(customer_id, \*\*<a href="src/parsec_api/types/builder/user_update_params.py">params</a>) -> <a href="./src/parsec_api/types/builder/user_update_response.py">UserUpdateResponse</a></code>
+- <code title="get /api/v1/builder/users">client.builder.users.<a href="./src/parsec_api/resources/builder/users.py">list</a>(\*\*<a href="src/parsec_api/types/builder/user_list_params.py">params</a>) -> <a href="./src/parsec_api/types/builder/user_list_response.py">UserListResponse</a></code>
+- <code title="delete /api/v1/builder/users/{customer_id}">client.builder.users.<a href="./src/parsec_api/resources/builder/users.py">deactivate</a>(customer_id) -> None</code>
+
+## Onboard
+
+Types:
+
+```python
+from parsec_api.types.builder import OnboardCreateResponse
+```
+
+Methods:
+
+- <code title="post /api/v1/builder/onboard">client.builder.onboard.<a href="./src/parsec_api/resources/builder/onboard.py">create</a>(\*\*<a href="src/parsec_api/types/builder/onboard_create_params.py">params</a>) -> <a href="./src/parsec_api/types/builder/onboard_create_response.py">OnboardCreateResponse</a></code>
+
+## Escrow
+
+Types:
+
+```python
+from parsec_api.types.builder import EscrowConfigResponse
+```
+
+Methods:
+
+- <code title="get /api/v1/builder/escrow/config">client.builder.escrow.<a href="./src/parsec_api/resources/builder/escrow.py">config</a>() -> <a href="./src/parsec_api/types/builder/escrow_config_response.py">EscrowConfigResponse</a></code>

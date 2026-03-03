@@ -38,11 +38,6 @@ markets = client.markets.list(
     exchanges=["kalshi"],
     limit=1,
 )
-estimate = client.execution_price.retrieve(
-    parsec_id=markets.markets[0].parsec_id,
-    side="buy",
-    amount=10,
-)
 print(markets.markets)
 ```
 
@@ -79,18 +74,6 @@ asyncio.run(main())
 ```
 
 Functionality between the synchronous and asynchronous clients is otherwise identical.
-
-## Examples
-
-The SDK ships with runnable examples in the [`examples/`](examples/) directory:
-
-| Example | Description |
-|---------|-------------|
-| [`getting_started.py`](examples/getting_started.py) | Fetch markets, read orderbooks, check execution price |
-| [`order_lifecycle.py`](examples/order_lifecycle.py) | Place, monitor, and cancel an order end-to-end |
-| [`websocket_streaming.py`](examples/websocket_streaming.py) | Stream real-time orderbook and trade data via WebSocket |
-
-Run any example with `python examples/getting_started.py` (requires `PARSEC_API_KEY`).
 
 ### With aiohttp
 
@@ -157,115 +140,6 @@ order = client.orders.create(
 print(order.credentials)
 ```
 
-## Real-time Streaming
-
-The SDK includes a WebSocket client for streaming orderbook snapshots, deltas, and trade activity in real time. The client maintains a local materialized orderbook, handles authentication, automatic reconnection with exponential backoff, and sequence gap detection.
-
-**Important:** The `ParsecAPI` (sync) client's `.ws()` method returns a `ParsecWebSocket`, which is async-only. You need `asyncio.run()` to drive it from synchronous code.
-
-### Quick start
-
-```python
-from parsec_api import ParsecAPI
-
-client = ParsecAPI(api_key="pk_...")
-ws = client.ws()
-
-@ws.on("orderbook")
-async def on_book(book):
-    print(f"{book.parsec_id} mid={book.mid_price}")
-
-ws.subscribe(parsec_id="polymarket:1234", outcome="yes")
-
-import asyncio
-asyncio.run(ws.connect())
-```
-
-### Event handlers
-
-Register handlers with the `@ws.on(event)` decorator and remove them with `ws.off(event, fn)`.
-
-```python
-from parsec_api.streaming import OrderbookSnapshot, Activity, WsError
-
-@ws.on("orderbook")
-async def handle_book(book: OrderbookSnapshot):
-    print(book.bids, book.asks, book.mid_price, book.spread)
-
-@ws.on("activity")
-async def handle_activity(activity: Activity):
-    print(f"{activity.kind}: {activity.price} x {activity.size}")
-
-@ws.on("error")
-async def handle_error(err: WsError):
-    print(f"WS error: {err.message}")
-
-@ws.on("disconnected")
-async def handle_disconnect(reason: str):
-    print(f"Disconnected: {reason}")
-
-@ws.on("reconnecting")
-async def handle_reconnect(attempt: int, delay_ms: int):
-    print(f"Reconnecting (attempt {attempt}) in {delay_ms}ms")
-```
-
-Available events: `orderbook`, `activity`, `error`, `connected`, `disconnected`, `reconnecting`, `heartbeat`, `slow_reader`.
-
-### Multiple market subscriptions
-
-You can subscribe to multiple markets at once by passing a list of `MarketSubscription` objects:
-
-```python
-from parsec_api.streaming import MarketSubscription
-
-ws.subscribe([
-    MarketSubscription(parsec_id="polymarket:1234", outcome="yes"),
-    MarketSubscription(parsec_id="kalshi:KXBTC-25", outcome="yes", depth=10),
-])
-
-# Unsubscribe from a single market
-ws.unsubscribe(parsec_id="polymarket:1234", outcome="yes")
-```
-
-### Connection lifecycle
-
-The client reconnects automatically on disconnect with exponential backoff (up to 30 seconds). Authentication errors are treated as fatal and will not trigger reconnection.
-
-```python
-await ws.connect()        # Resolves after successful auth
-await ws.close()          # Disconnect, cancel reconnect, clear subscriptions
-await ws.run_forever()    # Block until the connection is permanently closed
-```
-
-The client also supports the async context manager protocol:
-
-```python
-async with client.ws() as ws:
-    ws.subscribe(parsec_id="polymarket:1234", outcome="yes")
-    await ws.run_forever()
-```
-
-### Accessing the local orderbook
-
-The client maintains a materialized orderbook for each subscription. You can read the current state at any time with `get_book()`:
-
-```python
-book = ws.get_book("polymarket:1234", "yes")
-if book:
-    print(f"Best bid: {book['bids'][0]['price']}, Best ask: {book['asks'][0]['price']}")
-```
-
-### Types
-
-Key types are available from `parsec_api.streaming`:
-
-- `ParsecWebSocket` — The async WebSocket client
-- `OrderbookSnapshot` — Full orderbook state emitted on every `orderbook` event
-- `Activity` — Trade or fill event
-- `WsError` — Error payload with optional `code` and `parsec_id`
-- `MarketSubscription` — Subscription descriptor (`parsec_id`, `outcome`, `depth`)
-- `StreamingOrderbookLevel` — A single level with `price` and `size` fields
-
 ## Handling errors
 
 When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `parsec_api.APIConnectionError` is raised.
@@ -292,8 +166,6 @@ except parsec_api.APIStatusError as e:
     print("Another non-200-range status code was received")
     print(e.status_code)
     print(e.response)
-    print(e.code)  # "insufficient_funds" (when provided)
-    print(e.retryable)  # True/False (when provided)
 ```
 
 Error codes are as follows:
