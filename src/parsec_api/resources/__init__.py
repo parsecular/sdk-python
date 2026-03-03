@@ -1,5 +1,13 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+from .ctf import (
+    CtfResource,
+    AsyncCtfResource,
+    CtfResourceWithRawResponse,
+    AsyncCtfResourceWithRawResponse,
+    CtfResourceWithStreamingResponse,
+    AsyncCtfResourceWithStreamingResponse,
+)
 from .price import (
     PriceResource,
     AsyncPriceResource,
@@ -32,6 +40,14 @@ from .trades import (
     TradesResourceWithStreamingResponse,
     AsyncTradesResourceWithStreamingResponse,
 )
+from .wallet import (
+    WalletResource,
+    AsyncWalletResource,
+    WalletResourceWithRawResponse,
+    AsyncWalletResourceWithRawResponse,
+    WalletResourceWithStreamingResponse,
+    AsyncWalletResourceWithStreamingResponse,
+)
 from .account import (
     AccountResource,
     AsyncAccountResource,
@@ -39,6 +55,14 @@ from .account import (
     AsyncAccountResourceWithRawResponse,
     AccountResourceWithStreamingResponse,
     AsyncAccountResourceWithStreamingResponse,
+)
+from .builder import (
+    BuilderResource,
+    AsyncBuilderResource,
+    BuilderResourceWithRawResponse,
+    AsyncBuilderResourceWithRawResponse,
+    BuilderResourceWithStreamingResponse,
+    AsyncBuilderResourceWithStreamingResponse,
 )
 from .markets import (
     MarketsResource,
@@ -48,13 +72,13 @@ from .markets import (
     MarketsResourceWithStreamingResponse,
     AsyncMarketsResourceWithStreamingResponse,
 )
-from .approvals import (
-    ApprovalsResource,
-    AsyncApprovalsResource,
-    ApprovalsResourceWithRawResponse,
-    AsyncApprovalsResourceWithRawResponse,
-    ApprovalsResourceWithStreamingResponse,
-    AsyncApprovalsResourceWithStreamingResponse,
+from .onboard import (
+    OnboardResource,
+    AsyncOnboardResource,
+    OnboardResourceWithRawResponse,
+    AsyncOnboardResourceWithRawResponse,
+    OnboardResourceWithStreamingResponse,
+    AsyncOnboardResourceWithStreamingResponse,
 )
 from .exchanges import (
     ExchangesResource,
@@ -95,6 +119,14 @@ from .execution_price import (
     AsyncExecutionPriceResourceWithRawResponse,
     ExecutionPriceResourceWithStreamingResponse,
     AsyncExecutionPriceResourceWithStreamingResponse,
+)
+from .polymarket_auth import (
+    PolymarketAuthResource,
+    AsyncPolymarketAuthResource,
+    PolymarketAuthResourceWithRawResponse,
+    AsyncPolymarketAuthResourceWithRawResponse,
+    PolymarketAuthResourceWithStreamingResponse,
+    AsyncPolymarketAuthResourceWithStreamingResponse,
 )
 
 __all__ = [
@@ -164,10 +196,34 @@ __all__ = [
     "AsyncAccountResourceWithRawResponse",
     "AccountResourceWithStreamingResponse",
     "AsyncAccountResourceWithStreamingResponse",
-    "ApprovalsResource",
-    "AsyncApprovalsResource",
-    "ApprovalsResourceWithRawResponse",
-    "AsyncApprovalsResourceWithRawResponse",
-    "ApprovalsResourceWithStreamingResponse",
-    "AsyncApprovalsResourceWithStreamingResponse",
+    "OnboardResource",
+    "AsyncOnboardResource",
+    "OnboardResourceWithRawResponse",
+    "AsyncOnboardResourceWithRawResponse",
+    "OnboardResourceWithStreamingResponse",
+    "AsyncOnboardResourceWithStreamingResponse",
+    "WalletResource",
+    "AsyncWalletResource",
+    "WalletResourceWithRawResponse",
+    "AsyncWalletResourceWithRawResponse",
+    "WalletResourceWithStreamingResponse",
+    "AsyncWalletResourceWithStreamingResponse",
+    "PolymarketAuthResource",
+    "AsyncPolymarketAuthResource",
+    "PolymarketAuthResourceWithRawResponse",
+    "AsyncPolymarketAuthResourceWithRawResponse",
+    "PolymarketAuthResourceWithStreamingResponse",
+    "AsyncPolymarketAuthResourceWithStreamingResponse",
+    "CtfResource",
+    "AsyncCtfResource",
+    "CtfResourceWithRawResponse",
+    "AsyncCtfResourceWithRawResponse",
+    "CtfResourceWithStreamingResponse",
+    "AsyncCtfResourceWithStreamingResponse",
+    "BuilderResource",
+    "AsyncBuilderResource",
+    "BuilderResourceWithRawResponse",
+    "AsyncBuilderResourceWithRawResponse",
+    "BuilderResourceWithStreamingResponse",
+    "AsyncBuilderResourceWithStreamingResponse",
 ]

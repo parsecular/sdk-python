@@ -62,7 +62,8 @@ class OrderbookResource(SyncAPIResource):
         When start_ts or end_ts is provided, returns historical orderbook snapshots
         instead of a live L2 snapshot. Large time ranges are handled via internal
         chunking and may be slow for very wide windows. In historical mode, limit
-        defaults to 500 (max 1000).
+        defaults to 500 (max 1000). Historical data is tier-gated: Free=5d, Pro=30d,
+        Scale=unlimited.
 
         Args:
           parsec_id: Unified market ID in format `{exchange}:{native_id}`.
@@ -155,7 +156,8 @@ class AsyncOrderbookResource(AsyncAPIResource):
         When start_ts or end_ts is provided, returns historical orderbook snapshots
         instead of a live L2 snapshot. Large time ranges are handled via internal
         chunking and may be slow for very wide windows. In historical mode, limit
-        defaults to 500 (max 1000).
+        defaults to 500 (max 1000). Historical data is tier-gated: Free=5d, Pro=30d,
+        Scale=unlimited.
 
         Args:
           parsec_id: Unified market ID in format `{exchange}:{native_id}`.

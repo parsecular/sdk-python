@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from typing_extensions import Required, TypedDict
 
-__all__ = ["ApprovalListParams"]
+__all__ = ["PolymarketAuthMessageParams"]
 
 
-class ApprovalListParams(TypedDict, total=False):
-    exchange: Required[str]
-    """Must be "polymarket"."""
+class PolymarketAuthMessageParams(TypedDict, total=False):
+    address: Required[str]
+    """Your Ethereum wallet address."""
