@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.10.0 (2026-03-03)
+
+Full Changelog: [v0.9.0...v0.10.0](https://github.com/parsecular/sdk-python/compare/v0.9.0...v0.10.0)
+
+### Features
+
+* **api:** api update ([62ef06c](https://github.com/parsecular/sdk-python/commit/62ef06cb540788fdfe8c8ba2d673ffe7ac41d221))
+
+
+### Chores
+
+* **ci:** bump uv version ([ac77bc9](https://github.com/parsecular/sdk-python/commit/ac77bc968a633e79640e7deba5303090b837b20c))
+* **ci:** bump uv version ([b910dbe](https://github.com/parsecular/sdk-python/commit/b910dbe830301804f7ae6f980c40d520e8a8ddb5))
+* **internal:** add request options to SSE classes ([d836476](https://github.com/parsecular/sdk-python/commit/d836476485094ccbdc24ede68b50ffeea6f427ab))
+* **internal:** add request options to SSE classes ([70e443e](https://github.com/parsecular/sdk-python/commit/70e443e86bd9a52a91fa48acdd8357ed80a5aaf7))
+* **internal:** make `test_proxy_environment_variables` more resilient ([0617b39](https://github.com/parsecular/sdk-python/commit/0617b39b4525303e5c920573819881952343361e))
+* **internal:** make `test_proxy_environment_variables` more resilient ([9e79c7f](https://github.com/parsecular/sdk-python/commit/9e79c7f3b6d75f242f1d4fdb14109f8c8e67cee3))
+* **internal:** make `test_proxy_environment_variables` more resilient to env ([8cc2e90](https://github.com/parsecular/sdk-python/commit/8cc2e90595967240c63a2753c6b933623b5be000))
+* **internal:** make `test_proxy_environment_variables` more resilient to env ([4728a8f](https://github.com/parsecular/sdk-python/commit/4728a8f268134c311e71deea11fb212d8d85bab4))
+* **internal:** refactor authentication internals ([a5c2497](https://github.com/parsecular/sdk-python/commit/a5c2497904867de377569847bc8c07bf6efc037d))
+* **internal:** refactor authentication internals ([ee981c0](https://github.com/parsecular/sdk-python/commit/ee981c0de1857e500aaae9413a0064c712b0e96e))
+* **internal:** version bump ([603d764](https://github.com/parsecular/sdk-python/commit/603d7646d7ac4c9074aceb9af44d0aa1049cc74c))
+
 ## 0.9.0 (2026-02-23)
 
 Full Changelog: [v0.8.1...v0.9.0](https://github.com/parsecular/sdk-python/compare/v0.8.1...v0.9.0)
