@@ -8,6 +8,14 @@ from .ctf import (
     CtfResourceWithStreamingResponse,
     AsyncCtfResourceWithStreamingResponse,
 )
+from .fills import (
+    FillsResource,
+    AsyncFillsResource,
+    FillsResourceWithRawResponse,
+    AsyncFillsResourceWithRawResponse,
+    FillsResourceWithStreamingResponse,
+    AsyncFillsResourceWithStreamingResponse,
+)
 from .price import (
     PriceResource,
     AsyncPriceResource,
@@ -120,14 +128,6 @@ from .execution_price import (
     ExecutionPriceResourceWithStreamingResponse,
     AsyncExecutionPriceResourceWithStreamingResponse,
 )
-from .polymarket_auth import (
-    PolymarketAuthResource,
-    AsyncPolymarketAuthResource,
-    PolymarketAuthResourceWithRawResponse,
-    AsyncPolymarketAuthResourceWithRawResponse,
-    PolymarketAuthResourceWithStreamingResponse,
-    AsyncPolymarketAuthResourceWithStreamingResponse,
-)
 
 __all__ = [
     "ExchangesResource",
@@ -190,6 +190,12 @@ __all__ = [
     "AsyncPositionsResourceWithRawResponse",
     "PositionsResourceWithStreamingResponse",
     "AsyncPositionsResourceWithStreamingResponse",
+    "FillsResource",
+    "AsyncFillsResource",
+    "FillsResourceWithRawResponse",
+    "AsyncFillsResourceWithRawResponse",
+    "FillsResourceWithStreamingResponse",
+    "AsyncFillsResourceWithStreamingResponse",
     "AccountResource",
     "AsyncAccountResource",
     "AccountResourceWithRawResponse",
@@ -208,12 +214,6 @@ __all__ = [
     "AsyncWalletResourceWithRawResponse",
     "WalletResourceWithStreamingResponse",
     "AsyncWalletResourceWithStreamingResponse",
-    "PolymarketAuthResource",
-    "AsyncPolymarketAuthResource",
-    "PolymarketAuthResourceWithRawResponse",
-    "AsyncPolymarketAuthResourceWithRawResponse",
-    "PolymarketAuthResourceWithStreamingResponse",
-    "AsyncPolymarketAuthResourceWithStreamingResponse",
     "CtfResource",
     "AsyncCtfResource",
     "CtfResourceWithRawResponse",

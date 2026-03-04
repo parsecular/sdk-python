@@ -34,6 +34,7 @@ from ._base_client import (
 if TYPE_CHECKING:
     from .resources import (
         ctf,
+        fills,
         price,
         events,
         orders,
@@ -48,9 +49,9 @@ if TYPE_CHECKING:
         positions,
         websocket,
         execution_price,
-        polymarket_auth,
     )
     from .resources.ctf import CtfResource, AsyncCtfResource
+    from .resources.fills import FillsResource, AsyncFillsResource
     from .resources.price import PriceResource, AsyncPriceResource
     from .resources.events import EventsResource, AsyncEventsResource
     from .resources.orders import OrdersResource, AsyncOrdersResource
@@ -65,7 +66,6 @@ if TYPE_CHECKING:
     from .resources.websocket import WebsocketResource, AsyncWebsocketResource
     from .resources.builder.builder import BuilderResource, AsyncBuilderResource
     from .resources.execution_price import ExecutionPriceResource, AsyncExecutionPriceResource
-    from .resources.polymarket_auth import PolymarketAuthResource, AsyncPolymarketAuthResource
 
 __all__ = [
     "ENVIRONMENTS",
@@ -225,6 +225,12 @@ class ParsecAPI(SyncAPIClient):
         return PositionsResource(self)
 
     @cached_property
+    def fills(self) -> FillsResource:
+        from .resources.fills import FillsResource
+
+        return FillsResource(self)
+
+    @cached_property
     def account(self) -> AccountResource:
         from .resources.account import AccountResource
 
@@ -241,12 +247,6 @@ class ParsecAPI(SyncAPIClient):
         from .resources.wallet import WalletResource
 
         return WalletResource(self)
-
-    @cached_property
-    def polymarket_auth(self) -> PolymarketAuthResource:
-        from .resources.polymarket_auth import PolymarketAuthResource
-
-        return PolymarketAuthResource(self)
 
     @cached_property
     def ctf(self) -> CtfResource:
@@ -520,6 +520,12 @@ class AsyncParsecAPI(AsyncAPIClient):
         return AsyncPositionsResource(self)
 
     @cached_property
+    def fills(self) -> AsyncFillsResource:
+        from .resources.fills import AsyncFillsResource
+
+        return AsyncFillsResource(self)
+
+    @cached_property
     def account(self) -> AsyncAccountResource:
         from .resources.account import AsyncAccountResource
 
@@ -536,12 +542,6 @@ class AsyncParsecAPI(AsyncAPIClient):
         from .resources.wallet import AsyncWalletResource
 
         return AsyncWalletResource(self)
-
-    @cached_property
-    def polymarket_auth(self) -> AsyncPolymarketAuthResource:
-        from .resources.polymarket_auth import AsyncPolymarketAuthResource
-
-        return AsyncPolymarketAuthResource(self)
 
     @cached_property
     def ctf(self) -> AsyncCtfResource:
@@ -742,6 +742,12 @@ class ParsecAPIWithRawResponse:
         return PositionsResourceWithRawResponse(self._client.positions)
 
     @cached_property
+    def fills(self) -> fills.FillsResourceWithRawResponse:
+        from .resources.fills import FillsResourceWithRawResponse
+
+        return FillsResourceWithRawResponse(self._client.fills)
+
+    @cached_property
     def account(self) -> account.AccountResourceWithRawResponse:
         from .resources.account import AccountResourceWithRawResponse
 
@@ -758,12 +764,6 @@ class ParsecAPIWithRawResponse:
         from .resources.wallet import WalletResourceWithRawResponse
 
         return WalletResourceWithRawResponse(self._client.wallet)
-
-    @cached_property
-    def polymarket_auth(self) -> polymarket_auth.PolymarketAuthResourceWithRawResponse:
-        from .resources.polymarket_auth import PolymarketAuthResourceWithRawResponse
-
-        return PolymarketAuthResourceWithRawResponse(self._client.polymarket_auth)
 
     @cached_property
     def ctf(self) -> ctf.CtfResourceWithRawResponse:
@@ -845,6 +845,12 @@ class AsyncParsecAPIWithRawResponse:
         return AsyncPositionsResourceWithRawResponse(self._client.positions)
 
     @cached_property
+    def fills(self) -> fills.AsyncFillsResourceWithRawResponse:
+        from .resources.fills import AsyncFillsResourceWithRawResponse
+
+        return AsyncFillsResourceWithRawResponse(self._client.fills)
+
+    @cached_property
     def account(self) -> account.AsyncAccountResourceWithRawResponse:
         from .resources.account import AsyncAccountResourceWithRawResponse
 
@@ -861,12 +867,6 @@ class AsyncParsecAPIWithRawResponse:
         from .resources.wallet import AsyncWalletResourceWithRawResponse
 
         return AsyncWalletResourceWithRawResponse(self._client.wallet)
-
-    @cached_property
-    def polymarket_auth(self) -> polymarket_auth.AsyncPolymarketAuthResourceWithRawResponse:
-        from .resources.polymarket_auth import AsyncPolymarketAuthResourceWithRawResponse
-
-        return AsyncPolymarketAuthResourceWithRawResponse(self._client.polymarket_auth)
 
     @cached_property
     def ctf(self) -> ctf.AsyncCtfResourceWithRawResponse:
@@ -948,6 +948,12 @@ class ParsecAPIWithStreamedResponse:
         return PositionsResourceWithStreamingResponse(self._client.positions)
 
     @cached_property
+    def fills(self) -> fills.FillsResourceWithStreamingResponse:
+        from .resources.fills import FillsResourceWithStreamingResponse
+
+        return FillsResourceWithStreamingResponse(self._client.fills)
+
+    @cached_property
     def account(self) -> account.AccountResourceWithStreamingResponse:
         from .resources.account import AccountResourceWithStreamingResponse
 
@@ -964,12 +970,6 @@ class ParsecAPIWithStreamedResponse:
         from .resources.wallet import WalletResourceWithStreamingResponse
 
         return WalletResourceWithStreamingResponse(self._client.wallet)
-
-    @cached_property
-    def polymarket_auth(self) -> polymarket_auth.PolymarketAuthResourceWithStreamingResponse:
-        from .resources.polymarket_auth import PolymarketAuthResourceWithStreamingResponse
-
-        return PolymarketAuthResourceWithStreamingResponse(self._client.polymarket_auth)
 
     @cached_property
     def ctf(self) -> ctf.CtfResourceWithStreamingResponse:
@@ -1051,6 +1051,12 @@ class AsyncParsecAPIWithStreamedResponse:
         return AsyncPositionsResourceWithStreamingResponse(self._client.positions)
 
     @cached_property
+    def fills(self) -> fills.AsyncFillsResourceWithStreamingResponse:
+        from .resources.fills import AsyncFillsResourceWithStreamingResponse
+
+        return AsyncFillsResourceWithStreamingResponse(self._client.fills)
+
+    @cached_property
     def account(self) -> account.AsyncAccountResourceWithStreamingResponse:
         from .resources.account import AsyncAccountResourceWithStreamingResponse
 
@@ -1067,12 +1073,6 @@ class AsyncParsecAPIWithStreamedResponse:
         from .resources.wallet import AsyncWalletResourceWithStreamingResponse
 
         return AsyncWalletResourceWithStreamingResponse(self._client.wallet)
-
-    @cached_property
-    def polymarket_auth(self) -> polymarket_auth.AsyncPolymarketAuthResourceWithStreamingResponse:
-        from .resources.polymarket_auth import AsyncPolymarketAuthResourceWithStreamingResponse
-
-        return AsyncPolymarketAuthResourceWithStreamingResponse(self._client.polymarket_auth)
 
     @cached_property
     def ctf(self) -> ctf.AsyncCtfResourceWithStreamingResponse:

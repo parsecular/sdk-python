@@ -26,8 +26,20 @@ class MarketListParams(TypedDict, total=False):
     group_id: str
     """Source-native exchange event/group ID filter (exact match)."""
 
+    include_matches: bool
+    """
+    When true, each market includes a `matched_markets` array with cross-exchange
+    same-market relations.
+    """
+
+    include_related: bool
+    """
+    When true, each market includes a `related_markets` array with co-dependent
+    market relations.
+    """
+
     limit: int
-    """Results per page (default 100)."""
+    """Results per page (default 100, max 100)."""
 
     min_liquidity: float
     """Minimum liquidity filter."""

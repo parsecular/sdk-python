@@ -121,6 +121,18 @@ Methods:
 
 - <code title="get /api/v1/positions">client.positions.<a href="./src/parsec_api/resources/positions.py">list</a>(\*\*<a href="src/parsec_api/types/position_list_params.py">params</a>) -> <a href="./src/parsec_api/types/position_list_response.py">PositionListResponse</a></code>
 
+# Fills
+
+Types:
+
+```python
+from parsec_api.types import FillListResponse
+```
+
+Methods:
+
+- <code title="get /api/v1/fills">client.fills.<a href="./src/parsec_api/resources/fills.py">list</a>(\*\*<a href="src/parsec_api/types/fill_list_params.py">params</a>) -> <a href="./src/parsec_api/types/fill_list_response.py">FillListResponse</a></code>
+
 # Account
 
 Types:
@@ -129,6 +141,7 @@ Types:
 from parsec_api.types import (
     AccountBalanceResponse,
     AccountPingResponse,
+    AccountUsageResponse,
     AccountUserActivityResponse,
 )
 ```
@@ -137,6 +150,7 @@ Methods:
 
 - <code title="get /api/v1/balance">client.account.<a href="./src/parsec_api/resources/account.py">balance</a>(\*\*<a href="src/parsec_api/types/account_balance_params.py">params</a>) -> <a href="./src/parsec_api/types/account_balance_response.py">AccountBalanceResponse</a></code>
 - <code title="get /api/v1/ping">client.account.<a href="./src/parsec_api/resources/account.py">ping</a>(\*\*<a href="src/parsec_api/types/account_ping_params.py">params</a>) -> <a href="./src/parsec_api/types/account_ping_response.py">AccountPingResponse</a></code>
+- <code title="get /api/v1/usage">client.account.<a href="./src/parsec_api/resources/account.py">usage</a>() -> <a href="./src/parsec_api/types/account_usage_response.py">AccountUsageResponse</a></code>
 - <code title="get /api/v1/user-activity">client.account.<a href="./src/parsec_api/resources/account.py">user_activity</a>(\*\*<a href="src/parsec_api/types/account_user_activity_params.py">params</a>) -> <a href="./src/parsec_api/types/account_user_activity_response.py">AccountUserActivityResponse</a></code>
 
 # Onboard
@@ -163,19 +177,6 @@ Methods:
 
 - <code title="get /api/v1/wallet">client.wallet.<a href="./src/parsec_api/resources/wallet.py">retrieve</a>() -> <a href="./src/parsec_api/types/wallet_retrieve_response.py">WalletRetrieveResponse</a></code>
 - <code title="post /api/v1/wallet/export-key">client.wallet.<a href="./src/parsec_api/resources/wallet.py">export_key</a>(\*\*<a href="src/parsec_api/types/wallet_export_key_params.py">params</a>) -> <a href="./src/parsec_api/types/wallet_export_key_response.py">WalletExportKeyResponse</a></code>
-
-# PolymarketAuth
-
-Types:
-
-```python
-from parsec_api.types import PolymarketAuthCredentialsResponse, PolymarketAuthMessageResponse
-```
-
-Methods:
-
-- <code title="post /api/v1/exchange/polymarket/auth-credentials">client.polymarket_auth.<a href="./src/parsec_api/resources/polymarket_auth.py">credentials</a>(\*\*<a href="src/parsec_api/types/polymarket_auth_credentials_params.py">params</a>) -> <a href="./src/parsec_api/types/polymarket_auth_credentials_response.py">PolymarketAuthCredentialsResponse</a></code>
-- <code title="get /api/v1/exchange/polymarket/auth-message">client.polymarket_auth.<a href="./src/parsec_api/resources/polymarket_auth.py">message</a>(\*\*<a href="src/parsec_api/types/polymarket_auth_message_params.py">params</a>) -> <a href="./src/parsec_api/types/polymarket_auth_message_response.py">PolymarketAuthMessageResponse</a></code>
 
 # Ctf
 
