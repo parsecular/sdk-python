@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.11.0 (2026-03-04)
+
+Full Changelog: [v0.10.0...v0.11.0](https://github.com/parsecular/sdk-python/compare/v0.10.0...v0.11.0)
+
+### Features
+
+* add fills + usage endpoints, remove polymarket auth ([53b3ea3](https://github.com/parsecular/sdk-python/commit/53b3ea3927f1fa25f8e3e20e6e118587092d2ed2))
+* **api:** api update ([8853662](https://github.com/parsecular/sdk-python/commit/88536629e5ac6983ab4888d4e01122db0eb70dcb))
+
+
+### Chores
+
+* **internal:** version bump ([b5eca81](https://github.com/parsecular/sdk-python/commit/b5eca81ee8e92981ca26e5d81e046ad926d45dea))
+
 ## 0.10.0 (2026-03-03)
 
 Full Changelog: [v0.9.0...v0.10.0](https://github.com/parsecular/sdk-python/compare/v0.9.0...v0.10.0)
