@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.11.1 (2026-03-04)
+
+Full Changelog: [v0.11.0...v0.11.1](https://github.com/parsecular/sdk-python/compare/v0.11.0...v0.11.1)
+
+### Bug Fixes
+
+* add websockets dependency, exclude examples from pyright ([0b47644](https://github.com/parsecular/sdk-python/commit/0b47644ed6ffe6e766d20e5961a840d83ab1af2b))
+* add ws() method to ParsecAPI/AsyncParsecAPI, add websockets dep, exclude examples from mypy ([142ff84](https://github.com/parsecular/sdk-python/commit/142ff8402712f53dd328f50210a70e1eebaede0a))
+* exclude streaming.py from pyright strict checking ([17d54cb](https://github.com/parsecular/sdk-python/commit/17d54cb3bdb7d0c25bc50a43625c10d811a43376))
+* exclude tests/ from pyright strict checking ([4f22047](https://github.com/parsecular/sdk-python/commit/4f220471ec0d1e642fd0a368511c6123bf6f34e2))
+* update contract tests for fills + usage, remove polymarket auth ([326d269](https://github.com/parsecular/sdk-python/commit/326d269c456ca0c25b7e7797d5fa8199f069bbfa))
+* use Any return type for ws() to avoid pyright forward ref issue ([8559141](https://github.com/parsecular/sdk-python/commit/85591418f3bf678d33f751113581168153fec397))
+
 ## 0.11.0 (2026-03-04)
 
 Full Changelog: [v0.10.0...v0.11.0](https://github.com/parsecular/sdk-python/compare/v0.10.0...v0.11.0)
