@@ -268,7 +268,7 @@ class ParsecAPI(SyncAPIClient):
     def with_streaming_response(self) -> ParsecAPIWithStreamedResponse:
         return ParsecAPIWithStreamedResponse(self)
 
-    def ws(self, terminal_token: str | None = None) -> "ParsecWebSocket":
+    def ws(self, terminal_token: str | None = None) -> Any:
         """Create a ParsecWebSocket client for real-time orderbook and trade streaming."""
         from .streaming import ParsecWebSocket
 
@@ -570,7 +570,7 @@ class AsyncParsecAPI(AsyncAPIClient):
     def with_streaming_response(self) -> AsyncParsecAPIWithStreamedResponse:
         return AsyncParsecAPIWithStreamedResponse(self)
 
-    def ws(self, terminal_token: str | None = None) -> "ParsecWebSocket":
+    def ws(self, terminal_token: str | None = None) -> Any:
         """Create a ParsecWebSocket client for real-time orderbook and trade streaming."""
         from .streaming import ParsecWebSocket
 
