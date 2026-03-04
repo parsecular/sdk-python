@@ -34,8 +34,8 @@ PUBLIC_ENDPOINT_CONTRACT_COVERAGE = (
     "GET /api/v1/builder/users",
     "GET /api/v1/builder/users/{customer_id}",
     "GET /api/v1/events",
-    "GET /api/v1/exchange/polymarket/auth-message",
     "GET /api/v1/exchanges",
+    "GET /api/v1/fills",
     "GET /api/v1/execution-price",
     "GET /api/v1/markets",
     "GET /api/v1/orderbook",
@@ -45,13 +45,13 @@ PUBLIC_ENDPOINT_CONTRACT_COVERAGE = (
     "GET /api/v1/positions",
     "GET /api/v1/price",
     "GET /api/v1/trades",
+    "GET /api/v1/usage",
     "GET /api/v1/user-activity",
     "GET /api/v1/wallet",
     "GET /api/v1/ws/usage",
     "PATCH /api/v1/builder/users/{customer_id}",
     "POST /api/v1/builder/onboard",
     "POST /api/v1/builder/users",
-    "POST /api/v1/exchange/polymarket/auth-credentials",
     "POST /api/v1/onboard",
     "POST /api/v1/orders",
     "POST /api/v1/polymarket/ctf/merge",
@@ -313,6 +313,22 @@ class TestRESTTrades:
             assert isinstance(getattr(trade, "id", None), str)
             assert isinstance(trade.price, (int, float))
             assert isinstance(trade.size, (int, float))
+
+
+class TestRESTFills:
+    def test_list_fills(self, client: Any) -> None:
+        exchange, _ = _find_private_exchange(client)
+        try:
+            fills = client.fills.list(exchange=exchange)
+            assert isinstance(fills, list)
+        except APIStatusError as err:
+            assert err.status_code in (401, 403, 503)
+
+
+class TestRESTUsage:
+    def test_usage(self, client: Any) -> None:
+        usage = client.account.usage()
+        assert usage is not None
 
 
 class TestRESTWsUsage:
