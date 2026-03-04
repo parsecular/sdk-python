@@ -5,7 +5,7 @@ from datetime import datetime
 
 from .._models import BaseModel
 
-__all__ = ["MarketListResponse", "Market", "MarketOutcome", "Pagination"]
+__all__ = ["MarketListResponse", "Market", "MarketOutcome", "MarketMatchedMarket", "MarketRelatedMarket", "Pagination"]
 
 
 class MarketOutcome(BaseModel):
@@ -17,6 +17,52 @@ class MarketOutcome(BaseModel):
 
     token_id: Optional[str] = None
     """Exchange-native token ID for this outcome."""
+
+
+class MarketMatchedMarket(BaseModel):
+    confidence: float
+    """Match confidence score (0.0–1.0)."""
+
+    confidence_tier: str
+    """Confidence tier: HIGH, MEDIUM, or LOW."""
+
+    exchange: str
+    """Exchange of the related market."""
+
+    parsec_id: str
+    """Parsec ID of the related market."""
+
+    source: str
+    """Source of the match (e.g., embedding, llm)."""
+
+    dependency_direction: Optional[str] = None
+    """Direction of dependency (for related markets only)."""
+
+    dependency_type: Optional[str] = None
+    """Type of dependency (for related markets only)."""
+
+
+class MarketRelatedMarket(BaseModel):
+    confidence: float
+    """Match confidence score (0.0–1.0)."""
+
+    confidence_tier: str
+    """Confidence tier: HIGH, MEDIUM, or LOW."""
+
+    exchange: str
+    """Exchange of the related market."""
+
+    parsec_id: str
+    """Parsec ID of the related market."""
+
+    source: str
+    """Source of the match (e.g., embedding, llm)."""
+
+    dependency_direction: Optional[str] = None
+    """Direction of dependency (for related markets only)."""
+
+    dependency_type: Optional[str] = None
+    """Type of dependency (for related markets only)."""
 
 
 class Market(BaseModel):
@@ -75,6 +121,12 @@ class Market(BaseModel):
     event_start_time: Optional[datetime] = None
     """Event start time."""
 
+    icon_url: Optional[str] = None
+    """Market icon URL."""
+
+    image_url: Optional[str] = None
+    """Market image URL."""
+
     last_collected: Optional[datetime] = None
     """Date of last data collection."""
 
@@ -83,6 +135,12 @@ class Market(BaseModel):
 
     liquidity: Optional[float] = None
     """Current liquidity (USDC)."""
+
+    matched_markets: Optional[List[MarketMatchedMarket]] = None
+    """Cross-exchange same-market relations.
+
+    Only included when `include_matches=true`.
+    """
 
     min_order_size: Optional[float] = None
     """Minimum order size in contracts.
@@ -95,6 +153,15 @@ class Market(BaseModel):
 
     outcome_count: Optional[int] = None
     """Number of outcomes in this market."""
+
+    price_updated_at: Optional[datetime] = None
+    """
+    When bid/ask/last_price was last refreshed (upgraded to now when live WS data
+    overlays the snapshot).
+    """
+
+    related_markets: Optional[List[MarketRelatedMarket]] = None
+    """Co-dependent market relations. Only included when `include_related=true`."""
 
     rules: Optional[str] = None
     """Market resolution rules."""

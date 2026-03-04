@@ -61,11 +61,22 @@ class TradeListResponse(BaseModel):
 
     parsec_id: str
 
-    token_id: str
-
     trades: List[Trade]
 
     has_more: Optional[bool] = None
     """True if there are more results available"""
 
     next_cursor: Optional[str] = None
+
+    reason: Optional[str] = None
+    """Explanatory field for empty results.
+
+    Values: null (normal), "no_data_yet" (market exists but has no trade data for
+    the requested range).
+    """
+
+    token_id: Optional[str] = None
+    """Exchange-specific token/asset identifier.
+
+    Null for exchanges that do not use token IDs (e.g., Kalshi).
+    """

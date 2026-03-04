@@ -48,6 +48,8 @@ class MarketsResource(SyncAPIResource):
         event_id: str | Omit = omit,
         exchanges: SequenceNotStr[str] | Omit = omit,
         group_id: str | Omit = omit,
+        include_matches: bool | Omit = omit,
+        include_related: bool | Omit = omit,
         limit: int | Omit = omit,
         min_liquidity: float | Omit = omit,
         min_volume: float | Omit = omit,
@@ -76,7 +78,13 @@ class MarketsResource(SyncAPIResource):
 
           group_id: Source-native exchange event/group ID filter (exact match).
 
-          limit: Results per page (default 100).
+          include_matches: When true, each market includes a `matched_markets` array with cross-exchange
+              same-market relations.
+
+          include_related: When true, each market includes a `related_markets` array with co-dependent
+              market relations.
+
+          limit: Results per page (default 100, max 100).
 
           min_liquidity: Minimum liquidity filter.
 
@@ -111,6 +119,8 @@ class MarketsResource(SyncAPIResource):
                         "event_id": event_id,
                         "exchanges": exchanges,
                         "group_id": group_id,
+                        "include_matches": include_matches,
+                        "include_related": include_related,
                         "limit": limit,
                         "min_liquidity": min_liquidity,
                         "min_volume": min_volume,
@@ -152,6 +162,8 @@ class AsyncMarketsResource(AsyncAPIResource):
         event_id: str | Omit = omit,
         exchanges: SequenceNotStr[str] | Omit = omit,
         group_id: str | Omit = omit,
+        include_matches: bool | Omit = omit,
+        include_related: bool | Omit = omit,
         limit: int | Omit = omit,
         min_liquidity: float | Omit = omit,
         min_volume: float | Omit = omit,
@@ -180,7 +192,13 @@ class AsyncMarketsResource(AsyncAPIResource):
 
           group_id: Source-native exchange event/group ID filter (exact match).
 
-          limit: Results per page (default 100).
+          include_matches: When true, each market includes a `matched_markets` array with cross-exchange
+              same-market relations.
+
+          include_related: When true, each market includes a `related_markets` array with co-dependent
+              market relations.
+
+          limit: Results per page (default 100, max 100).
 
           min_liquidity: Minimum liquidity filter.
 
@@ -215,6 +233,8 @@ class AsyncMarketsResource(AsyncAPIResource):
                         "event_id": event_id,
                         "exchanges": exchanges,
                         "group_id": group_id,
+                        "include_matches": include_matches,
+                        "include_related": include_related,
                         "limit": limit,
                         "min_liquidity": min_liquidity,
                         "min_volume": min_volume,
