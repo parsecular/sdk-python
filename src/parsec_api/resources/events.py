@@ -58,10 +58,11 @@ class EventsResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> EventListResponse:
-        """Aggregates markets by event ID from the Silver cache.
+        """Aggregates markets by event ID from the DuckDB gold layer.
 
-        Returns event summaries
-        sorted by total volume (descending). Markets without an event_id are excluded.
+        Returns event
+        summaries sorted by total volume (descending). Markets without an event_id are
+        excluded.
 
         Args:
           cursor: Pagination cursor (offset-based).
@@ -147,10 +148,11 @@ class AsyncEventsResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> EventListResponse:
-        """Aggregates markets by event ID from the Silver cache.
+        """Aggregates markets by event ID from the DuckDB gold layer.
 
-        Returns event summaries
-        sorted by total volume (descending). Markets without an event_id are excluded.
+        Returns event
+        summaries sorted by total volume (descending). Markets without an event_id are
+        excluded.
 
         Args:
           cursor: Pagination cursor (offset-based).

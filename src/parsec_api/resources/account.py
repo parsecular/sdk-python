@@ -17,6 +17,7 @@ from .._response import (
 )
 from .._base_client import make_request_options
 from ..types.account_ping_response import AccountPingResponse
+from ..types.account_usage_response import AccountUsageResponse
 from ..types.account_balance_response import AccountBalanceResponse
 from ..types.account_user_activity_response import AccountUserActivityResponse
 
@@ -127,6 +128,29 @@ class AccountResource(SyncAPIResource):
                 query=maybe_transform({"exchange": exchange}, account_ping_params.AccountPingParams),
             ),
             cast_to=AccountPingResponse,
+        )
+
+    def usage(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AccountUsageResponse:
+        """
+        Returns the authenticated customer's tier, billing period, rate limits, and
+        current consumption (monthly requests, WebSocket connections/subscriptions).
+        Values of 0 for limits indicate unlimited.
+        """
+        return self._get(
+            "/api/v1/usage",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AccountUsageResponse,
         )
 
     def user_activity(
@@ -288,6 +312,29 @@ class AsyncAccountResource(AsyncAPIResource):
             cast_to=AccountPingResponse,
         )
 
+    async def usage(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AccountUsageResponse:
+        """
+        Returns the authenticated customer's tier, billing period, rate limits, and
+        current consumption (monthly requests, WebSocket connections/subscriptions).
+        Values of 0 for limits indicate unlimited.
+        """
+        return await self._get(
+            "/api/v1/usage",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=AccountUsageResponse,
+        )
+
     async def user_activity(
         self,
         *,
@@ -351,6 +398,9 @@ class AccountResourceWithRawResponse:
         self.ping = to_raw_response_wrapper(
             account.ping,
         )
+        self.usage = to_raw_response_wrapper(
+            account.usage,
+        )
         self.user_activity = to_raw_response_wrapper(
             account.user_activity,
         )
@@ -365,6 +415,9 @@ class AsyncAccountResourceWithRawResponse:
         )
         self.ping = async_to_raw_response_wrapper(
             account.ping,
+        )
+        self.usage = async_to_raw_response_wrapper(
+            account.usage,
         )
         self.user_activity = async_to_raw_response_wrapper(
             account.user_activity,
@@ -381,6 +434,9 @@ class AccountResourceWithStreamingResponse:
         self.ping = to_streamed_response_wrapper(
             account.ping,
         )
+        self.usage = to_streamed_response_wrapper(
+            account.usage,
+        )
         self.user_activity = to_streamed_response_wrapper(
             account.user_activity,
         )
@@ -395,6 +451,9 @@ class AsyncAccountResourceWithStreamingResponse:
         )
         self.ping = async_to_streamed_response_wrapper(
             account.ping,
+        )
+        self.usage = async_to_streamed_response_wrapper(
+            account.usage,
         )
         self.user_activity = async_to_streamed_response_wrapper(
             account.user_activity,
