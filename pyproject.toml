@@ -137,6 +137,7 @@ exclude = [
     ".nox",
     ".git",
     "tests",
+    "src/parsec_api/streaming.py",
 ]
 
 reportImplicitOverride = true
