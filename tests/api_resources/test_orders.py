@@ -43,6 +43,7 @@ class TestOrders:
             price=0,
             side="buy",
             size=0,
+            affiliate="affiliate",
             credentials={
                 "api_key_id": "api_key_id",
                 "clob_api_key": "clob_api_key",
@@ -50,7 +51,16 @@ class TestOrders:
                 "clob_api_secret": "clob_api_secret",
                 "private_key": "private_key",
             },
+            fee_auth={
+                "deadline": 0,
+                "fee_amount": "fee_amount",
+                "order_id": "order_id",
+                "payer": "payer",
+                "signature": "signature",
+            },
             params={"foo": "string"},
+            payer_address="payer_address",
+            signer_address="signer_address",
             x_exchange_credentials="X-Exchange-Credentials",
         )
         assert_matches_type(Order, order, path=["response"])
@@ -276,6 +286,7 @@ class TestAsyncOrders:
             price=0,
             side="buy",
             size=0,
+            affiliate="affiliate",
             credentials={
                 "api_key_id": "api_key_id",
                 "clob_api_key": "clob_api_key",
@@ -283,7 +294,16 @@ class TestAsyncOrders:
                 "clob_api_secret": "clob_api_secret",
                 "private_key": "private_key",
             },
+            fee_auth={
+                "deadline": 0,
+                "fee_amount": "fee_amount",
+                "order_id": "order_id",
+                "payer": "payer",
+                "signature": "signature",
+            },
             params={"foo": "string"},
+            payer_address="payer_address",
+            signer_address="signer_address",
             x_exchange_credentials="X-Exchange-Credentials",
         )
         assert_matches_type(Order, order, path=["response"])
