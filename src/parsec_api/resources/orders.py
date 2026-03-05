@@ -54,8 +54,12 @@ class OrdersResource(SyncAPIResource):
         price: float,
         side: Literal["buy", "sell"],
         size: float,
+        affiliate: str | Omit = omit,
         credentials: order_create_params.Credentials | Omit = omit,
+        fee_auth: order_create_params.FeeAuth | Omit = omit,
         params: Dict[str, str] | Omit = omit,
+        payer_address: str | Omit = omit,
+        signer_address: str | Omit = omit,
         x_exchange_credentials: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -70,15 +74,24 @@ class OrdersResource(SyncAPIResource):
         Args:
           exchange: Exchange identifier (e.g., kalshi, polymarket).
 
+          affiliate: Affiliate address override. Builder-only.
+
           credentials: Per-request exchange credentials (Mode B). When provided, Parsec creates a
               transient exchange session instead of using stored credentials. Credentials are
               never persisted.
+
+          fee_auth: EIP-712 fee authorization signed by the end-user's wallet. Required to collect
+              fees via fee escrow. Builder-only.
 
           params:
               Optional key-value parameters. Supported keys:
 
               - `order_type`: Order time-in-force. Values: `gtc` (default), `ioc`, `fok`.
                 Unsupported types return 501 per exchange.
+
+          payer_address: End-user's wallet address (fee escrow payer). Builder-only.
+
+          signer_address: End-user's signing wallet address. Builder-only.
 
           extra_headers: Send extra headers
 
@@ -98,8 +111,12 @@ class OrdersResource(SyncAPIResource):
                     "price": price,
                     "side": side,
                     "size": size,
+                    "affiliate": affiliate,
                     "credentials": credentials,
+                    "fee_auth": fee_auth,
                     "params": params,
+                    "payer_address": payer_address,
+                    "signer_address": signer_address,
                 },
                 order_create_params.OrderCreateParams,
             ),
@@ -275,8 +292,12 @@ class AsyncOrdersResource(AsyncAPIResource):
         price: float,
         side: Literal["buy", "sell"],
         size: float,
+        affiliate: str | Omit = omit,
         credentials: order_create_params.Credentials | Omit = omit,
+        fee_auth: order_create_params.FeeAuth | Omit = omit,
         params: Dict[str, str] | Omit = omit,
+        payer_address: str | Omit = omit,
+        signer_address: str | Omit = omit,
         x_exchange_credentials: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -291,15 +312,24 @@ class AsyncOrdersResource(AsyncAPIResource):
         Args:
           exchange: Exchange identifier (e.g., kalshi, polymarket).
 
+          affiliate: Affiliate address override. Builder-only.
+
           credentials: Per-request exchange credentials (Mode B). When provided, Parsec creates a
               transient exchange session instead of using stored credentials. Credentials are
               never persisted.
+
+          fee_auth: EIP-712 fee authorization signed by the end-user's wallet. Required to collect
+              fees via fee escrow. Builder-only.
 
           params:
               Optional key-value parameters. Supported keys:
 
               - `order_type`: Order time-in-force. Values: `gtc` (default), `ioc`, `fok`.
                 Unsupported types return 501 per exchange.
+
+          payer_address: End-user's wallet address (fee escrow payer). Builder-only.
+
+          signer_address: End-user's signing wallet address. Builder-only.
 
           extra_headers: Send extra headers
 
@@ -319,8 +349,12 @@ class AsyncOrdersResource(AsyncAPIResource):
                     "price": price,
                     "side": side,
                     "size": size,
+                    "affiliate": affiliate,
                     "credentials": credentials,
+                    "fee_auth": fee_auth,
                     "params": params,
+                    "payer_address": payer_address,
+                    "signer_address": signer_address,
                 },
                 order_create_params.OrderCreateParams,
             ),
