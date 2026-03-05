@@ -268,6 +268,13 @@ class ParsecAPI(SyncAPIClient):
     def with_streaming_response(self) -> ParsecAPIWithStreamedResponse:
         return ParsecAPIWithStreamedResponse(self)
 
+    def ws(self, terminal_token: str | None = None) -> Any:
+        """Create a ParsecWebSocket client for real-time orderbook and trade streaming."""
+        from .streaming import ParsecWebSocket
+
+        ws_url = str(self.base_url).rstrip("/").replace("http://", "ws://").replace("https://", "wss://") + "/ws"
+        return ParsecWebSocket(api_key=self.api_key, ws_url=ws_url, terminal_token=terminal_token)
+
     @property
     @override
     def qs(self) -> Querystring:
@@ -562,6 +569,13 @@ class AsyncParsecAPI(AsyncAPIClient):
     @cached_property
     def with_streaming_response(self) -> AsyncParsecAPIWithStreamedResponse:
         return AsyncParsecAPIWithStreamedResponse(self)
+
+    def ws(self, terminal_token: str | None = None) -> Any:
+        """Create a ParsecWebSocket client for real-time orderbook and trade streaming."""
+        from .streaming import ParsecWebSocket
+
+        ws_url = str(self.base_url).rstrip("/").replace("http://", "ws://").replace("https://", "wss://") + "/ws"
+        return ParsecWebSocket(api_key=self.api_key, ws_url=ws_url, terminal_token=terminal_token)
 
     @property
     @override

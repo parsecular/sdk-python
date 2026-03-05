@@ -1,6 +1,6 @@
 [project]
 name = "parsec_api"
-version = "0.11.0"
+version = "0.11.1"
 description = "The official Python library for the Parsec API API"
 dynamic = ["readme"]
 license = "Apache-2.0"
@@ -15,6 +15,7 @@ dependencies = [
   "anyio>=3.5.0, <5",
   "distro>=1.7.0, <2",
   "sniffio",
+  "websockets>=12.0",
 ]
 
 requires-python = ">= 3.9"
@@ -136,6 +137,9 @@ exclude = [
     ".venv",
     ".nox",
     ".git",
+    "tests",
+    "examples",
+    "src/parsec_api/streaming.py",
 ]
 
 reportImplicitOverride = true
@@ -154,7 +158,7 @@ show_error_codes = true
 #
 # We also exclude our `tests` as mypy doesn't always infer
 # types correctly and Pyright will still catch any type errors.
-exclude = ['src/parsec_api/_files.py', '_dev/.*.py', 'tests/.*']
+exclude = ['src/parsec_api/_files.py', 'src/parsec_api/streaming.py', '_dev/.*.py', 'tests/.*', 'examples/.*']
 
 strict_equality = true
 implicit_reexport = true
