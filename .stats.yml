@@ -1,4 +1,4 @@
 configured_endpoints: 32
-openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/parsec%2Fparsec-api-06a4a2543bb08a4610bf1854cfcf24a4b2f8613c8bd5ff5194e31a7f835902e9.yml
-openapi_spec_hash: ac39c51931a4c574db467733f20dc641
+openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/parsec%2Fparsec-api-46fd155bb755fdac3799755d56fcd8c722c5d9ef907b33b6f713a1834441733c.yml
+openapi_spec_hash: 9be5ba126c56e610aa5a52d26da905fd
 config_hash: c1044d5692f23a58be37413fb249aaf4
