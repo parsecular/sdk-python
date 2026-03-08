@@ -38,7 +38,7 @@ markets = client.markets.list(
     exchanges=["kalshi"],
     limit=1,
 )
-print(markets.markets)
+print(markets.duplicate_ids)
 ```
 
 While you can provide an `api_key` keyword argument,
@@ -67,7 +67,7 @@ async def main() -> None:
         exchanges=["kalshi"],
         limit=1,
     )
-    print(markets.markets)
+    print(markets.duplicate_ids)
 
 
 asyncio.run(main())
@@ -104,7 +104,7 @@ async def main() -> None:
             exchanges=["kalshi"],
             limit=1,
         )
-        print(markets.markets)
+        print(markets.duplicate_ids)
 
 
 asyncio.run(main())
