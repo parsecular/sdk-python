@@ -2,10 +2,19 @@
 
 from typing import Dict, List, Optional
 from datetime import datetime
+from typing_extensions import Literal
 
 from .._models import BaseModel
 
-__all__ = ["MarketListResponse", "Market", "MarketOutcome", "MarketMatchedMarket", "MarketRelatedMarket", "Pagination"]
+__all__ = [
+    "MarketListResponse",
+    "Market",
+    "MarketOutcome",
+    "MarketMatchedMarket",
+    "MarketRelatedMarket",
+    "Pagination",
+    "Event",
+]
 
 
 class MarketOutcome(BaseModel):
@@ -197,7 +206,44 @@ class Pagination(BaseModel):
     """Cursor for the next page (offset-based)."""
 
 
+class Event(BaseModel):
+    """Event context. Only present when `scope=event`."""
+
+    event_id: str
+    """Canonical Parsec event ID."""
+
+    exchange_count: int
+    """Number of exchanges covering this event."""
+
+    market_count: int
+    """Total number of markets in this event."""
+
+    title: str
+    """Event title."""
+
+
 class MarketListResponse(BaseModel):
     markets: List[Market]
 
     pagination: Pagination
+
+    scope: Literal["list", "market", "market_batch", "event"]
+    """
+    Query scope that produced this response: `list`, `market`, `market_batch`, or
+    `event`.
+    """
+
+    duplicate_ids: Optional[List[str]] = None
+    """IDs that appeared more than once in the request.
+
+    Only present for `scope=market_batch`.
+    """
+
+    event: Optional[Event] = None
+    """Event context. Only present when `scope=event`."""
+
+    not_found_ids: Optional[List[str]] = None
+    """IDs that were not found in any data layer.
+
+    Only present for `scope=market_batch`.
+    """
