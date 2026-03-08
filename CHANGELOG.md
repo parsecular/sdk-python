@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.14.0 (2026-03-08)
+
+Full Changelog: [v0.13.0...v0.14.0](https://github.com/parsecular/sdk-python/compare/v0.13.0...v0.14.0)
+
+### Features
+
+* add markets scope parameter documentation for query modes ([80fd8de](https://github.com/parsecular/sdk-python/commit/80fd8dee9e18ae2b7b15ba8172f94fc89135ded4))
+
+
+### Documentation
+
+* document markets scope parameter in README ([85707ed](https://github.com/parsecular/sdk-python/commit/85707ed526a76ff6999bfc05a53de569a37b0366))
+
 ## 0.13.0 (2026-03-08)
 
 Full Changelog: [v0.12.0...v0.13.0](https://github.com/parsecular/sdk-python/compare/v0.12.0...v0.13.0)
