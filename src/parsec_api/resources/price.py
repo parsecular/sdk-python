@@ -46,11 +46,13 @@ class PriceResource(SyncAPIResource):
     def retrieve(
         self,
         *,
-        parsec_id: str,
         at_ts: int | Omit = omit,
         end_ts: int | Omit = omit,
+        exchange: str | Omit = omit,
         interval: Literal["1m", "1h", "6h", "1d", "1w", "max"] | Omit = omit,
+        market_id: str | Omit = omit,
         outcome: str | Omit = omit,
+        parsec_id: str | Omit = omit,
         start_ts: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -60,22 +62,28 @@ class PriceResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> PriceRetrieveResponse:
         """
-        Returns an array of candlesticks with timestamps at period start (UTC).
-        Historical data is tier-gated: Free=5d, Pro=30d, Scale=unlimited.
+        Use `/markets` to discover a market first, then query by either `parsec_id` or
+        `exchange + market_id`. Returns an array of candlesticks with timestamps at
+        period start (UTC). Historical data is tier-gated: Free=5d, Pro=30d,
+        Scale=unlimited.
 
         Args:
-          parsec_id: Unified market ID in format `{exchange}:{native_id}`.
-
           at_ts: Point-in-time lookup (Unix seconds). Returns the single closest candle. Cannot
               be combined with start_ts/end_ts.
 
           end_ts: Unix seconds end timestamp (inclusive). Defaults to now.
 
+          exchange: Exchange ID (alternative to parsec_id — use with market_id).
+
           interval: Defaults to 1h for point-in-time (at_ts)
+
+          market_id: Exchange-native market ID (alternative to parsec_id — use with exchange).
 
           outcome: Outcome selector. For binary markets this is typically "yes" or "no"
               (case-insensitive). For categorical markets, this is required and may be an
               outcome label or numeric index.
+
+          parsec_id: Unified market ID. Provide either `parsec_id` OR both `exchange` + `market_id`.
 
           start_ts: Unix seconds start timestamp (inclusive). If omitted, the server selects a
               default range based on `interval`.
@@ -97,11 +105,13 @@ class PriceResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
-                        "parsec_id": parsec_id,
                         "at_ts": at_ts,
                         "end_ts": end_ts,
+                        "exchange": exchange,
                         "interval": interval,
+                        "market_id": market_id,
                         "outcome": outcome,
+                        "parsec_id": parsec_id,
                         "start_ts": start_ts,
                     },
                     price_retrieve_params.PriceRetrieveParams,
@@ -134,11 +144,13 @@ class AsyncPriceResource(AsyncAPIResource):
     async def retrieve(
         self,
         *,
-        parsec_id: str,
         at_ts: int | Omit = omit,
         end_ts: int | Omit = omit,
+        exchange: str | Omit = omit,
         interval: Literal["1m", "1h", "6h", "1d", "1w", "max"] | Omit = omit,
+        market_id: str | Omit = omit,
         outcome: str | Omit = omit,
+        parsec_id: str | Omit = omit,
         start_ts: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -148,22 +160,28 @@ class AsyncPriceResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> PriceRetrieveResponse:
         """
-        Returns an array of candlesticks with timestamps at period start (UTC).
-        Historical data is tier-gated: Free=5d, Pro=30d, Scale=unlimited.
+        Use `/markets` to discover a market first, then query by either `parsec_id` or
+        `exchange + market_id`. Returns an array of candlesticks with timestamps at
+        period start (UTC). Historical data is tier-gated: Free=5d, Pro=30d,
+        Scale=unlimited.
 
         Args:
-          parsec_id: Unified market ID in format `{exchange}:{native_id}`.
-
           at_ts: Point-in-time lookup (Unix seconds). Returns the single closest candle. Cannot
               be combined with start_ts/end_ts.
 
           end_ts: Unix seconds end timestamp (inclusive). Defaults to now.
 
+          exchange: Exchange ID (alternative to parsec_id — use with market_id).
+
           interval: Defaults to 1h for point-in-time (at_ts)
+
+          market_id: Exchange-native market ID (alternative to parsec_id — use with exchange).
 
           outcome: Outcome selector. For binary markets this is typically "yes" or "no"
               (case-insensitive). For categorical markets, this is required and may be an
               outcome label or numeric index.
+
+          parsec_id: Unified market ID. Provide either `parsec_id` OR both `exchange` + `market_id`.
 
           start_ts: Unix seconds start timestamp (inclusive). If omitted, the server selects a
               default range based on `interval`.
@@ -185,11 +203,13 @@ class AsyncPriceResource(AsyncAPIResource):
                 timeout=timeout,
                 query=await async_maybe_transform(
                     {
-                        "parsec_id": parsec_id,
                         "at_ts": at_ts,
                         "end_ts": end_ts,
+                        "exchange": exchange,
                         "interval": interval,
+                        "market_id": market_id,
                         "outcome": outcome,
+                        "parsec_id": parsec_id,
                         "start_ts": start_ts,
                     },
                     price_retrieve_params.PriceRetrieveParams,

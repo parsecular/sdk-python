@@ -47,9 +47,11 @@ class ExecutionPriceResource(SyncAPIResource):
         self,
         *,
         amount: float,
-        parsec_id: str,
         side: Literal["buy", "sell"],
+        exchange: str | Omit = omit,
+        market_id: str | Omit = omit,
         outcome: str | Omit = omit,
+        parsec_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -58,18 +60,24 @@ class ExecutionPriceResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ExecutionPriceRetrieveResponse:
         """
-        Walks the orderbook to estimate the volume-weighted average price (VWAP) for a
-        hypothetical order of the given size. Does not place an order.
+        Use `/markets` to discover a market first, then query by either `parsec_id` or
+        `exchange + market_id`. Walks the orderbook to estimate the volume-weighted
+        average price (VWAP) for a hypothetical order of the given size. Does not place
+        an order.
 
         Args:
           amount: Order size in contracts.
 
-          parsec_id: Unified market ID in format `{exchange}:{native_id}`.
-
           side: Order side ("buy" or "sell").
+
+          exchange: Exchange ID (alternative to parsec_id — use with market_id).
+
+          market_id: Exchange-native market ID (alternative to parsec_id — use with exchange).
 
           outcome: Outcome selector. For binary markets this is typically "yes" or "no"
               (case-insensitive). For categorical markets, this is required.
+
+          parsec_id: Unified market ID. Provide either `parsec_id` OR both `exchange` + `market_id`.
 
           extra_headers: Send extra headers
 
@@ -89,9 +97,11 @@ class ExecutionPriceResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "amount": amount,
-                        "parsec_id": parsec_id,
                         "side": side,
+                        "exchange": exchange,
+                        "market_id": market_id,
                         "outcome": outcome,
+                        "parsec_id": parsec_id,
                     },
                     execution_price_retrieve_params.ExecutionPriceRetrieveParams,
                 ),
@@ -124,9 +134,11 @@ class AsyncExecutionPriceResource(AsyncAPIResource):
         self,
         *,
         amount: float,
-        parsec_id: str,
         side: Literal["buy", "sell"],
+        exchange: str | Omit = omit,
+        market_id: str | Omit = omit,
         outcome: str | Omit = omit,
+        parsec_id: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -135,18 +147,24 @@ class AsyncExecutionPriceResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ExecutionPriceRetrieveResponse:
         """
-        Walks the orderbook to estimate the volume-weighted average price (VWAP) for a
-        hypothetical order of the given size. Does not place an order.
+        Use `/markets` to discover a market first, then query by either `parsec_id` or
+        `exchange + market_id`. Walks the orderbook to estimate the volume-weighted
+        average price (VWAP) for a hypothetical order of the given size. Does not place
+        an order.
 
         Args:
           amount: Order size in contracts.
 
-          parsec_id: Unified market ID in format `{exchange}:{native_id}`.
-
           side: Order side ("buy" or "sell").
+
+          exchange: Exchange ID (alternative to parsec_id — use with market_id).
+
+          market_id: Exchange-native market ID (alternative to parsec_id — use with exchange).
 
           outcome: Outcome selector. For binary markets this is typically "yes" or "no"
               (case-insensitive). For categorical markets, this is required.
+
+          parsec_id: Unified market ID. Provide either `parsec_id` OR both `exchange` + `market_id`.
 
           extra_headers: Send extra headers
 
@@ -166,9 +184,11 @@ class AsyncExecutionPriceResource(AsyncAPIResource):
                 query=await async_maybe_transform(
                     {
                         "amount": amount,
-                        "parsec_id": parsec_id,
                         "side": side,
+                        "exchange": exchange,
+                        "market_id": market_id,
                         "outcome": outcome,
+                        "parsec_id": parsec_id,
                     },
                     execution_price_retrieve_params.ExecutionPriceRetrieveParams,
                 ),

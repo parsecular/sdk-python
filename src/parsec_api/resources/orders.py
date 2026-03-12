@@ -76,9 +76,10 @@ class OrdersResource(SyncAPIResource):
 
           affiliate: Affiliate address override. Builder-only.
 
-          credentials: Per-request exchange credentials (Mode B). When provided, Parsec creates a
-              transient exchange session instead of using stored credentials. Credentials are
-              never persisted.
+          credentials: Per-request exchange credentials passed in the `X-Exchange-Credentials` header.
+              Parsec creates a transient exchange session instead of using stored credentials.
+              For Polymarket transient sessions, `private_key` is required; CLOB API
+              credentials are optional. Credentials are never persisted.
 
           fee_auth: EIP-712 fee authorization signed by the end-user's wallet. Required to collect
               fees via fee escrow. Builder-only.
@@ -314,9 +315,10 @@ class AsyncOrdersResource(AsyncAPIResource):
 
           affiliate: Affiliate address override. Builder-only.
 
-          credentials: Per-request exchange credentials (Mode B). When provided, Parsec creates a
-              transient exchange session instead of using stored credentials. Credentials are
-              never persisted.
+          credentials: Per-request exchange credentials passed in the `X-Exchange-Credentials` header.
+              Parsec creates a transient exchange session instead of using stored credentials.
+              For Polymarket transient sessions, `private_key` is required; CLOB API
+              credentials are optional. Credentials are never persisted.
 
           fee_auth: EIP-712 fee authorization signed by the end-user's wallet. Required to collect
               fees via fee escrow. Builder-only.

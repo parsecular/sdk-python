@@ -30,7 +30,7 @@ class TestFills:
     def test_method_list_with_all_params(self, client: ParsecAPI) -> None:
         fill = client.fills.list(
             exchange="exchange",
-            limit=0,
+            limit=1,
             market_id="market_id",
             x_exchange_credentials="X-Exchange-Credentials",
         )
@@ -81,7 +81,7 @@ class TestAsyncFills:
     async def test_method_list_with_all_params(self, async_client: AsyncParsecAPI) -> None:
         fill = await async_client.fills.list(
             exchange="exchange",
-            limit=0,
+            limit=1,
             market_id="market_id",
             x_exchange_credentials="X-Exchange-Credentials",
         )

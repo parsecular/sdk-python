@@ -28,10 +28,11 @@ class OrderCreateParams(TypedDict, total=False):
     """Affiliate address override. Builder-only."""
 
     credentials: Credentials
-    """Per-request exchange credentials (Mode B).
-
-    When provided, Parsec creates a transient exchange session instead of using
-    stored credentials. Credentials are never persisted.
+    """
+    Per-request exchange credentials passed in the `X-Exchange-Credentials` header.
+    Parsec creates a transient exchange session instead of using stored credentials.
+    For Polymarket transient sessions, `private_key` is required; CLOB API
+    credentials are optional. Credentials are never persisted.
     """
 
     fee_auth: FeeAuth
@@ -57,26 +58,31 @@ class OrderCreateParams(TypedDict, total=False):
 
 
 class Credentials(TypedDict, total=False):
-    """Per-request exchange credentials (Mode B).
-
-    When provided, Parsec creates a transient
-    exchange session instead of using stored credentials. Credentials are never persisted.
+    """
+    Per-request exchange credentials passed in the `X-Exchange-Credentials` header.
+    Parsec creates a transient exchange session instead of using stored credentials.
+    For Polymarket transient sessions, `private_key` is required; CLOB API
+    credentials are optional.
+    Credentials are never persisted.
     """
 
     api_key_id: str
     """Kalshi API key ID."""
 
     clob_api_key: str
-    """Polymarket CLOB API key."""
+    """Optional Polymarket CLOB API key."""
 
     clob_api_passphrase: str
-    """Polymarket CLOB API passphrase."""
+    """Optional Polymarket CLOB API passphrase."""
 
     clob_api_secret: str
-    """Polymarket CLOB API secret."""
+    """Optional Polymarket CLOB API secret."""
 
     private_key: str
-    """Kalshi RSA private key (PEM format)."""
+    """
+    Kalshi RSA private key (PEM) or Polymarket wallet private key (`0x`-prefixed
+    hex).
+    """
 
 
 class FeeAuth(TypedDict, total=False):

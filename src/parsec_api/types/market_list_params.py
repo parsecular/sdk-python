@@ -11,7 +11,7 @@ __all__ = ["MarketListParams"]
 
 class MarketListParams(TypedDict, total=False):
     cursor: str
-    """Pagination cursor (offset-based). Only valid for `scope=list`."""
+    """Pagination cursor (offset-based). Valid for `scope=list` and `scope=event`."""
 
     event_id: str
     """Canonical Parsec event ID (exact match).
@@ -43,14 +43,15 @@ class MarketListParams(TypedDict, total=False):
     exchanges: SequenceNotStr[str]
     """
     Comma-separated exchange IDs to query (e.g., `polymarket,kalshi`). Only valid
-    for `scope=list`. In SDKs this is typically an array encoded as CSV on the wire.
+    for `scope=list`. Omit to query all exchanges. In SDKs this is typically an
+    array encoded as CSV on the wire.
     """
 
-    external_market_keys: str
+    external_market_keys: SequenceNotStr[str]
     """
     Comma-separated external market keys in format
-    `{exchange}:{exchange_market_id}`. Only valid for `scope=market_batch`. Mutually
-    exclusive with `parsec_ids`.
+    `{exchange}:{exchange_market_id}`. Only valid for `scope=market_batch`. Max 100.
+    Mutually exclusive with `parsec_ids`.
     """
 
     include_matches: bool
@@ -85,7 +86,8 @@ class MarketListParams(TypedDict, total=False):
     """
     Comma-separated parsec IDs for batch lookup (format: `{exchange}:{native_id}`).
     Only valid for `scope=market_batch`. Max 100 IDs. Mutually exclusive with
-    `external_market_keys`. In SDKs this is typically an array encoded as CSV on the
+    `external_market_keys`. If `scope` is omitted, the server auto-infers
+    `scope=market_batch`. In SDKs this is typically an array encoded as CSV on the
     wire.
     """
 

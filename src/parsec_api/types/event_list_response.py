@@ -12,6 +12,7 @@ __all__ = [
     "EventMarketOutcome",
     "EventMarketMatchedMarket",
     "EventMarketRelatedMarket",
+    "EventMatchedEvent",
     "Pagination",
 ]
 
@@ -49,6 +50,9 @@ class EventMarketMatchedMarket(BaseModel):
     dependency_type: Optional[str] = None
     """Type of dependency (for related markets only)."""
 
+    status: Optional[str] = None
+    """Counterpart market status (e.g., active, closed, archived)."""
+
 
 class EventMarketRelatedMarket(BaseModel):
     confidence: float
@@ -71,6 +75,9 @@ class EventMarketRelatedMarket(BaseModel):
 
     dependency_type: Optional[str] = None
     """Type of dependency (for related markets only)."""
+
+    status: Optional[str] = None
+    """Counterpart market status (e.g., active, closed, archived)."""
 
 
 class EventMarket(BaseModel):
@@ -191,6 +198,26 @@ class EventMarket(BaseModel):
     """Cross-reference data (exchange-specific metadata)."""
 
 
+class EventMatchedEvent(BaseModel):
+    confidence: float
+    """Match confidence score."""
+
+    confidence_tier: str
+    """Confidence bucket metadata for the event match."""
+
+    event_id: str
+    """Canonical Parsec event ID for the matched event."""
+
+    exchanges: List[str]
+    """Exchanges represented in the matched event."""
+
+    source: str
+    """Event match source label from the matching pipeline."""
+
+    title: str
+    """Matched event title."""
+
+
 class Event(BaseModel):
     event_id: str
     """Canonical Parsec event ID."""
@@ -215,6 +242,9 @@ class Event(BaseModel):
 
     markets: Optional[List[EventMarket]] = None
     """Constituent markets (only included when `include_markets=true`)."""
+
+    matched_events: Optional[List[EventMatchedEvent]] = None
+    """Cross-exchange event counterparts from published `same_event` matches."""
 
 
 class Pagination(BaseModel):
