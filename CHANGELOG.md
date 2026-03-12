@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.16.0 (2026-03-12)
+
+Full Changelog: [v0.15.0...v0.16.0](https://github.com/parsecular/sdk-python/compare/v0.15.0...v0.16.0)
+
+### Features
+
+* **ws:** add liquidity_role to Activity dataclass ([937f60b](https://github.com/parsecular/sdk-python/commit/937f60be74a36e57f674f38a00384d724f05c722))
+
 ## 0.15.0 (2026-03-12)
 
 Full Changelog: [v0.14.0...v0.15.0](https://github.com/parsecular/sdk-python/compare/v0.14.0...v0.15.0)
