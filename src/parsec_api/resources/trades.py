@@ -44,11 +44,13 @@ class TradesResource(SyncAPIResource):
     def list(
         self,
         *,
-        parsec_id: str,
         cursor: str | Omit = omit,
         end_ts: int | Omit = omit,
+        exchange: str | Omit = omit,
         limit: int | Omit = omit,
+        market_id: str | Omit = omit,
         outcome: str | Omit = omit,
+        parsec_id: str | Omit = omit,
         start_ts: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -58,22 +60,27 @@ class TradesResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> TradeListResponse:
         """
-        Returns an array of recent trades for the requested market+outcome (normalized
-        prices 0.0-1.0). Historical data is tier-gated: Free=5d, Pro=30d,
-        Scale=unlimited.
+        Use `/markets` to discover a market first, then query by either `parsec_id` or
+        `exchange + market_id`. Returns an array of recent trades for the requested
+        market+outcome (normalized prices 0.0-1.0). Historical data is tier-gated:
+        Free=5d, Pro=30d, Scale=unlimited.
 
         Args:
-          parsec_id: Unified market ID in format `{exchange}:{native_id}`.
-
           cursor: Opaque pagination cursor from a previous response.
 
           end_ts: Unix seconds end timestamp (inclusive).
 
+          exchange: Exchange ID (alternative to parsec_id — use with market_id).
+
           limit: Max number of trades (default 200; server clamps to 1..=500).
+
+          market_id: Exchange-native market ID (alternative to parsec_id — use with exchange).
 
           outcome: Outcome selector. For binary markets this is typically "yes" or "no"
               (case-insensitive). For categorical markets, this is required and may be an
               outcome label or numeric index.
+
+          parsec_id: Unified market ID. Provide either `parsec_id` OR both `exchange` + `market_id`.
 
           start_ts: Unix seconds start timestamp (inclusive).
 
@@ -94,11 +101,13 @@ class TradesResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
-                        "parsec_id": parsec_id,
                         "cursor": cursor,
                         "end_ts": end_ts,
+                        "exchange": exchange,
                         "limit": limit,
+                        "market_id": market_id,
                         "outcome": outcome,
+                        "parsec_id": parsec_id,
                         "start_ts": start_ts,
                     },
                     trade_list_params.TradeListParams,
@@ -131,11 +140,13 @@ class AsyncTradesResource(AsyncAPIResource):
     async def list(
         self,
         *,
-        parsec_id: str,
         cursor: str | Omit = omit,
         end_ts: int | Omit = omit,
+        exchange: str | Omit = omit,
         limit: int | Omit = omit,
+        market_id: str | Omit = omit,
         outcome: str | Omit = omit,
+        parsec_id: str | Omit = omit,
         start_ts: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -145,22 +156,27 @@ class AsyncTradesResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> TradeListResponse:
         """
-        Returns an array of recent trades for the requested market+outcome (normalized
-        prices 0.0-1.0). Historical data is tier-gated: Free=5d, Pro=30d,
-        Scale=unlimited.
+        Use `/markets` to discover a market first, then query by either `parsec_id` or
+        `exchange + market_id`. Returns an array of recent trades for the requested
+        market+outcome (normalized prices 0.0-1.0). Historical data is tier-gated:
+        Free=5d, Pro=30d, Scale=unlimited.
 
         Args:
-          parsec_id: Unified market ID in format `{exchange}:{native_id}`.
-
           cursor: Opaque pagination cursor from a previous response.
 
           end_ts: Unix seconds end timestamp (inclusive).
 
+          exchange: Exchange ID (alternative to parsec_id — use with market_id).
+
           limit: Max number of trades (default 200; server clamps to 1..=500).
+
+          market_id: Exchange-native market ID (alternative to parsec_id — use with exchange).
 
           outcome: Outcome selector. For binary markets this is typically "yes" or "no"
               (case-insensitive). For categorical markets, this is required and may be an
               outcome label or numeric index.
+
+          parsec_id: Unified market ID. Provide either `parsec_id` OR both `exchange` + `market_id`.
 
           start_ts: Unix seconds start timestamp (inclusive).
 
@@ -181,11 +197,13 @@ class AsyncTradesResource(AsyncAPIResource):
                 timeout=timeout,
                 query=await async_maybe_transform(
                     {
-                        "parsec_id": parsec_id,
                         "cursor": cursor,
                         "end_ts": end_ts,
+                        "exchange": exchange,
                         "limit": limit,
+                        "market_id": market_id,
                         "outcome": outcome,
+                        "parsec_id": parsec_id,
                         "start_ts": start_ts,
                     },
                     trade_list_params.TradeListParams,

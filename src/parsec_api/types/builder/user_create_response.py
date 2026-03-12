@@ -65,7 +65,7 @@ class UserCreateResponse(BaseModel):
     """Exchanges linked to this user."""
 
     status: str
-    """User status ("active")."""
+    """Response status ("complete")."""
 
     affiliate_address: Optional[str] = None
     """Affiliate fee recipient address."""

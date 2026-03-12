@@ -20,21 +20,21 @@ class TestOrderbook:
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_retrieve(self, client: ParsecAPI) -> None:
-        orderbook = client.orderbook.retrieve(
-            parsec_id="parsec_id",
-        )
+        orderbook = client.orderbook.retrieve()
         assert_matches_type(OrderbookRetrieveResponse, orderbook, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_retrieve_with_all_params(self, client: ParsecAPI) -> None:
         orderbook = client.orderbook.retrieve(
-            parsec_id="parsec_id",
             cursor="cursor",
             depth=1,
             end_ts=0,
+            exchange="exchange",
             limit=1,
+            market_id="market_id",
             outcome="outcome",
+            parsec_id="parsec_id",
             start_ts=0,
         )
         assert_matches_type(OrderbookRetrieveResponse, orderbook, path=["response"])
@@ -42,9 +42,7 @@ class TestOrderbook:
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_retrieve(self, client: ParsecAPI) -> None:
-        response = client.orderbook.with_raw_response.retrieve(
-            parsec_id="parsec_id",
-        )
+        response = client.orderbook.with_raw_response.retrieve()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -54,9 +52,7 @@ class TestOrderbook:
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_retrieve(self, client: ParsecAPI) -> None:
-        with client.orderbook.with_streaming_response.retrieve(
-            parsec_id="parsec_id",
-        ) as response:
+        with client.orderbook.with_streaming_response.retrieve() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
@@ -74,21 +70,21 @@ class TestAsyncOrderbook:
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_retrieve(self, async_client: AsyncParsecAPI) -> None:
-        orderbook = await async_client.orderbook.retrieve(
-            parsec_id="parsec_id",
-        )
+        orderbook = await async_client.orderbook.retrieve()
         assert_matches_type(OrderbookRetrieveResponse, orderbook, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_retrieve_with_all_params(self, async_client: AsyncParsecAPI) -> None:
         orderbook = await async_client.orderbook.retrieve(
-            parsec_id="parsec_id",
             cursor="cursor",
             depth=1,
             end_ts=0,
+            exchange="exchange",
             limit=1,
+            market_id="market_id",
             outcome="outcome",
+            parsec_id="parsec_id",
             start_ts=0,
         )
         assert_matches_type(OrderbookRetrieveResponse, orderbook, path=["response"])
@@ -96,9 +92,7 @@ class TestAsyncOrderbook:
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_retrieve(self, async_client: AsyncParsecAPI) -> None:
-        response = await async_client.orderbook.with_raw_response.retrieve(
-            parsec_id="parsec_id",
-        )
+        response = await async_client.orderbook.with_raw_response.retrieve()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -108,9 +102,7 @@ class TestAsyncOrderbook:
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_retrieve(self, async_client: AsyncParsecAPI) -> None:
-        async with async_client.orderbook.with_streaming_response.retrieve(
-            parsec_id="parsec_id",
-        ) as response:
+        async with async_client.orderbook.with_streaming_response.retrieve() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 

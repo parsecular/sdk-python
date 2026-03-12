@@ -18,7 +18,7 @@ class OnboardCreateResponse(BaseModel):
     """Onboard mode used ("managed" or "self")."""
 
     status: str
-    """Onboard status ("complete")."""
+    """Onboard status ("complete" or "already_linked")."""
 
     steps_completed: List[str]
     """Steps completed during this call."""

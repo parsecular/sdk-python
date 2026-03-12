@@ -52,7 +52,7 @@ class MarketsResource(SyncAPIResource):
         exchange_group_id: str | Omit = omit,
         exchange_market_id: str | Omit = omit,
         exchanges: SequenceNotStr[str] | Omit = omit,
-        external_market_keys: str | Omit = omit,
+        external_market_keys: SequenceNotStr[str] | Omit = omit,
         include_matches: bool | Omit = omit,
         include_related: bool | Omit = omit,
         limit: int | Omit = omit,
@@ -86,7 +86,7 @@ class MarketsResource(SyncAPIResource):
         details.
 
         Args:
-          cursor: Pagination cursor (offset-based). Only valid for `scope=list`.
+          cursor: Pagination cursor (offset-based). Valid for `scope=list` and `scope=event`.
 
           event_id: Canonical Parsec event ID (exact match). Used for `scope=event`. Mutually
               exclusive with `exchange` + `exchange_group_id`.
@@ -101,11 +101,12 @@ class MarketsResource(SyncAPIResource):
               Mutually exclusive with `parsec_id`.
 
           exchanges: Comma-separated exchange IDs to query (e.g., `polymarket,kalshi`). Only valid
-              for `scope=list`. In SDKs this is typically an array encoded as CSV on the wire.
+              for `scope=list`. Omit to query all exchanges. In SDKs this is typically an
+              array encoded as CSV on the wire.
 
           external_market_keys: Comma-separated external market keys in format
-              `{exchange}:{exchange_market_id}`. Only valid for `scope=market_batch`. Mutually
-              exclusive with `parsec_ids`.
+              `{exchange}:{exchange_market_id}`. Only valid for `scope=market_batch`. Max 100.
+              Mutually exclusive with `parsec_ids`.
 
           include_matches: When true, each market includes a `matched_markets` array with cross-exchange
               same-market relations.
@@ -125,7 +126,8 @@ class MarketsResource(SyncAPIResource):
 
           parsec_ids: Comma-separated parsec IDs for batch lookup (format: `{exchange}:{native_id}`).
               Only valid for `scope=market_batch`. Max 100 IDs. Mutually exclusive with
-              `external_market_keys`. In SDKs this is typically an array encoded as CSV on the
+              `external_market_keys`. If `scope` is omitted, the server auto-infers
+              `scope=market_batch`. In SDKs this is typically an array encoded as CSV on the
               wire.
 
           scope: Query scope. Determines which parameters are valid and how results are returned.
@@ -208,7 +210,7 @@ class AsyncMarketsResource(AsyncAPIResource):
         exchange_group_id: str | Omit = omit,
         exchange_market_id: str | Omit = omit,
         exchanges: SequenceNotStr[str] | Omit = omit,
-        external_market_keys: str | Omit = omit,
+        external_market_keys: SequenceNotStr[str] | Omit = omit,
         include_matches: bool | Omit = omit,
         include_related: bool | Omit = omit,
         limit: int | Omit = omit,
@@ -242,7 +244,7 @@ class AsyncMarketsResource(AsyncAPIResource):
         details.
 
         Args:
-          cursor: Pagination cursor (offset-based). Only valid for `scope=list`.
+          cursor: Pagination cursor (offset-based). Valid for `scope=list` and `scope=event`.
 
           event_id: Canonical Parsec event ID (exact match). Used for `scope=event`. Mutually
               exclusive with `exchange` + `exchange_group_id`.
@@ -257,11 +259,12 @@ class AsyncMarketsResource(AsyncAPIResource):
               Mutually exclusive with `parsec_id`.
 
           exchanges: Comma-separated exchange IDs to query (e.g., `polymarket,kalshi`). Only valid
-              for `scope=list`. In SDKs this is typically an array encoded as CSV on the wire.
+              for `scope=list`. Omit to query all exchanges. In SDKs this is typically an
+              array encoded as CSV on the wire.
 
           external_market_keys: Comma-separated external market keys in format
-              `{exchange}:{exchange_market_id}`. Only valid for `scope=market_batch`. Mutually
-              exclusive with `parsec_ids`.
+              `{exchange}:{exchange_market_id}`. Only valid for `scope=market_batch`. Max 100.
+              Mutually exclusive with `parsec_ids`.
 
           include_matches: When true, each market includes a `matched_markets` array with cross-exchange
               same-market relations.
@@ -281,7 +284,8 @@ class AsyncMarketsResource(AsyncAPIResource):
 
           parsec_ids: Comma-separated parsec IDs for batch lookup (format: `{exchange}:{native_id}`).
               Only valid for `scope=market_batch`. Max 100 IDs. Mutually exclusive with
-              `external_market_keys`. In SDKs this is typically an array encoded as CSV on the
+              `external_market_keys`. If `scope` is omitted, the server auto-infers
+              `scope=market_batch`. In SDKs this is typically an array encoded as CSV on the
               wire.
 
           scope: Query scope. Determines which parameters are valid and how results are returned.

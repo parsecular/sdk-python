@@ -50,6 +50,9 @@ class MarketMatchedMarket(BaseModel):
     dependency_type: Optional[str] = None
     """Type of dependency (for related markets only)."""
 
+    status: Optional[str] = None
+    """Counterpart market status (e.g., active, closed, archived)."""
+
 
 class MarketRelatedMarket(BaseModel):
     confidence: float
@@ -72,6 +75,9 @@ class MarketRelatedMarket(BaseModel):
 
     dependency_type: Optional[str] = None
     """Type of dependency (for related markets only)."""
+
+    status: Optional[str] = None
+    """Counterpart market status (e.g., active, closed, archived)."""
 
 
 class Market(BaseModel):

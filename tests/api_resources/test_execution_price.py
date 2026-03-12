@@ -22,7 +22,6 @@ class TestExecutionPrice:
     def test_method_retrieve(self, client: ParsecAPI) -> None:
         execution_price = client.execution_price.retrieve(
             amount=0,
-            parsec_id="parsec_id",
             side="buy",
         )
         assert_matches_type(ExecutionPriceRetrieveResponse, execution_price, path=["response"])
@@ -32,9 +31,11 @@ class TestExecutionPrice:
     def test_method_retrieve_with_all_params(self, client: ParsecAPI) -> None:
         execution_price = client.execution_price.retrieve(
             amount=0,
-            parsec_id="parsec_id",
             side="buy",
+            exchange="exchange",
+            market_id="market_id",
             outcome="outcome",
+            parsec_id="parsec_id",
         )
         assert_matches_type(ExecutionPriceRetrieveResponse, execution_price, path=["response"])
 
@@ -43,7 +44,6 @@ class TestExecutionPrice:
     def test_raw_response_retrieve(self, client: ParsecAPI) -> None:
         response = client.execution_price.with_raw_response.retrieve(
             amount=0,
-            parsec_id="parsec_id",
             side="buy",
         )
 
@@ -57,7 +57,6 @@ class TestExecutionPrice:
     def test_streaming_response_retrieve(self, client: ParsecAPI) -> None:
         with client.execution_price.with_streaming_response.retrieve(
             amount=0,
-            parsec_id="parsec_id",
             side="buy",
         ) as response:
             assert not response.is_closed
@@ -79,7 +78,6 @@ class TestAsyncExecutionPrice:
     async def test_method_retrieve(self, async_client: AsyncParsecAPI) -> None:
         execution_price = await async_client.execution_price.retrieve(
             amount=0,
-            parsec_id="parsec_id",
             side="buy",
         )
         assert_matches_type(ExecutionPriceRetrieveResponse, execution_price, path=["response"])
@@ -89,9 +87,11 @@ class TestAsyncExecutionPrice:
     async def test_method_retrieve_with_all_params(self, async_client: AsyncParsecAPI) -> None:
         execution_price = await async_client.execution_price.retrieve(
             amount=0,
-            parsec_id="parsec_id",
             side="buy",
+            exchange="exchange",
+            market_id="market_id",
             outcome="outcome",
+            parsec_id="parsec_id",
         )
         assert_matches_type(ExecutionPriceRetrieveResponse, execution_price, path=["response"])
 
@@ -100,7 +100,6 @@ class TestAsyncExecutionPrice:
     async def test_raw_response_retrieve(self, async_client: AsyncParsecAPI) -> None:
         response = await async_client.execution_price.with_raw_response.retrieve(
             amount=0,
-            parsec_id="parsec_id",
             side="buy",
         )
 
@@ -114,7 +113,6 @@ class TestAsyncExecutionPrice:
     async def test_streaming_response_retrieve(self, async_client: AsyncParsecAPI) -> None:
         async with async_client.execution_price.with_streaming_response.retrieve(
             amount=0,
-            parsec_id="parsec_id",
             side="buy",
         ) as response:
             assert not response.is_closed
