@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.15.0 (2026-03-12)
+
+Full Changelog: [v0.14.0...v0.15.0](https://github.com/parsecular/sdk-python/compare/v0.14.0...v0.15.0)
+
+### Features
+
+* **api:** api update ([6f1bb1b](https://github.com/parsecular/sdk-python/commit/6f1bb1b02024e5c7659dc9ee3574014814700186))
+
 ## 0.14.0 (2026-03-08)
 
 Full Changelog: [v0.13.0...v0.14.0](https://github.com/parsecular/sdk-python/compare/v0.13.0...v0.14.0)
