@@ -75,6 +75,7 @@ class Activity:
     exchange_ts_ms: Optional[int]
     ingest_ts_ms: Optional[int]
     source_channel: str
+    liquidity_role: Optional[str]  # "maker" | "taker"
 
 
 @dataclass
@@ -605,6 +606,7 @@ class ParsecWebSocket:
                     exchange_ts_ms=msg.get("exchange_ts_ms"),
                     ingest_ts_ms=msg.get("ingest_ts_ms"),
                     source_channel=msg.get("source_channel", ""),
+                    liquidity_role=msg.get("liquidity_role"),
                 )
             )
 
