@@ -2,15 +2,12 @@
 
 from __future__ import annotations
 
-from typing_extensions import Literal, Required, TypedDict
+from typing_extensions import Literal, TypedDict
 
 __all__ = ["PriceRetrieveParams"]
 
 
 class PriceRetrieveParams(TypedDict, total=False):
-    parsec_id: Required[str]
-    """Unified market ID in format `{exchange}:{native_id}`."""
-
     at_ts: int
     """Point-in-time lookup (Unix seconds).
 
@@ -20,8 +17,14 @@ class PriceRetrieveParams(TypedDict, total=False):
     end_ts: int
     """Unix seconds end timestamp (inclusive). Defaults to now."""
 
+    exchange: str
+    """Exchange ID (alternative to parsec_id — use with market_id)."""
+
     interval: Literal["1m", "1h", "6h", "1d", "1w", "max"]
     """Defaults to 1h for point-in-time (at_ts)"""
+
+    market_id: str
+    """Exchange-native market ID (alternative to parsec_id — use with exchange)."""
 
     outcome: str
     """Outcome selector.
@@ -30,6 +33,9 @@ class PriceRetrieveParams(TypedDict, total=False):
     categorical markets, this is required and may be an outcome label or numeric
     index.
     """
+
+    parsec_id: str
+    """Unified market ID. Provide either `parsec_id` OR both `exchange` + `market_id`."""
 
     start_ts: int
     """Unix seconds start timestamp (inclusive).

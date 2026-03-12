@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any, cast
+
 import httpx
 
 from ..types import orderbook_retrieve_params
@@ -44,12 +46,14 @@ class OrderbookResource(SyncAPIResource):
     def retrieve(
         self,
         *,
-        parsec_id: str,
         cursor: str | Omit = omit,
         depth: int | Omit = omit,
         end_ts: int | Omit = omit,
+        exchange: str | Omit = omit,
         limit: int | Omit = omit,
+        market_id: str | Omit = omit,
         outcome: str | Omit = omit,
+        parsec_id: str | Omit = omit,
         start_ts: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -59,26 +63,31 @@ class OrderbookResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> OrderbookRetrieveResponse:
         """
-        When start_ts or end_ts is provided, returns historical orderbook snapshots
-        instead of a live L2 snapshot. Large time ranges are handled via internal
-        chunking and may be slow for very wide windows. In historical mode, limit
-        defaults to 500 (max 1000). Historical data is tier-gated: Free=5d, Pro=30d,
-        Scale=unlimited.
+        Use `/markets` to discover a market first, then query by either `parsec_id` or
+        `exchange + market_id`. When start_ts or end_ts is provided, returns historical
+        orderbook snapshots instead of a live L2 snapshot. Large time ranges are handled
+        via internal chunking and may be slow for very wide windows. In historical mode,
+        limit defaults to 500 (max 1000). Historical data is tier-gated: Free=5d,
+        Pro=30d, Scale=unlimited.
 
         Args:
-          parsec_id: Unified market ID in format `{exchange}:{native_id}`.
-
           cursor: Opaque pagination cursor for historical mode.
 
           depth: Alias for `limit` (REST/WS symmetry).
 
           end_ts: Unix seconds — end of time range. Defaults to now.
 
+          exchange: Exchange ID (alternative to parsec_id — use with market_id).
+
           limit: Max depth per side (default 50; server clamps to 1..=100).
+
+          market_id: Exchange-native market ID (alternative to parsec_id — use with exchange).
 
           outcome: Outcome selector. For binary markets this is typically "yes" or "no"
               (case-insensitive). For categorical markets, this is required and may be an
               outcome label or numeric index.
+
+          parsec_id: Unified market ID. Provide either `parsec_id` OR both `exchange` + `market_id`.
 
           start_ts: Unix seconds — when present, switches to historical mode (returns snapshots
               instead of live book).
@@ -91,27 +100,34 @@ class OrderbookResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return self._get(
-            "/api/v1/orderbook",
-            options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=maybe_transform(
-                    {
-                        "parsec_id": parsec_id,
-                        "cursor": cursor,
-                        "depth": depth,
-                        "end_ts": end_ts,
-                        "limit": limit,
-                        "outcome": outcome,
-                        "start_ts": start_ts,
-                    },
-                    orderbook_retrieve_params.OrderbookRetrieveParams,
+        return cast(
+            OrderbookRetrieveResponse,
+            self._get(
+                "/api/v1/orderbook",
+                options=make_request_options(
+                    extra_headers=extra_headers,
+                    extra_query=extra_query,
+                    extra_body=extra_body,
+                    timeout=timeout,
+                    query=maybe_transform(
+                        {
+                            "cursor": cursor,
+                            "depth": depth,
+                            "end_ts": end_ts,
+                            "exchange": exchange,
+                            "limit": limit,
+                            "market_id": market_id,
+                            "outcome": outcome,
+                            "parsec_id": parsec_id,
+                            "start_ts": start_ts,
+                        },
+                        orderbook_retrieve_params.OrderbookRetrieveParams,
+                    ),
                 ),
+                cast_to=cast(
+                    Any, OrderbookRetrieveResponse
+                ),  # Union types cannot be passed in as arguments in the type system
             ),
-            cast_to=OrderbookRetrieveResponse,
         )
 
 
@@ -138,12 +154,14 @@ class AsyncOrderbookResource(AsyncAPIResource):
     async def retrieve(
         self,
         *,
-        parsec_id: str,
         cursor: str | Omit = omit,
         depth: int | Omit = omit,
         end_ts: int | Omit = omit,
+        exchange: str | Omit = omit,
         limit: int | Omit = omit,
+        market_id: str | Omit = omit,
         outcome: str | Omit = omit,
+        parsec_id: str | Omit = omit,
         start_ts: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -153,26 +171,31 @@ class AsyncOrderbookResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> OrderbookRetrieveResponse:
         """
-        When start_ts or end_ts is provided, returns historical orderbook snapshots
-        instead of a live L2 snapshot. Large time ranges are handled via internal
-        chunking and may be slow for very wide windows. In historical mode, limit
-        defaults to 500 (max 1000). Historical data is tier-gated: Free=5d, Pro=30d,
-        Scale=unlimited.
+        Use `/markets` to discover a market first, then query by either `parsec_id` or
+        `exchange + market_id`. When start_ts or end_ts is provided, returns historical
+        orderbook snapshots instead of a live L2 snapshot. Large time ranges are handled
+        via internal chunking and may be slow for very wide windows. In historical mode,
+        limit defaults to 500 (max 1000). Historical data is tier-gated: Free=5d,
+        Pro=30d, Scale=unlimited.
 
         Args:
-          parsec_id: Unified market ID in format `{exchange}:{native_id}`.
-
           cursor: Opaque pagination cursor for historical mode.
 
           depth: Alias for `limit` (REST/WS symmetry).
 
           end_ts: Unix seconds — end of time range. Defaults to now.
 
+          exchange: Exchange ID (alternative to parsec_id — use with market_id).
+
           limit: Max depth per side (default 50; server clamps to 1..=100).
+
+          market_id: Exchange-native market ID (alternative to parsec_id — use with exchange).
 
           outcome: Outcome selector. For binary markets this is typically "yes" or "no"
               (case-insensitive). For categorical markets, this is required and may be an
               outcome label or numeric index.
+
+          parsec_id: Unified market ID. Provide either `parsec_id` OR both `exchange` + `market_id`.
 
           start_ts: Unix seconds — when present, switches to historical mode (returns snapshots
               instead of live book).
@@ -185,27 +208,34 @@ class AsyncOrderbookResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        return await self._get(
-            "/api/v1/orderbook",
-            options=make_request_options(
-                extra_headers=extra_headers,
-                extra_query=extra_query,
-                extra_body=extra_body,
-                timeout=timeout,
-                query=await async_maybe_transform(
-                    {
-                        "parsec_id": parsec_id,
-                        "cursor": cursor,
-                        "depth": depth,
-                        "end_ts": end_ts,
-                        "limit": limit,
-                        "outcome": outcome,
-                        "start_ts": start_ts,
-                    },
-                    orderbook_retrieve_params.OrderbookRetrieveParams,
+        return cast(
+            OrderbookRetrieveResponse,
+            await self._get(
+                "/api/v1/orderbook",
+                options=make_request_options(
+                    extra_headers=extra_headers,
+                    extra_query=extra_query,
+                    extra_body=extra_body,
+                    timeout=timeout,
+                    query=await async_maybe_transform(
+                        {
+                            "cursor": cursor,
+                            "depth": depth,
+                            "end_ts": end_ts,
+                            "exchange": exchange,
+                            "limit": limit,
+                            "market_id": market_id,
+                            "outcome": outcome,
+                            "parsec_id": parsec_id,
+                            "start_ts": start_ts,
+                        },
+                        orderbook_retrieve_params.OrderbookRetrieveParams,
+                    ),
                 ),
+                cast_to=cast(
+                    Any, OrderbookRetrieveResponse
+                ),  # Union types cannot be passed in as arguments in the type system
             ),
-            cast_to=OrderbookRetrieveResponse,
         )
 
 

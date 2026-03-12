@@ -37,7 +37,11 @@ class OnboardCreateParams(TypedDict, total=False):
     """
 
     private_key: str
-    """Kalshi RSA private key in PEM format (self mode)."""
+    """Self-mode signing key.
+
+    For Polymarket this is an Ethereum private key (optional for order placement).
+    For Kalshi this is an RSA private key in PEM format (required).
+    """
 
     wallet_type: str
     """Wallet type for managed mode.

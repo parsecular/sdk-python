@@ -88,7 +88,9 @@ class OnboardResource(SyncAPIResource):
               "safe". Parsec skips embedded EOA creation and uses this address as the Safe
               owner. Must not be provided when wallet_type is "eoa".
 
-          private_key: Kalshi RSA private key in PEM format (self mode).
+          private_key: Self-mode signing key. For Polymarket this is an Ethereum private key (optional
+              for order placement). For Kalshi this is an RSA private key in PEM format
+              (required).
 
           wallet_type: Wallet type for managed mode. "eoa" (default) creates an embedded EOA wallet.
               "safe" creates a Safe wallet owned by the external address in eoa_address.
@@ -191,7 +193,9 @@ class AsyncOnboardResource(AsyncAPIResource):
               "safe". Parsec skips embedded EOA creation and uses this address as the Safe
               owner. Must not be provided when wallet_type is "eoa".
 
-          private_key: Kalshi RSA private key in PEM format (self mode).
+          private_key: Self-mode signing key. For Polymarket this is an Ethereum private key (optional
+              for order placement). For Kalshi this is an RSA private key in PEM format
+              (required).
 
           wallet_type: Wallet type for managed mode. "eoa" (default) creates an embedded EOA wallet.
               "safe" creates a Safe wallet owned by the external address in eoa_address.

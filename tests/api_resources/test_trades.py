@@ -20,20 +20,20 @@ class TestTrades:
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list(self, client: ParsecAPI) -> None:
-        trade = client.trades.list(
-            parsec_id="parsec_id",
-        )
+        trade = client.trades.list()
         assert_matches_type(TradeListResponse, trade, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list_with_all_params(self, client: ParsecAPI) -> None:
         trade = client.trades.list(
-            parsec_id="parsec_id",
             cursor="cursor",
             end_ts=0,
+            exchange="exchange",
             limit=1,
+            market_id="market_id",
             outcome="outcome",
+            parsec_id="parsec_id",
             start_ts=0,
         )
         assert_matches_type(TradeListResponse, trade, path=["response"])
@@ -41,9 +41,7 @@ class TestTrades:
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_list(self, client: ParsecAPI) -> None:
-        response = client.trades.with_raw_response.list(
-            parsec_id="parsec_id",
-        )
+        response = client.trades.with_raw_response.list()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -53,9 +51,7 @@ class TestTrades:
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_list(self, client: ParsecAPI) -> None:
-        with client.trades.with_streaming_response.list(
-            parsec_id="parsec_id",
-        ) as response:
+        with client.trades.with_streaming_response.list() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
@@ -73,20 +69,20 @@ class TestAsyncTrades:
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_list(self, async_client: AsyncParsecAPI) -> None:
-        trade = await async_client.trades.list(
-            parsec_id="parsec_id",
-        )
+        trade = await async_client.trades.list()
         assert_matches_type(TradeListResponse, trade, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncParsecAPI) -> None:
         trade = await async_client.trades.list(
-            parsec_id="parsec_id",
             cursor="cursor",
             end_ts=0,
+            exchange="exchange",
             limit=1,
+            market_id="market_id",
             outcome="outcome",
+            parsec_id="parsec_id",
             start_ts=0,
         )
         assert_matches_type(TradeListResponse, trade, path=["response"])
@@ -94,9 +90,7 @@ class TestAsyncTrades:
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncParsecAPI) -> None:
-        response = await async_client.trades.with_raw_response.list(
-            parsec_id="parsec_id",
-        )
+        response = await async_client.trades.with_raw_response.list()
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -106,9 +100,7 @@ class TestAsyncTrades:
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncParsecAPI) -> None:
-        async with async_client.trades.with_streaming_response.list(
-            parsec_id="parsec_id",
-        ) as response:
+        async with async_client.trades.with_streaming_response.list() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
