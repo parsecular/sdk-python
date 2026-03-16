@@ -11,7 +11,7 @@ __all__ = ["FillListParams"]
 
 class FillListParams(TypedDict, total=False):
     exchange: Required[str]
-    """Exchange identifier (e.g., kalshi, polymarket)."""
+    """Exchange identifier (e.g., polymarket, kalshi, limitless, opinion, predictfun)."""
 
     limit: int
     """Maximum number of fills to return."""

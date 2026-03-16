@@ -60,7 +60,7 @@ class FillsResource(SyncAPIResource):
         the specified exchange. A single order can produce multiple fills.
 
         Args:
-          exchange: Exchange identifier (e.g., kalshi, polymarket).
+          exchange: Exchange identifier (e.g., polymarket, kalshi, limitless, opinion, predictfun).
 
           limit: Maximum number of fills to return.
 
@@ -134,7 +134,7 @@ class AsyncFillsResource(AsyncAPIResource):
         the specified exchange. A single order can produce multiple fills.
 
         Args:
-          exchange: Exchange identifier (e.g., kalshi, polymarket).
+          exchange: Exchange identifier (e.g., polymarket, kalshi, limitless, opinion, predictfun).
 
           limit: Maximum number of fills to return.
 

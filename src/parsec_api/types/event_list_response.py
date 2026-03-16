@@ -206,7 +206,7 @@ class EventMatchedEvent(BaseModel):
     """Confidence bucket metadata for the event match."""
 
     event_id: str
-    """Canonical Parsec event ID for the matched event."""
+    """Stored Parsec event-group ID for the matched event."""
 
     exchanges: List[str]
     """Exchanges represented in the matched event."""
@@ -220,7 +220,10 @@ class EventMatchedEvent(BaseModel):
 
 class Event(BaseModel):
     event_id: str
-    """Canonical Parsec event ID."""
+    """Stored Parsec event-group ID from the gold snapshot.
+
+    Lookup also accepts `ev:{event_id}` aliases.
+    """
 
     exchanges: List[str]
     """Deduplicated list of exchanges with markets in this event."""

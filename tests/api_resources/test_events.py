@@ -28,6 +28,9 @@ class TestEvents:
     def test_method_list_with_all_params(self, client: ParsecAPI) -> None:
         event = client.events.list(
             cursor="cursor",
+            event_id="event_id",
+            exchange="exchange",
+            exchange_group_id="exchange_group_id",
             exchanges=["string"],
             include_markets=True,
             limit=1,
@@ -76,6 +79,9 @@ class TestAsyncEvents:
     async def test_method_list_with_all_params(self, async_client: AsyncParsecAPI) -> None:
         event = await async_client.events.list(
             cursor="cursor",
+            event_id="event_id",
+            exchange="exchange",
+            exchange_group_id="exchange_group_id",
             exchanges=["string"],
             include_markets=True,
             limit=1,
