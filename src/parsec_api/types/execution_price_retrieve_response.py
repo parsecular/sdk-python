@@ -4,7 +4,21 @@ from typing import Optional
 
 from .._models import BaseModel
 
-__all__ = ["ExecutionPriceRetrieveResponse"]
+__all__ = ["ExecutionPriceRetrieveResponse", "FeeInfo"]
+
+
+class FeeInfo(BaseModel):
+    """Metadata about how fees were computed. Null for unknown exchanges."""
+
+    exchange: str
+
+    fee_type: str
+    """Fee model: quadratic, linear, lookup_table, or none."""
+
+    is_estimate: bool
+
+    note: Optional[str] = None
+    """Additional context (e.g. "no fees for this market")."""
 
 
 class ExecutionPriceRetrieveResponse(BaseModel):
@@ -25,6 +39,9 @@ class ExecutionPriceRetrieveResponse(BaseModel):
 
     fee_estimate: Optional[float] = None
     """Estimated exchange fee (null when fee rate is unknown)."""
+
+    fee_info: Optional[FeeInfo] = None
+    """Metadata about how fees were computed. Null for unknown exchanges."""
 
     net_cost: Optional[float] = None
     """Total cost including fees (total_cost + fee_estimate).

@@ -170,7 +170,11 @@ class TestOrders:
     def test_method_list_with_all_params(self, client: ParsecAPI) -> None:
         order = client.orders.list(
             exchange="exchange",
+            end_ts=0,
+            limit=1,
             market_id="market_id",
+            start_ts=0,
+            status="open",
             x_exchange_credentials="X-Exchange-Credentials",
         )
         assert_matches_type(OrderListResponse, order, path=["response"])
@@ -413,7 +417,11 @@ class TestAsyncOrders:
     async def test_method_list_with_all_params(self, async_client: AsyncParsecAPI) -> None:
         order = await async_client.orders.list(
             exchange="exchange",
+            end_ts=0,
+            limit=1,
             market_id="market_id",
+            start_ts=0,
+            status="open",
             x_exchange_credentials="X-Exchange-Credentials",
         )
         assert_matches_type(OrderListResponse, order, path=["response"])

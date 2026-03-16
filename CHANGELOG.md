@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.17.0 (2026-03-16)
+
+Full Changelog: [v0.16.0...v0.17.0](https://github.com/parsecular/sdk-python/compare/v0.16.0...v0.17.0)
+
+### Features
+
+* update OpenAPI to 0.17.0 — fee estimates, price history, WS docs ([f3ddbe8](https://github.com/parsecular/sdk-python/commit/f3ddbe81baecf7af50047ec7751953c937ffde5a))
+
 ## 0.16.0 (2026-03-12)
 
 Full Changelog: [v0.15.0...v0.16.0](https://github.com/parsecular/sdk-python/compare/v0.15.0...v0.16.0)

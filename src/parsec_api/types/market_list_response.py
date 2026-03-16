@@ -216,7 +216,7 @@ class Event(BaseModel):
     """Event context. Only present when `scope=event`."""
 
     event_id: str
-    """Canonical Parsec event ID."""
+    """Stored Parsec event-group ID."""
 
     exchange_count: int
     """Number of exchanges covering this event."""

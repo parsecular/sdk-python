@@ -72,7 +72,7 @@ class OrdersResource(SyncAPIResource):
         Creates a new order on the selected exchange.
 
         Args:
-          exchange: Exchange identifier (e.g., kalshi, polymarket).
+          exchange: Exchange identifier (e.g., polymarket, kalshi, limitless, opinion, predictfun).
 
           affiliate: Affiliate address override. Builder-only.
 
@@ -87,8 +87,10 @@ class OrdersResource(SyncAPIResource):
           params:
               Optional key-value parameters. Supported keys:
 
-              - `order_type`: Order time-in-force. Values: `gtc` (default), `ioc`, `fok`.
-                Unsupported types return 501 per exchange.
+              - `order_type`: Order time-in-force. Values: `gtc` (default), `ioc`, `fok`,
+                `gtd`. Unsupported types return 501 per exchange.
+              - `expiration`: Unix timestamp in seconds. Required when `order_type` is `gtd`
+                (must be at least 60s in the future). Polymarket only.
 
           payer_address: End-user's wallet address (fee escrow payer). Builder-only.
 
@@ -148,7 +150,7 @@ class OrdersResource(SyncAPIResource):
         Fetches a single order by ID from the selected exchange.
 
         Args:
-          exchange: Exchange identifier (e.g., kalshi, polymarket).
+          exchange: Exchange identifier (e.g., polymarket, kalshi, limitless, opinion, predictfun).
 
           extra_headers: Send extra headers
 
@@ -177,7 +179,11 @@ class OrdersResource(SyncAPIResource):
         self,
         *,
         exchange: str,
+        end_ts: int | Omit = omit,
+        limit: int | Omit = omit,
         market_id: str | Omit = omit,
+        start_ts: int | Omit = omit,
+        status: Literal["open", "closed", "all"] | Omit = omit,
         x_exchange_credentials: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -187,12 +193,25 @@ class OrdersResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> OrderListResponse:
         """
-        Lists open orders on the selected exchange.
+        Lists orders on the selected exchange.
+
+        `status=open` preserves open-order behavior. `status=closed|all` enables order
+        history on supported exchanges.
 
         Args:
-          exchange: Exchange identifier (e.g., kalshi, polymarket).
+          exchange: Exchange identifier (e.g., polymarket, kalshi, limitless, opinion, predictfun).
+
+          end_ts: Filter orders created at or before this Unix timestamp (seconds).
+
+          limit: Max orders to return. For `status=closed|all`, defaults to 100 and clamps to
+              1..=500.
 
           market_id: Optional market ID filter (exchange-native).
+
+          start_ts: Filter orders created at or after this Unix timestamp (seconds).
+
+          status: Order status view. `open` returns active orders, `closed` returns terminal
+              orders, and `all` returns both. Defaults to `open`.
 
           extra_headers: Send extra headers
 
@@ -213,7 +232,11 @@ class OrdersResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "exchange": exchange,
+                        "end_ts": end_ts,
+                        "limit": limit,
                         "market_id": market_id,
+                        "start_ts": start_ts,
+                        "status": status,
                     },
                     order_list_params.OrderListParams,
                 ),
@@ -238,7 +261,7 @@ class OrdersResource(SyncAPIResource):
         Cancels an order by ID on the selected exchange.
 
         Args:
-          exchange: Exchange identifier (e.g., kalshi, polymarket).
+          exchange: Exchange identifier (e.g., polymarket, kalshi, limitless, opinion, predictfun).
 
           extra_headers: Send extra headers
 
@@ -311,7 +334,7 @@ class AsyncOrdersResource(AsyncAPIResource):
         Creates a new order on the selected exchange.
 
         Args:
-          exchange: Exchange identifier (e.g., kalshi, polymarket).
+          exchange: Exchange identifier (e.g., polymarket, kalshi, limitless, opinion, predictfun).
 
           affiliate: Affiliate address override. Builder-only.
 
@@ -326,8 +349,10 @@ class AsyncOrdersResource(AsyncAPIResource):
           params:
               Optional key-value parameters. Supported keys:
 
-              - `order_type`: Order time-in-force. Values: `gtc` (default), `ioc`, `fok`.
-                Unsupported types return 501 per exchange.
+              - `order_type`: Order time-in-force. Values: `gtc` (default), `ioc`, `fok`,
+                `gtd`. Unsupported types return 501 per exchange.
+              - `expiration`: Unix timestamp in seconds. Required when `order_type` is `gtd`
+                (must be at least 60s in the future). Polymarket only.
 
           payer_address: End-user's wallet address (fee escrow payer). Builder-only.
 
@@ -387,7 +412,7 @@ class AsyncOrdersResource(AsyncAPIResource):
         Fetches a single order by ID from the selected exchange.
 
         Args:
-          exchange: Exchange identifier (e.g., kalshi, polymarket).
+          exchange: Exchange identifier (e.g., polymarket, kalshi, limitless, opinion, predictfun).
 
           extra_headers: Send extra headers
 
@@ -416,7 +441,11 @@ class AsyncOrdersResource(AsyncAPIResource):
         self,
         *,
         exchange: str,
+        end_ts: int | Omit = omit,
+        limit: int | Omit = omit,
         market_id: str | Omit = omit,
+        start_ts: int | Omit = omit,
+        status: Literal["open", "closed", "all"] | Omit = omit,
         x_exchange_credentials: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -426,12 +455,25 @@ class AsyncOrdersResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> OrderListResponse:
         """
-        Lists open orders on the selected exchange.
+        Lists orders on the selected exchange.
+
+        `status=open` preserves open-order behavior. `status=closed|all` enables order
+        history on supported exchanges.
 
         Args:
-          exchange: Exchange identifier (e.g., kalshi, polymarket).
+          exchange: Exchange identifier (e.g., polymarket, kalshi, limitless, opinion, predictfun).
+
+          end_ts: Filter orders created at or before this Unix timestamp (seconds).
+
+          limit: Max orders to return. For `status=closed|all`, defaults to 100 and clamps to
+              1..=500.
 
           market_id: Optional market ID filter (exchange-native).
+
+          start_ts: Filter orders created at or after this Unix timestamp (seconds).
+
+          status: Order status view. `open` returns active orders, `closed` returns terminal
+              orders, and `all` returns both. Defaults to `open`.
 
           extra_headers: Send extra headers
 
@@ -452,7 +494,11 @@ class AsyncOrdersResource(AsyncAPIResource):
                 query=await async_maybe_transform(
                     {
                         "exchange": exchange,
+                        "end_ts": end_ts,
+                        "limit": limit,
                         "market_id": market_id,
+                        "start_ts": start_ts,
+                        "status": status,
                     },
                     order_list_params.OrderListParams,
                 ),
@@ -477,7 +523,7 @@ class AsyncOrdersResource(AsyncAPIResource):
         Cancels an order by ID on the selected exchange.
 
         Args:
-          exchange: Exchange identifier (e.g., kalshi, polymarket).
+          exchange: Exchange identifier (e.g., polymarket, kalshi, limitless, opinion, predictfun).
 
           extra_headers: Send extra headers
 

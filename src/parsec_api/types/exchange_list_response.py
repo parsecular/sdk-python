@@ -21,6 +21,8 @@ class ExchangeListResponseItemHas(BaseModel):
 
     fetch_markets: bool
 
+    fetch_order_history: bool
+
     fetch_orderbook: bool
 
     fetch_orderbook_history: bool
@@ -34,6 +36,8 @@ class ExchangeListResponseItemHas(BaseModel):
     fetch_user_activity: bool
 
     refresh_balance: bool
+
+    watch_address: bool
 
     websocket: bool
 
