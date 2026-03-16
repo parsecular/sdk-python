@@ -61,7 +61,7 @@ class AccountResource(SyncAPIResource):
         Returns the raw balance payload from the exchange (opaque JSON).
 
         Args:
-          exchange: Exchange identifier (e.g., kalshi, polymarket).
+          exchange: Exchange identifier (e.g., polymarket, kalshi, limitless, opinion, predictfun).
 
           refresh: Refresh balance before returning (default false).
 
@@ -243,7 +243,7 @@ class AsyncAccountResource(AsyncAPIResource):
         Returns the raw balance payload from the exchange (opaque JSON).
 
         Args:
-          exchange: Exchange identifier (e.g., kalshi, polymarket).
+          exchange: Exchange identifier (e.g., polymarket, kalshi, limitless, opinion, predictfun).
 
           refresh: Refresh balance before returning (default false).
 

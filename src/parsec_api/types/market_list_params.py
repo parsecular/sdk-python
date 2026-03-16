@@ -14,10 +14,10 @@ class MarketListParams(TypedDict, total=False):
     """Pagination cursor (offset-based). Valid for `scope=list` and `scope=event`."""
 
     event_id: str
-    """Canonical Parsec event ID (exact match).
+    """Stored Parsec event-group ID (exact match).
 
-    Used for `scope=event`. Mutually exclusive with `exchange` +
-    `exchange_group_id`.
+    The `ev:{event_id}` alias form is also accepted. Used for `scope=event`.
+    Mutually exclusive with `exchange` + `exchange_group_id`.
     """
 
     exchange: str

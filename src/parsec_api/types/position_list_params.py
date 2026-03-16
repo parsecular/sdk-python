@@ -11,7 +11,7 @@ __all__ = ["PositionListParams"]
 
 class PositionListParams(TypedDict, total=False):
     exchange: Required[str]
-    """Exchange identifier (e.g., kalshi, polymarket)."""
+    """Exchange identifier (e.g., polymarket, kalshi, limitless, opinion, predictfun)."""
 
     market_id: str
     """Optional market ID filter (exchange-native)."""

@@ -45,6 +45,9 @@ class EventsResource(SyncAPIResource):
         self,
         *,
         cursor: str | Omit = omit,
+        event_id: str | Omit = omit,
+        exchange: str | Omit = omit,
+        exchange_group_id: str | Omit = omit,
         exchanges: SequenceNotStr[str] | Omit = omit,
         include_markets: bool | Omit = omit,
         limit: int | Omit = omit,
@@ -64,20 +67,36 @@ class EventsResource(SyncAPIResource):
         summaries sorted by total volume (descending). Markets without an event_id are
         excluded.
 
-        Args:
-          cursor: Pagination cursor (offset-based).
+        Exact lookup mode is available via either `event_id` or `exchange` +
+        `exchange_group_id`. Exact lookup returns the normal `EventsResponse` wrapper
+        with either zero or one event. Returned `event_id` values are the stored
+        gold-layer event-group IDs (typically `parsec_group_id`); lookup also accepts
+        `ev:{event_id}` aliases.
 
-          exchanges: Exchanges to include (CSV). Defaults to all exchanges in the cache.
+        Args:
+          cursor: Pagination cursor (offset-based). Only valid for list mode.
+
+          event_id: Exact event lookup by stored event-group ID. The `ev:{event_id}` alias form is
+              also accepted. Mutually exclusive with `exchange` + `exchange_group_id`.
+
+          exchange: Exchange selector for exact external event lookup. Must be paired with
+              `exchange_group_id`.
+
+          exchange_group_id: Exchange-native event/group ID. Must be paired with `exchange`.
+
+          exchanges: Exchanges to include (CSV). Defaults to all exchanges in the cache. Only valid
+              for list mode.
 
           include_markets: Include constituent markets in the response (default false).
 
-          limit: Results per page (default 50, max 100).
+          limit: Results per page (default 50, max 100). Only valid for list mode.
 
-          min_volume: Minimum total volume across all markets in event.
+          min_volume: Minimum total volume across all markets in event. Only valid for list mode.
 
-          search: Keyword search in event title (case-insensitive).
+          search: Keyword search in event title (case-insensitive). Only valid for list mode.
 
-          status: Status filter (e.g., active, closed, resolved, archived).
+          status: Status filter (e.g., active, closed, resolved, archived). Only valid for list
+              mode.
 
           extra_headers: Send extra headers
 
@@ -97,6 +116,9 @@ class EventsResource(SyncAPIResource):
                 query=maybe_transform(
                     {
                         "cursor": cursor,
+                        "event_id": event_id,
+                        "exchange": exchange,
+                        "exchange_group_id": exchange_group_id,
                         "exchanges": exchanges,
                         "include_markets": include_markets,
                         "limit": limit,
@@ -135,6 +157,9 @@ class AsyncEventsResource(AsyncAPIResource):
         self,
         *,
         cursor: str | Omit = omit,
+        event_id: str | Omit = omit,
+        exchange: str | Omit = omit,
+        exchange_group_id: str | Omit = omit,
         exchanges: SequenceNotStr[str] | Omit = omit,
         include_markets: bool | Omit = omit,
         limit: int | Omit = omit,
@@ -154,20 +179,36 @@ class AsyncEventsResource(AsyncAPIResource):
         summaries sorted by total volume (descending). Markets without an event_id are
         excluded.
 
-        Args:
-          cursor: Pagination cursor (offset-based).
+        Exact lookup mode is available via either `event_id` or `exchange` +
+        `exchange_group_id`. Exact lookup returns the normal `EventsResponse` wrapper
+        with either zero or one event. Returned `event_id` values are the stored
+        gold-layer event-group IDs (typically `parsec_group_id`); lookup also accepts
+        `ev:{event_id}` aliases.
 
-          exchanges: Exchanges to include (CSV). Defaults to all exchanges in the cache.
+        Args:
+          cursor: Pagination cursor (offset-based). Only valid for list mode.
+
+          event_id: Exact event lookup by stored event-group ID. The `ev:{event_id}` alias form is
+              also accepted. Mutually exclusive with `exchange` + `exchange_group_id`.
+
+          exchange: Exchange selector for exact external event lookup. Must be paired with
+              `exchange_group_id`.
+
+          exchange_group_id: Exchange-native event/group ID. Must be paired with `exchange`.
+
+          exchanges: Exchanges to include (CSV). Defaults to all exchanges in the cache. Only valid
+              for list mode.
 
           include_markets: Include constituent markets in the response (default false).
 
-          limit: Results per page (default 50, max 100).
+          limit: Results per page (default 50, max 100). Only valid for list mode.
 
-          min_volume: Minimum total volume across all markets in event.
+          min_volume: Minimum total volume across all markets in event. Only valid for list mode.
 
-          search: Keyword search in event title (case-insensitive).
+          search: Keyword search in event title (case-insensitive). Only valid for list mode.
 
-          status: Status filter (e.g., active, closed, resolved, archived).
+          status: Status filter (e.g., active, closed, resolved, archived). Only valid for list
+              mode.
 
           extra_headers: Send extra headers
 
@@ -187,6 +228,9 @@ class AsyncEventsResource(AsyncAPIResource):
                 query=await async_maybe_transform(
                     {
                         "cursor": cursor,
+                        "event_id": event_id,
+                        "exchange": exchange,
+                        "exchange_group_id": exchange_group_id,
                         "exchanges": exchanges,
                         "include_markets": include_markets,
                         "limit": limit,

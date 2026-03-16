@@ -88,8 +88,9 @@ class MarketsResource(SyncAPIResource):
         Args:
           cursor: Pagination cursor (offset-based). Valid for `scope=list` and `scope=event`.
 
-          event_id: Canonical Parsec event ID (exact match). Used for `scope=event`. Mutually
-              exclusive with `exchange` + `exchange_group_id`.
+          event_id: Stored Parsec event-group ID (exact match). The `ev:{event_id}` alias form is
+              also accepted. Used for `scope=event`. Mutually exclusive with `exchange` +
+              `exchange_group_id`.
 
           exchange: Exchange selector for external-ID lookups. Used with `exchange_market_id` for
               `scope=market`, or with `exchange_group_id` for `scope=event`.
@@ -246,8 +247,9 @@ class AsyncMarketsResource(AsyncAPIResource):
         Args:
           cursor: Pagination cursor (offset-based). Valid for `scope=list` and `scope=event`.
 
-          event_id: Canonical Parsec event ID (exact match). Used for `scope=event`. Mutually
-              exclusive with `exchange` + `exchange_group_id`.
+          event_id: Stored Parsec event-group ID (exact match). The `ev:{event_id}` alias form is
+              also accepted. Used for `scope=event`. Mutually exclusive with `exchange` +
+              `exchange_group_id`.
 
           exchange: Exchange selector for external-ID lookups. Used with `exchange_market_id` for
               `scope=market`, or with `exchange_group_id` for `scope=event`.

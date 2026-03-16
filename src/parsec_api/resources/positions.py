@@ -58,7 +58,7 @@ class PositionsResource(SyncAPIResource):
         Lists positions for the authenticated customer on the selected exchange.
 
         Args:
-          exchange: Exchange identifier (e.g., kalshi, polymarket).
+          exchange: Exchange identifier (e.g., polymarket, kalshi, limitless, opinion, predictfun).
 
           market_id: Optional market ID filter (exchange-native).
 
@@ -127,7 +127,7 @@ class AsyncPositionsResource(AsyncAPIResource):
         Lists positions for the authenticated customer on the selected exchange.
 
         Args:
-          exchange: Exchange identifier (e.g., kalshi, polymarket).
+          exchange: Exchange identifier (e.g., polymarket, kalshi, limitless, opinion, predictfun).
 
           market_id: Optional market ID filter (exchange-native).
 

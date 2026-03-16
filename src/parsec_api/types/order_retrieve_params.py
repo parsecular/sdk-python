@@ -11,6 +11,6 @@ __all__ = ["OrderRetrieveParams"]
 
 class OrderRetrieveParams(TypedDict, total=False):
     exchange: Required[str]
-    """Exchange identifier (e.g., kalshi, polymarket)."""
+    """Exchange identifier (e.g., polymarket, kalshi, limitless, opinion, predictfun)."""
 
     x_exchange_credentials: Annotated[str, PropertyInfo(alias="X-Exchange-Credentials")]

@@ -12,7 +12,7 @@ __all__ = ["OrderCreateParams", "Credentials", "FeeAuth"]
 
 class OrderCreateParams(TypedDict, total=False):
     exchange: Required[str]
-    """Exchange identifier (e.g., kalshi, polymarket)."""
+    """Exchange identifier (e.g., polymarket, kalshi, limitless, opinion, predictfun)."""
 
     market_id: Required[str]
 
@@ -44,8 +44,10 @@ class OrderCreateParams(TypedDict, total=False):
     params: Dict[str, str]
     """Optional key-value parameters. Supported keys:
 
-    - `order_type`: Order time-in-force. Values: `gtc` (default), `ioc`, `fok`.
-      Unsupported types return 501 per exchange.
+    - `order_type`: Order time-in-force. Values: `gtc` (default), `ioc`, `fok`,
+      `gtd`. Unsupported types return 501 per exchange.
+    - `expiration`: Unix timestamp in seconds. Required when `order_type` is `gtd`
+      (must be at least 60s in the future). Polymarket only.
     """
 
     payer_address: str

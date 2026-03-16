@@ -11,7 +11,7 @@ __all__ = ["AccountBalanceParams"]
 
 class AccountBalanceParams(TypedDict, total=False):
     exchange: Required[str]
-    """Exchange identifier (e.g., kalshi, polymarket)."""
+    """Exchange identifier (e.g., polymarket, kalshi, limitless, opinion, predictfun)."""
 
     refresh: bool
     """Refresh balance before returning (default false)."""
