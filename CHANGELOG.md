@@ -1,5 +1,37 @@
 # Changelog
 
+## 0.18.0 (2026-05-01)
+
+Full Changelog: [v0.17.0...v0.18.0](https://github.com/parsecular/sdk-python/compare/v0.17.0...v0.18.0)
+
+### Features
+
+* **internal:** implement indices array format for query and form serialization ([8a7833b](https://github.com/parsecular/sdk-python/commit/8a7833bf7b62295b22b9ef9d2cf788f528d7b22a))
+* support setting headers via env ([e1c5e4e](https://github.com/parsecular/sdk-python/commit/e1c5e4e9451cb49c6b972040492f02e6348caf0a))
+
+
+### Bug Fixes
+
+* **client:** preserve hardcoded query params when merging with user params ([cbd9b83](https://github.com/parsecular/sdk-python/commit/cbd9b83c3aaed32c17c9d43ec8fa575f934fd51f))
+* **deps:** bump minimum typing-extensions version ([ab63c33](https://github.com/parsecular/sdk-python/commit/ab63c338682d2b396b9ef752d372ca82b3c72dd2))
+* ensure file data are only sent as 1 parameter ([d6d354c](https://github.com/parsecular/sdk-python/commit/d6d354cb662d4e99e36619cd076642beb502071c))
+* **pydantic:** do not pass `by_alias` unless set ([a9246f1](https://github.com/parsecular/sdk-python/commit/a9246f13c9b1c9e9b7d3966dfda5ae9fa25b7899))
+* sanitize endpoint path params ([dbac3a2](https://github.com/parsecular/sdk-python/commit/dbac3a2c0b1921e8e6ee6ad40db187f911134d7f))
+* use correct field name format for multipart file arrays ([65f770e](https://github.com/parsecular/sdk-python/commit/65f770ef4ffbd84bd85f417a475d24ef8851ee24))
+
+
+### Performance Improvements
+
+* **client:** optimize file structure copying in multipart requests ([c756447](https://github.com/parsecular/sdk-python/commit/c7564477251862c0a54926306c3828d9984fcdf4))
+
+
+### Chores
+
+* **ci:** skip lint on metadata-only changes ([93dec02](https://github.com/parsecular/sdk-python/commit/93dec02354e778c4152b56053962680050afbd2e))
+* **internal:** more robust bootstrap script ([efbfc30](https://github.com/parsecular/sdk-python/commit/efbfc30f328234eb2843cb42b0cb3a307be4bb6c))
+* **internal:** tweak CI branches ([1770ebf](https://github.com/parsecular/sdk-python/commit/1770ebf942eafbed63099c236bfc2deebb19021f))
+* **internal:** update gitignore ([45d6f9b](https://github.com/parsecular/sdk-python/commit/45d6f9b3b29e99bfcc3323f52aeabe7f5ef852f0))
+
 ## 0.17.0 (2026-03-16)
 
 Full Changelog: [v0.16.0...v0.17.0](https://github.com/parsecular/sdk-python/compare/v0.16.0...v0.17.0)

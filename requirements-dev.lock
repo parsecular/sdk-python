@@ -106,5 +106,9 @@ typing-extensions==4.15.0
     #   typing-inspection
 typing-inspection==0.4.2
     # via pydantic
+websockets==15.0.1 ; python_full_version < '3.10'
+    # via parsec-api
+websockets==16.0 ; python_full_version >= '3.10'
+    # via parsec-api
 zipp==3.23.0
     # via importlib-metadata

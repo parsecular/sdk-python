@@ -788,7 +788,7 @@ wheels = [
 
 [[package]]
 name = "parsec-api"
-version = "0.11.0"
+version = "0.17.0"
 source = { editable = "." }
 dependencies = [
     { name = "anyio" },
@@ -841,7 +841,7 @@ requires-dist = [
     { name = "httpx-aiohttp", marker = "extra == 'aiohttp'", specifier = ">=0.1.9" },
     { name = "pydantic", specifier = ">=1.9.0,<3" },
     { name = "sniffio" },
-    { name = "typing-extensions", specifier = ">=4.10,<5" },
+    { name = "typing-extensions", specifier = ">=4.14,<5" },
     { name = "websockets", specifier = ">=12.0" },
 ]
 provides-extras = ["aiohttp"]
