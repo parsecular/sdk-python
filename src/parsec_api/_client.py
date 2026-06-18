@@ -288,9 +288,11 @@ class ParsecAPI(SyncAPIClient):
 
     @override
     def _auth_headers(self, security: SecurityOptions) -> dict[str, str]:
-        return {
-            **(self._api_key_auth if security.get("api_key_auth", False) else {}),
-        }
+        headers: dict[str, str] = {}
+        if security.get("api_key_auth", False):
+            for key, value in self._api_key_auth.items():
+                headers.setdefault(key, value)
+        return headers
 
     @property
     def _api_key_auth(self) -> dict[str, str]:
@@ -592,9 +594,11 @@ class AsyncParsecAPI(AsyncAPIClient):
 
     @override
     def _auth_headers(self, security: SecurityOptions) -> dict[str, str]:
-        return {
-            **(self._api_key_auth if security.get("api_key_auth", False) else {}),
-        }
+        headers: dict[str, str] = {}
+        if security.get("api_key_auth", False):
+            for key, value in self._api_key_auth.items():
+                headers.setdefault(key, value)
+        return headers
 
     @property
     def _api_key_auth(self) -> dict[str, str]:
